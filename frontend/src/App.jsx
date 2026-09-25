@@ -5,13 +5,23 @@ import SkillLab from './components/verification/SkillLab';
 import Method from './components/verification/Method';
 import Landing from './components/Landing';
 import ApiView from './components/ApiView';
+import AboutModal from './components/AboutModal';
+import Icon from './components/Icon';
 
 const TABS = [
-  { id: 'today', label: 'Today' },
-  { id: 'skill', label: 'Skill lab' },
-  { id: 'method', label: 'Method' },
-  { id: 'api', label: 'API' },
+  { id: 'today', label: 'Today', icon: 'today' },
+  { id: 'skill', label: 'Skill lab', icon: 'skill' },
+  { id: 'method', label: 'Method', icon: 'method' },
+  { id: 'api', label: 'API', icon: 'api' },
 ];
+
+// Page headings, SAGAR-style: one large statement of what the screen is for.
+const PAGE = {
+  today: { title: 'District rainfall warnings', sub: 'Corrected forecast, IMD warning category and exceedance probability for every district.' },
+  skill: { title: 'Verification skill lab', sub: 'How much the regime-aware correction actually helps — with confidence intervals, including where it does not.' },
+  method: { title: 'Method and architecture', sub: 'How the pipeline is built, how modules talk to each other, and what the models can and cannot do.' },
+  api: { title: 'API reference', sub: 'Every number on screen comes from these endpoints. Probe them live.' },
+};
 
 const HOME = { tab: 'landing', date: null, lead: 1 };
 
@@ -32,6 +42,7 @@ export default function App() {
   const [session, setSession] = useState({ date: initial.date, lead: initial.lead });
   const [health, setHealth] = useState(null);
   const [toast, setToast] = useState(null);
+  const [about, setAbout] = useState(false);
 
   useEffect(() => {
     const poll = () => api.health().then(setHealth).catch(() => setHealth(null));
@@ -98,14 +109,26 @@ export default function App() {
     <div className="app">
       <header className="masthead">
         <div className="masthead-inner">
-          <button className="brand" onClick={() => setTab('landing')}
-                  title="Back to the overview" style={{ background: 'none', border: 0, padding: 0 }}>
+          <button className="brand" onClick={() => setTab('landing')} title="Back to the overview">
+            <img src="/favicon.svg" alt="" className="brand-logo" />
             <span className="brand-mark">MonsoonIQ</span>
-            <span className="brand-sub">
-              Regime-aware post-processing of NWP rainfall · IMD warning scale
-            </span>
           </button>
-          <div className="cb-group" style={{ marginLeft: 12 }}>
+
+          <nav className="tabs" role="tablist" aria-label="Screens">
+            {TABS.map((t) => (
+              <button key={t.id} role="tab" className="tab" aria-selected={tab === t.id}
+                      onClick={() => setTab(t.id)}>
+                <Icon name={t.icon} />
+                <span>{t.label}</span>
+              </button>
+            ))}
+            <button className="tab" onClick={() => setAbout(true)}>
+              <Icon name="info" />
+              <span>About</span>
+            </button>
+          </nav>
+
+          <div className="masthead-right">
             <span className="chip live" title={health ? JSON.stringify(health.artifacts) : ''}>
               <span className="dot" />
               {health?.status === 'healthy' ? 'Live · engine ready' : 'Engine degraded'}
@@ -115,19 +138,21 @@ export default function App() {
                 ? 'Provenance: synthetic research archive'
                 : `Provenance: ${health?.provenance || 'unknown'}`}
             </span>
-            {freshness && <span className="chip">Models loaded {freshness}</span>}
-            <button className="btn" onClick={() => setTab('landing')} title="Overview screen (h)">
-              Overview
+            {freshness && freshness !== '<volatile>' && <span className="chip">Models loaded {freshness}</span>}
+            <button className="btn back" onClick={() => setTab('landing')} title="Overview screen (h)">
+              <Icon name="back" />
+              <span>Overview</span>
             </button>
           </div>
-          <nav className="tabs" role="tablist">
-            {TABS.map((t) => (
-              <button key={t.id} role="tab" className="tab" aria-selected={tab === t.id}
-                      onClick={() => setTab(t.id)}>{t.label}</button>
-            ))}
-          </nav>
         </div>
       </header>
+
+      {PAGE[tab] && (
+        <div className="page-head anim-up" key={tab}>
+          <h1>{PAGE[tab].title}</h1>
+          <p>{PAGE[tab].sub}</p>
+        </div>
+      )}
 
       {tab === 'today' && (
         <Today session={session} onSession={onSession} onToast={setToast} onTab={setTab} />
@@ -142,6 +167,8 @@ export default function App() {
         public warnings. Verification figures are internal comparisons on that archive.
         {' '}Press <span className="mono">?</span> for shortcuts.
       </footer>
+
+      {about && <AboutModal onClose={() => setAbout(false)} />}
 
       {toast && (
         <div style={{

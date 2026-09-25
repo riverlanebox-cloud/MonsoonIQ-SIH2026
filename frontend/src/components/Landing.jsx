@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { GeoJSON, MapContainer, TileLayer } from 'react-leaflet';
 import { api } from '../api';
-import { CATEGORY_FILL, CATEGORY_META, fmt } from '../lib/format';
+import { fmt } from '../lib/format';
+import DottedIndia from './DottedIndia';
 
 /**
  * Opening screen.
  *
- * One frame that states what the system is and shows the live state of the
- * country underneath it: every district tinted by its current IMD warning
- * category for the most warning-heavy monsoon day in the archive. The whole
+ * SAGAR-style hero: a dot-matrix map of India behind a centred title and two
+ * calls to action. The dots are not decoration — every modelled district is
+ * tinted by its current IMD warning category for the most warning-heavy monsoon
+ * day in the archive. The whole
  * console is one click away, and the numbers on the strip are the same numbers
  * the console will show, so nothing here is decoration.
  */
@@ -43,39 +44,7 @@ export default function Landing({ onEnter, onMethod }) {
   return (
     <div className="landing">
       <div className="landing-map">
-        <MapContainer
-          center={[22.8, 79.5]} zoom={4.4} zoomControl={false} dragging={false}
-          scrollWheelZoom={false} doubleClickZoom={false} attributionControl={false}
-          keyboard={false} preferCanvas
-        >
-          <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png" />
-          {geojson && (
-            <GeoJSON
-              key={`${districts.length}-${console_?.date || 'loading'}`}
-              data={geojson}
-              style={(f) => {
-                const d = byId[f.properties.district_id];
-                return {
-                  color: d && d.category !== 'green' ? '#0a1929' : '#12293c',
-                  weight: d && d.category === 'red' ? 1.4 : 0.6,
-                  fillColor: d ? CATEGORY_FILL[d.category] : '#0e1f2e',
-                  fillOpacity: d ? (d.category === 'red' ? 0.95 : d.category === 'orange' ? 0.9 : 0.82) : 0.5,
-                };
-              }}
-              onEachFeature={(feature, layer) => {
-                const d = byId[feature.properties.district_id];
-                if (!d) return;
-                layer.bindTooltip(
-                  `<div class="district-tip"><b>${d.district_name}</b> · ${d.state_name}<br/>
-                   ${CATEGORY_META[d.category].short} — ${CATEGORY_META[d.category].action}<br/>
-                   corrected ${fmt(d.corrected_mm)} mm · raw ${fmt(d.raw_mm)} mm<br/>
-                   P(≥64.5 mm) ${(d.p_heavy * 100).toFixed(0)}%</div>`,
-                  { sticky: true, direction: 'top' },
-                );
-              }}
-            />
-          )}
-        </MapContainer>
+        <DottedIndia geojson={geojson} byId={byId} />
       </div>
       <div className="landing-veil" />
 
@@ -95,7 +64,7 @@ export default function Landing({ onEnter, onMethod }) {
           <button className="cta primary" onClick={() => onEnter(defaultDate)}>
             Enter operations console
           </button>
-          <button className="cta ghost" onClick={onMethod}>
+          <button className="cta teal" onClick={onMethod}>
             Verification &amp; method
           </button>
         </div>
