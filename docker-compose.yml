@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  monsooniq:
+    build: .
+    container_name: monsooniq_app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATA_MODE=synthetic
+      - CDSAPI_URL=https://cds.climate.copernicus.eu/api/v2
+      - CDSAPI_KEY=YOUR_CDS_API_KEY_HERE
+    volumes:
+      - ./data:/app/data
+      - ./artifacts:/app/artifacts
+    restart: unless-stopped

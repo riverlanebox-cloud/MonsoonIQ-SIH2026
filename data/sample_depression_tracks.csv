@@ -1,0 +1,18 @@
+date,system_id,system_name,intensity,center_lat,center_lon,pressure_deficit_hpa,source_bulletin
+2016-07-06,BOB01,Deep Depression BOB 01,Deep Depression,20.5,88.5,-4.5,IMD Monsoon Bulletin 2016
+2016-08-09,BOB02,Land Depression 02,Land Depression,23.0,86.5,-3.8,IMD Monsoon Bulletin 2016
+2017-06-11,BOB01,Depression BOB 01,Depression,21.0,89.0,-4.0,IMD Monsoon Bulletin 2017
+2017-07-18,BOB02,Deep Depression BOB 02,Deep Depression,21.5,87.0,-5.2,IMD Monsoon Bulletin 2017
+2018-06-10,ARB01,Depression ARB 01,Depression,16.5,70.5,-3.5,IMD Monsoon Bulletin 2018
+2018-08-07,BOB03,Deep Depression BOB 03,Deep Depression,20.0,87.5,-4.8,IMD Monsoon Bulletin 2018
+2018-08-15,BOB04,Depression BOB 04,Depression,21.0,86.5,-4.1,IMD Monsoon Bulletin 2018
+2019-06-28,BOB02,Depression BOB 02,Depression,21.5,88.0,-3.9,IMD Monsoon Bulletin 2019
+2019-08-06,BOB03,Deep Depression BOB 03,Deep Depression,20.8,87.2,-5.5,IMD Monsoon Bulletin 2019
+2020-07-04,BOB01,Low Pressure Area BOB 01,Well Marked Low,20.0,89.0,-3.2,IMD Monsoon Bulletin 2020
+2020-08-19,BOB02,Deep Depression BOB 02,Deep Depression,21.2,87.8,-5.0,IMD Monsoon Bulletin 2020
+2021-08-12,BOB03,Depression BOB 03,Depression,20.5,88.0,-4.2,IMD Monsoon Bulletin 2021
+2021-09-13,BOB04,Deep Depression BOB 04,Deep Depression,20.2,86.8,-5.1,IMD Monsoon Bulletin 2021
+2022-07-16,BOB02,Depression BOB 02,Depression,19.5,85.5,-4.0,IMD Monsoon Bulletin 2022
+2022-08-09,BOB03,Deep Depression BOB 03,Deep Depression,21.0,87.0,-5.4,IMD Monsoon Bulletin 2022
+2023-08-01,BOB02,Deep Depression BOB 02,Deep Depression,21.5,88.2,-4.7,IMD Monsoon Bulletin 2023
+2023-09-29,BOB04,Well Marked Low BOB 04,Well Marked Low,19.0,86.5,-3.5,IMD Monsoon Bulletin 2023

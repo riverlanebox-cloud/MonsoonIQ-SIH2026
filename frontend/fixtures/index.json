@@ -1,0 +1,20 @@
+{
+  "paths": {
+    "/health": "health",
+    "/timeline": "timeline",
+    "/events?limit=30": "events",
+    "/districts/geojson": "geojson",
+    "/grid": "grid",
+    "/verification/summary": "verification",
+    "/verification/heavy-events": "heavy_events",
+    "/verification/regime-value": "regime_value",
+    "/model-card": "model_card",
+    "/case-replays": "cases",
+    "/console?date=2020-08-05&lead=1": "console",
+    "/district/OD_BBS?date=2020-08-05&lead=1": "district",
+    "/bulletin?date=2020-08-05&lead=1": "bulletin"
+  },
+  "date": "2020-08-05",
+  "lead": 1,
+  "district": "OD_BBS"
+}

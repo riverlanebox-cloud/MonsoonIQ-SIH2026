@@ -1,0 +1,85 @@
+# MonsoonIQ Model and Pipeline Configuration
+
+system:
+  random_seed: 42
+  data_mode: "synthetic" # Options: "synthetic" or "real"
+  lead_times: [1, 2, 3, 4, 5] # Forecast lead times in days
+
+spatial_domain:
+  lat_min: 6.0
+  lat_max: 38.0
+  lon_min: 68.0
+  lon_max: 98.0
+  resolution: 0.25 # 0.25 degree grid (~27 km)
+
+temporal_split:
+  train_years: [2016, 2017, 2018, 2019, 2020]
+  val_years: [2021]
+  test_years: [2022, 2023]
+  leakage_check: true
+
+features:
+  dynamic:
+    - "raw_nwp_rain"
+    - "u850"
+    - "v850"
+    - "wind_speed_850"
+    - "vorticity_850"
+    - "mslp_anomaly"
+    - "q500"
+    - "cape"
+    - "olr_anomaly"
+    - "moisture_flux"
+    - "vertical_velocity_500"
+    - "trough_latitude"
+  static:
+    - "terrain_elevation"
+    - "terrain_slope"
+    - "distance_to_coast"
+    - "land_sea_mask"
+    - "latitude"
+    - "longitude"
+
+regime_classifier:
+  model_type: "lightgbm" # 'lightgbm' or 'xgboost'
+  n_estimators: 150
+  learning_rate: 0.05
+  max_depth: 6
+  num_leaves: 31
+  calibration: "isotonic"
+  feature_importance: "shap"
+
+mixture_of_experts:
+  method: "soft_blending" # sum_k P(R_k) * Expert_k
+  baseline_expert: "quantile_mapping" # empirical quantile mapping per regime
+  residual_expert:
+    model_type: "lightgbm"
+    n_estimators: 100
+    learning_rate: 0.05
+    max_depth: 5
+    num_leaves: 25
+
+probabilistic:
+  quantiles: [0.10, 0.50, 0.90] # P10, P50, P90
+  objective: "quantile"
+
+heavy_rain_module:
+  thresholds:
+    heavy: 64.5
+    very_heavy: 115.6
+    extremely_heavy: 204.5
+  model_type: "lightgbm"
+  scale_pos_weight: "auto" # handles class imbalance
+  calibration: "isotonic"
+
+paths:
+  data_dir: "data"
+  synthetic_dir: "data/synthetic"
+  raw_dir: "data/raw"
+  geojson_path: "data/geojson/india_districts.geojson"
+  depression_tracks_path: "data/sample_depression_tracks.csv"
+  artifacts_dir: "artifacts"
+  model_save_dir: "artifacts/models"
+  metrics_save_dir: "artifacts/metrics"
+  plots_save_dir: "artifacts/plots"
+  reports_dir: "artifacts/reports"

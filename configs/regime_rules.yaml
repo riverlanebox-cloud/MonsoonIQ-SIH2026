@@ -1,0 +1,86 @@
+# MonsoonIQ Weather Regime Classification Rules & Physical Thresholds
+# Scientifically justified criteria based on Indian Meteorological Department (IMD)
+# monsoon dynamics, tropical meteorology, and synoptic climatology.
+
+regimes:
+  1:
+    name: "Active Monsoon"
+    short_code: "ACT"
+    description: "Vigorous southwest monsoon flow with strong low-level jet, deep cyclonic vorticity, and widespread convection along the core monsoon trough."
+    justification: "Active spells are characterized by a well-established monsoon trough over central India (near 20-25N), strong 850 hPa low-level Somali jet (>14 m/s) transporting abundant Arabian Sea moisture, negative OLR anomalies (< -20 W/m2 indicating deep convection), and positive relative vorticity across the monsoon trough zone."
+    rules:
+      trough_lat_min: 18.0
+      trough_lat_max: 26.0
+      u850_min: 12.0          # m/s, strong westerly / south-westerly zonal wind
+      vorticity_850_min: 1.5e-5 # s^-1, cyclonic shear across monsoon zone
+      olr_anomaly_max: -15.0  # W/m^2, convective cloudiness
+      min_monsoon_month: 6    # June to September
+      max_monsoon_month: 9
+
+  2:
+    name: "Break Monsoon"
+    short_code: "BRK"
+    description: "Monsoon trough shifts northwards to the Himalayan foothills; suppressed rainfall over central and peninsular India with isolated heavy rain near the foothills."
+    justification: "Break monsoon episodes occur when the sea-level monsoon trough shifts to the foothills of the Himalayas. Westerly winds over central India weaken significantly, relative vorticity becomes anticyclonic/weak over central India, and positive OLR anomalies (> +15 W/m2) dominate central India while the Himalayan foothills experience orographic enhancement."
+    rules:
+      trough_lat_min: 27.0    # Trough shifted to Himalayan foothills
+      trough_lat_max: 32.0
+      central_olr_anomaly_min: 12.0 # W/m^2, suppressed central convection
+      u850_central_max: 7.0   # Weakened low-level westerly winds in central India
+      vorticity_850_central_max: 0.5e-5 # Suppressed vorticity in central belt
+      min_monsoon_month: 7    # July and August peak breaks
+      max_monsoon_month: 8
+
+  3:
+    name: "Monsoon Low/Depression"
+    short_code: "DEP"
+    description: "Synoptic-scale cyclonic vortex originating in the Bay of Bengal or land-based, producing concentrated extreme rainfall along its south/southwest quadrant."
+    justification: "Monsoon depressions (central pressure deficit >= 2-4 hPa) and low-pressure systems are key rain-producing synoptic systems. Characterized by high positive 850 hPa relative vorticity (> 4.0e-5 s^-1), closed cyclonic circulation, low MSLP anomaly (< -3.5 hPa), and strong moisture convergence."
+    rules:
+      vorticity_850_min: 4.0e-5  # s^-1, intense cyclonic core
+      mslp_anomaly_max: -3.5     # hPa, central pressure deficit
+      moisture_flux_conv_min: 3.0e-4 # kg/(m^2 s)
+      min_monsoon_month: 6
+      max_monsoon_month: 10
+
+  4:
+    name: "Orographic"
+    short_code: "ORO"
+    description: "Heavy rain driven by mechanical lifting of moist maritime air masses against steep mountain topography (Western Ghats windward slopes & southern Himalayan slopes)."
+    justification: "Orographic enhancement along the Western Ghats (lat 8-21N, lon 73-77E) and Himalayan foothills occurs when moist low-level westerly or southerly winds impinge perpendicularly on steep terrain slopes (> 0.012 gradient, elevation > 350 m). Raw NWP severely underestimates windward precipitation due to coarse grid resolution."
+    rules:
+      terrain_elevation_min: 350.0 # meters above sea level
+      terrain_slope_min: 0.012     # gradient
+      surface_wind_onshore_min: 8.0 # m/s impinging perpendicular to ridge
+      relative_humidity_850_min: 80.0 # % moist maritime boundary layer
+
+  5:
+    name: "Coastal"
+    short_code: "CST"
+    description: "Localized mesoscale convergence along coastal boundaries, sea-breeze fronts, and frictional coastal convergence lines (e.g. Konkan, Malabar, Coromandel coasts)."
+    justification: "Coastal rainfall is dominated by differential friction between sea and land, coastline curvature, and land-sea thermal breezes triggering boundary layer convergence within 65 km of the shoreline, even in the absence of synoptic depressions."
+    rules:
+      distance_to_coast_max_km: 65.0
+      land_sea_mask_transition: true
+      coastal_convergence_min: 1.5e-5 # s^-1
+      marine_moisture_flux_min: 250.0 # kg/(m s)
+
+  6:
+    name: "Western Disturbance"
+    short_code: "WD"
+    description: "Extratropical upper-level trough in the subtropical westerly jet bringing precipitation, heavy snowfall, and convective storms to northwest India."
+    justification: "Western Disturbances originate over the Mediterranean/Caspian region and travel eastward embedded in the subtropical westerlies. They feature a 500 hPa geopotential trough, upper-level cold advection, and positive vorticity over NW India (north of 25N, west of 82E), predominantly active from October through May and interacting with the monsoon in early June."
+    rules:
+      lat_min: 25.0
+      lon_max: 82.0
+      trough_500_hpa_anomaly_max: -35.0 # gpm geopotential anomaly
+      vorticity_500_min: 2.0e-5        # s^-1 upper-level cyclonic vorticity
+      applicable_months: [1, 2, 3, 4, 5, 10, 11, 12]
+
+  7:
+    name: "Weak/Normal"
+    short_code: "WKN"
+    description: "Moderate or transitional monsoon conditions without extreme synoptic forcing or pronounced break anomalies; climatological convection."
+    justification: "Default background state where meteorological fields lie within standard climatological ranges without triggering localized or synoptic extremes."
+    rules:
+      is_fallback: true

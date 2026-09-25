@@ -1,0 +1,25 @@
+{
+  "name": "monsooniq",
+  "version": "1.0.0",
+  "description": "MonsoonIQ: Regime-Aware AI Post-Processing System for Monsoon Rainfall Forecasts over India",
+  "scripts": {
+    "data": "powershell -ExecutionPolicy Bypass -File ./scripts/data.ps1",
+    "train": "powershell -ExecutionPolicy Bypass -File ./scripts/train.ps1",
+    "evaluate": "powershell -ExecutionPolicy Bypass -File ./scripts/evaluate.ps1",
+    "api": "powershell -ExecutionPolicy Bypass -File ./scripts/api.ps1",
+    "ui": "powershell -ExecutionPolicy Bypass -File ./scripts/ui.ps1",
+    "all": "powershell -ExecutionPolicy Bypass -File ./scripts/all.ps1",
+    "test": "pytest tests/ -v"
+  },
+  "keywords": [
+    "monsoon",
+    "atmospheric-science",
+    "machine-learning",
+    "smart-india-hackathon",
+    "meteorology",
+    "imd",
+    "mixture-of-experts"
+  ],
+  "author": "MonsoonIQ SIH Team",
+  "license": "MIT"
+}

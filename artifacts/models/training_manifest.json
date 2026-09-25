@@ -1,0 +1,289 @@
+{
+  "train_samples": 69165,
+  "val_samples": 13833,
+  "test_samples": 27666,
+  "split": {
+    "train": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020
+    ],
+    "val": [
+      2021
+    ],
+    "test": [
+      2022,
+      2023
+    ]
+  },
+  "regime_classifier": {
+    "validation_accuracy": 0.9727,
+    "macro_f1": 0.972,
+    "labels": "generator latent regime (synthetic)"
+  },
+  "exceedance_models": {
+    "heavy": {
+      "threshold_mm": 64.5,
+      "train_positives": 1341,
+      "val_brier_score": 0.0041,
+      "val_auc": 0.9972
+    },
+    "very_heavy": {
+      "threshold_mm": 115.6,
+      "train_positives": 302,
+      "val_brier_score": 0.0016,
+      "val_auc": 0.9961
+    },
+    "extremely_heavy": {
+      "threshold_mm": 204.5,
+      "train_positives": 10,
+      "val_brier_score": 0.0003,
+      "val_auc": 0.6001
+    }
+  },
+  "lead_bundle": {
+    "leads": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "detail": {
+      "day_1": {
+        "nwp_column": "raw_nwp_d1",
+        "expert_training_samples": {
+          "Active Monsoon": 11713,
+          "Break Monsoon": 5512,
+          "Monsoon Low/Depression": 10176,
+          "Orographic": 8321,
+          "Coastal": 9699,
+          "Western Disturbance": 11819,
+          "Weak/Normal": 11925
+        },
+        "probability_models": {
+          "heavy": {
+            "threshold_mm": 64.5,
+            "train_positives": 1341,
+            "val_brier_score": 0.0041,
+            "val_auc": 0.9972
+          },
+          "very_heavy": {
+            "threshold_mm": 115.6,
+            "train_positives": 302,
+            "val_brier_score": 0.0016,
+            "val_auc": 0.9961
+          },
+          "extremely_heavy": {
+            "threshold_mm": 204.5,
+            "train_positives": 10,
+            "val_brier_score": 0.0003,
+            "val_auc": 0.6001
+          }
+        }
+      },
+      "day_2": {
+        "nwp_column": "raw_nwp_d2",
+        "expert_training_samples": {
+          "Active Monsoon": 11713,
+          "Break Monsoon": 5512,
+          "Monsoon Low/Depression": 10176,
+          "Orographic": 8321,
+          "Coastal": 9699,
+          "Western Disturbance": 11819,
+          "Weak/Normal": 11925
+        },
+        "probability_models": {
+          "heavy": {
+            "threshold_mm": 64.5,
+            "train_positives": 1341,
+            "val_brier_score": 0.0049,
+            "val_auc": 0.9966
+          },
+          "very_heavy": {
+            "threshold_mm": 115.6,
+            "train_positives": 302,
+            "val_brier_score": 0.0016,
+            "val_auc": 0.9941
+          },
+          "extremely_heavy": {
+            "threshold_mm": 204.5,
+            "train_positives": 10,
+            "val_brier_score": 0.0004,
+            "val_auc": 0.699
+          }
+        }
+      },
+      "day_3": {
+        "nwp_column": "raw_nwp_d3",
+        "expert_training_samples": {
+          "Active Monsoon": 11713,
+          "Break Monsoon": 5512,
+          "Monsoon Low/Depression": 10176,
+          "Orographic": 8321,
+          "Coastal": 9699,
+          "Western Disturbance": 11819,
+          "Weak/Normal": 11925
+        },
+        "probability_models": {
+          "heavy": {
+            "threshold_mm": 64.5,
+            "train_positives": 1341,
+            "val_brier_score": 0.005,
+            "val_auc": 0.9941
+          },
+          "very_heavy": {
+            "threshold_mm": 115.6,
+            "train_positives": 302,
+            "val_brier_score": 0.0018,
+            "val_auc": 0.9833
+          },
+          "extremely_heavy": {
+            "threshold_mm": 204.5,
+            "train_positives": 10,
+            "val_brier_score": 0.0003,
+            "val_auc": 0.7966
+          }
+        }
+      },
+      "day_4": {
+        "nwp_column": "raw_nwp_d4",
+        "expert_training_samples": {
+          "Active Monsoon": 11713,
+          "Break Monsoon": 5512,
+          "Monsoon Low/Depression": 10176,
+          "Orographic": 8321,
+          "Coastal": 9699,
+          "Western Disturbance": 11819,
+          "Weak/Normal": 11925
+        },
+        "probability_models": {
+          "heavy": {
+            "threshold_mm": 64.5,
+            "train_positives": 1341,
+            "val_brier_score": 0.0055,
+            "val_auc": 0.9921
+          },
+          "very_heavy": {
+            "threshold_mm": 115.6,
+            "train_positives": 302,
+            "val_brier_score": 0.0018,
+            "val_auc": 0.9942
+          },
+          "extremely_heavy": {
+            "threshold_mm": 204.5,
+            "train_positives": 10,
+            "val_brier_score": 0.0004,
+            "val_auc": 0.594
+          }
+        }
+      },
+      "day_5": {
+        "nwp_column": "raw_nwp_d5",
+        "expert_training_samples": {
+          "Active Monsoon": 11713,
+          "Break Monsoon": 5512,
+          "Monsoon Low/Depression": 10176,
+          "Orographic": 8321,
+          "Coastal": 9699,
+          "Western Disturbance": 11819,
+          "Weak/Normal": 11925
+        },
+        "probability_models": {
+          "heavy": {
+            "threshold_mm": 64.5,
+            "train_positives": 1341,
+            "val_brier_score": 0.0057,
+            "val_auc": 0.9945
+          },
+          "very_heavy": {
+            "threshold_mm": 115.6,
+            "train_positives": 302,
+            "val_brier_score": 0.0019,
+            "val_auc": 0.9885
+          },
+          "extremely_heavy": {
+            "threshold_mm": 204.5,
+            "train_positives": 10,
+            "val_brier_score": 0.0003,
+            "val_auc": 0.6006
+          }
+        }
+      }
+    }
+  },
+  "grid_correction": {
+    "cell_days": 164232,
+    "dates": 72,
+    "train_years": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021
+    ],
+    "features": [
+      "u850",
+      "v850",
+      "wind_speed_850",
+      "vorticity_850",
+      "mslp_anomaly",
+      "q500",
+      "cape",
+      "olr",
+      "olr_anomaly",
+      "moisture_flux",
+      "trough_latitude",
+      "elevation",
+      "slope",
+      "dist_coast",
+      "latitude",
+      "longitude",
+      "raw_nwp",
+      "p_regime_active",
+      "p_regime_break",
+      "p_regime_depression",
+      "p_regime_orographic",
+      "p_regime_coastal",
+      "p_regime_western_disturbance",
+      "p_regime_weak_normal"
+    ],
+    "train_rmse": 2.7013,
+    "skipped": false
+  },
+  "elapsed_seconds": 35.16,
+  "dataset": {
+    "path": "data/synthetic/district_daily.parquet",
+    "rows": 110664,
+    "sha256_16": "0bb61ddeab888cde"
+  },
+  "artifacts": {
+    "regime_classifier": {
+      "sha256_16": "d8f1b592ee4f9137",
+      "bytes": 1273819
+    },
+    "mixture_of_experts": {
+      "sha256_16": "0574d99c221ee8af",
+      "bytes": 1874404
+    },
+    "quantile_regressor": {
+      "sha256_16": "c4af41271fa0c608",
+      "bytes": 737769
+    },
+    "heavy_rain_module": {
+      "sha256_16": "b2e6356628090adc",
+      "bytes": 472149
+    },
+    "lead_time_bundle": {
+      "sha256_16": "1e11008f32f45641",
+      "bytes": 15321113
+    },
+    "grid_correction": {
+      "sha256_16": "45230d5fddab8e87",
+      "bytes": 1333577
+    }
+  }
+}
