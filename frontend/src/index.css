@@ -3,11 +3,12 @@
 /* ===========================================================================
    MonsoonIQ — operations console theme.
 
-   A dark command-centre surface: deep navy panels, hairline borders, one cyan
-   accent for interaction, and saturated colour reserved for the IMD warning
-   scale and the rainfall ramp. Numbers are tabular and large; glows are used
-   only to signal state (severity, live data, active control), never as
-   decoration. No gradients-as-texture, no glass, no AI-product gloss.
+   Visual language follows SAGAR (SIH 2025 winner, T-MavLabs/SAGAR): marine
+   navy (#0a1929) ground, a single cyan (#00d4ff) accent, translucent glass
+   cards with white/10 hairlines and 12px radii, pill tags, a dotted-map hero,
+   and cyan hover glows. Saturated colour stays reserved for the IMD warning
+   scale and the rainfall ramp. The SAGAR layer at the end of this file
+   overrides the base console rules below it.
 =========================================================================== */
 :root {
   /* surfaces */
@@ -559,6 +560,308 @@ table.data td.num, table.data th.num { text-align: right; font-family: var(--mon
   .chip.live .dot { animation: none; }
 }
 
+/* ===========================================================================
+   SAGAR design layer.
+   Mirrors SAGAR's Tailwind vocabulary: bg-marine-blue ground, bg-white/5 +
+   border-white/10 + rounded-xl + backdrop-blur cards, gray-300 nav that turns
+   cyan, cyan/20 + cyan/30 secondary buttons, solid cyan primary with navy text,
+   rounded-full tags, hover lift with a cyan/10 shadow, fade-up entrances.
+=========================================================================== */
+:root {
+  --glass: rgba(255, 255, 255, .05);
+  --glass-2: rgba(255, 255, 255, .08);
+  --glass-line: rgba(255, 255, 255, .10);
+  --glass-line-2: rgba(255, 255, 255, .20);
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  font-size: 14px;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, rgba(0, 212, 255, .08), transparent 60%),
+    radial-gradient(900px 560px at 100% 4%, rgba(32, 178, 170, .06), transparent 55%),
+    var(--bg-1);
+  background-attachment: fixed;
+}
+
+/* ---------------------------------------------------------------- header */
+.masthead {
+  background: rgba(10, 25, 41, .95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 212, 255, .20);
+}
+.masthead-inner { height: 64px; padding: 0 24px; gap: 28px; }
+.brand { display: flex; align-items: center; gap: 10px; background: none; border: 0; padding: 0; }
+.brand-logo { width: 32px; height: 32px; border-radius: var(--radius-sm); }
+.brand-mark {
+  font-size: 20px; font-weight: 700; letter-spacing: 0; text-transform: none;
+  color: #fff; text-shadow: none;
+}
+.tabs { margin-left: 0; gap: 26px; }
+.tab {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 0; border: 0; border-radius: 0; background: none;
+  color: var(--gray-300); font-size: 14px; transition: color .2s ease;
+}
+.tab:hover { background: none; color: var(--cyan); }
+.tab[aria-selected="true"] {
+  background: none; border: 0; box-shadow: none; color: var(--cyan); font-weight: 600;
+}
+.masthead-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.icon { flex: none; }
+
+.chip { border-radius: 999px; padding: 4px 11px; background: var(--glass); border-color: var(--glass-line); }
+
+/* ------------------------------------------------------------- page head */
+.page-head { padding: 26px 24px 4px; }
+.page-head h1 { font-size: clamp(24px, 3vw, 34px); font-weight: 700; color: #fff; letter-spacing: -.01em; line-height: 1.15; }
+.page-head p { margin-top: 6px; color: var(--gray-400); font-size: 14.5px; max-width: 820px; }
+
+/* ------------------------------------------------------------- controls */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  border-radius: var(--radius-sm); padding: 7px 14px;
+  background: rgba(0, 212, 255, .12); border: 1px solid rgba(0, 212, 255, .30); color: #fff;
+  transition: all .2s ease;
+}
+.btn:hover { background: rgba(0, 212, 255, .22); border-color: rgba(0, 212, 255, .50); }
+.btn.primary { background: var(--cyan); border-color: var(--cyan); color: var(--bg-1); font-weight: 600; }
+.btn.primary:hover { background: var(--cyan); box-shadow: 0 10px 24px rgba(0, 212, 255, .25); transform: translateY(-1px); }
+.btn.icon { padding: 7px 10px; }
+
+.seg { border-radius: var(--radius-sm); background: var(--glass); border-color: var(--glass-line); }
+.seg button { padding: 6px 12px; border-right-color: var(--glass-line); }
+.seg button[aria-pressed="true"] { background: rgba(0, 212, 255, .20); box-shadow: none; color: var(--cyan); }
+
+input[type="date"], input[type="search"], select, textarea {
+  border-radius: var(--radius-sm); padding: 7px 10px;
+  background: rgba(255, 255, 255, .08); border-color: var(--glass-line-2);
+  backdrop-filter: blur(4px);
+}
+
+.commandbar {
+  top: 64px; padding: 12px 24px; gap: 14px;
+  background: rgba(10, 25, 41, .88); backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 212, 255, .10);
+}
+.cb-label { color: var(--gray-400); letter-spacing: .06em; }
+
+/* ------------------------------------------------------------- glass cards */
+.workspace { padding: 18px 24px 24px; gap: 18px; }
+.split { gap: 18px; }
+.rail { gap: 18px; }
+
+.panel, .card {
+  background: var(--glass);
+  border: 1px solid var(--glass-line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(8px);
+  box-shadow: none;
+  transition: border-color .3s ease, box-shadow .3s ease;
+  animation: fadeup .5s ease-out both;
+}
+.panel:hover, .card:hover {
+  border-color: rgba(0, 212, 255, .35);
+  box-shadow: 0 12px 32px rgba(0, 212, 255, .07);
+}
+.workspace > *:nth-child(2) { animation-delay: .06s; }
+.workspace > *:nth-child(3) { animation-delay: .12s; }
+.workspace > *:nth-child(4) { animation-delay: .18s; }
+.workspace > *:nth-child(n+5) { animation-delay: .24s; }
+
+.panel-head { padding: 14px 18px; border-bottom-color: var(--glass-line); }
+.panel-title {
+  font-size: 16px; font-weight: 700; color: #fff;
+  text-transform: none; letter-spacing: 0;
+}
+.panel-title::before {
+  width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; vertical-align: 1px;
+  box-shadow: 0 0 10px rgba(0, 212, 255, .7);
+}
+.panel-body { padding: 16px 18px; }
+.card { padding: 18px; }
+.card h3 { font-size: 12px; color: var(--cyan); letter-spacing: .06em; font-weight: 600; }
+
+.summary-strip {
+  gap: 12px; background: transparent; border: 0; padding: 16px 18px 0; border-radius: 0;
+}
+.stat {
+  background: rgba(255, 255, 255, .04); border: 1px solid var(--glass-line);
+  border-radius: 10px; padding: 12px 14px;
+}
+.stat .k, .landing-stat .k { color: var(--gray-400); letter-spacing: .07em; }
+.stat .v { font-size: 22px; }
+
+/* Warning categories as SAGAR's solid rounded-full tags (navy text on colour). */
+.cat-chip {
+  border-radius: 999px; min-width: 70px; padding: 3px 10px; font-size: 11px;
+  border: 0; box-shadow: none;
+}
+.cat-green { background: var(--green); color: var(--bg-1); }
+.cat-yellow { background: var(--yellow); color: var(--bg-1); }
+.cat-orange { background: var(--orange); color: var(--bg-1); }
+.cat-red { background: var(--red); color: #fff; box-shadow: 0 0 14px rgba(255, 59, 48, .45); }
+
+.badge { padding: 4px 11px; }
+.pill {
+  display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 500;
+}
+.pill.blue { background: rgba(59, 130, 246, .2); color: #60a5fa; }
+.pill.green { background: rgba(34, 197, 94, .2); color: #4ade80; }
+.pill.red { background: rgba(239, 68, 68, .2); color: #f87171; }
+
+/* ----------------------------------------------------------------- tables */
+table.data { font-size: 13px; }
+table.data th {
+  background: rgba(10, 25, 41, .96); color: var(--gray-400);
+  border-bottom-color: var(--glass-line); padding: 10px 12px;
+}
+table.data td { padding: 8px 12px; border-bottom-color: rgba(255, 255, 255, .06); }
+table.data tbody tr { transition: background .15s ease; }
+table.data tbody tr:hover { background: rgba(0, 212, 255, .06); }
+
+/* -------------------------------------------------------------- map/timeline */
+.leaflet-container { border-radius: 0 0 var(--radius) var(--radius); }
+.map-legend, .map-overlay, .map-meta {
+  background: rgba(10, 25, 41, .85); border-color: var(--glass-line); border-radius: 10px;
+  backdrop-filter: blur(8px);
+}
+.timeline-track, .band { border-radius: var(--radius-sm); border-color: var(--glass-line); }
+.flow-col { border-radius: 10px; background: var(--glass); border-color: var(--glass-line); }
+.flow-step { border-radius: var(--radius-sm); background: rgba(255, 255, 255, .04); border-color: var(--glass-line); }
+.method pre, pre.term { border-radius: 10px; border-color: var(--glass-line); background: rgba(0, 0, 0, .35); }
+.note { border-radius: 10px; }
+.advisory, .basis { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+/* Bulletin dialog: SAGAR's modal shell (gray-900, cyan/30 border, rounded-2xl). */
+.bulletin-overlay { backdrop-filter: blur(4px); }
+.panel.bulletin {
+  background: #111827; border-color: rgba(0, 212, 255, .30); border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, .5); animation: pop .25s ease-out both;
+}
+.panel.bulletin:hover { border-color: rgba(0, 212, 255, .30); }
+.panel.bulletin .panel-head { background: linear-gradient(90deg, var(--bg-1), rgba(32, 178, 170, .30)); border-radius: 16px 16px 0 0; }
+
+.footer { padding: 18px 24px 28px; border-top-color: var(--glass-line); }
+
+/* ------------------------------------------------------------ About modal */
+.modal-overlay { position: fixed; inset: 0; z-index: 1600; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, .7); backdrop-filter: blur(4px); animation: fade .2s ease both; }
+.modal {
+  position: relative; width: min(720px, 100%); max-height: 90vh; overflow: auto;
+  background: #111827; border: 1px solid rgba(0, 212, 255, .30); border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, .5); animation: pop .3s ease-out both;
+}
+.modal-hero {
+  position: relative; min-height: 128px; padding: 28px 32px 22px; display: flex; align-items: flex-end;
+  background: linear-gradient(90deg, var(--bg-1), rgba(32, 178, 170, .30));
+}
+.modal-hero-row { display: flex; align-items: center; gap: 16px; }
+.modal-logo { width: 64px; height: 64px; border-radius: 12px; border: 2px solid rgba(0, 212, 255, .5); box-shadow: 0 10px 25px rgba(0, 0, 0, .4); }
+.modal-hero h2 { font-size: 24px; font-weight: 700; color: #fff; }
+.modal-hero p { color: var(--cyan); font-size: 13.5px; font-weight: 500; margin-top: 2px; }
+.modal-close {
+  position: absolute; top: 14px; right: 14px; padding: 8px; border-radius: 999px;
+  color: rgba(255, 255, 255, .55); background: rgba(0, 0, 0, .2); display: inline-flex;
+}
+.modal-close:hover { color: #fff; background: rgba(0, 0, 0, .4); }
+.modal-body { padding: 28px 32px; display: flex; flex-direction: column; gap: 28px; }
+.modal-body h3 { display: flex; align-items: center; gap: 8px; font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 12px; }
+.modal-body h3 .icon { color: var(--cyan); }
+.modal-body section > p { color: var(--gray-300); font-size: 13.5px; line-height: 1.65; }
+.source-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.source-card {
+  background: rgba(31, 41, 55, .5); border: 1px solid rgba(55, 65, 81, .5); border-radius: 10px; padding: 16px;
+  transition: border-color .2s ease;
+}
+.source-card:hover { border-color: rgba(0, 212, 255, .30); }
+.source-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.source-head h4 { font-size: 14.5px; font-weight: 600; color: #fff; }
+.source-org { font-size: 11.5px; color: var(--gray-400); margin-bottom: 8px; }
+.source-card p { font-size: 12px; color: var(--gray-300); line-height: 1.55; }
+.modal-foot { padding-top: 20px; border-top: 1px solid #374151; text-align: center; font-size: 11.5px; color: #6b7280; }
+
+@keyframes pop { from { opacity: 0; transform: scale(.94) translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* --------------------------------------------------------------- landing */
+.landing { background: var(--bg-1); }
+.landing-map {
+  display: flex; align-items: center; justify-content: center;
+  padding: 3vh 4vw; opacity: 1;
+}
+.dotted-india {
+  width: 100%; height: 100%; max-height: 100vh;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+}
+.dotted-india .dot-hot { animation: dotpulse 2.4s ease-in-out infinite; }
+@keyframes dotpulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+.landing-veil {
+  background: radial-gradient(ellipse 46% 40% at 50% 42%, rgba(10, 25, 41, .72), rgba(10, 25, 41, .15) 75%, rgba(10, 25, 41, .45));
+}
+.landing-inner::before { display: none; }
+.landing-kicker { letter-spacing: .28em; font-size: 11.5px; font-weight: 600; }
+.landing-title {
+  font-size: clamp(44px, 7vw, 72px); font-weight: 800; letter-spacing: -.02em;
+  text-transform: none; color: #fff; text-shadow: 0 2px 30px rgba(0, 0, 0, .6);
+}
+.landing-sub { color: var(--gray-300); font-size: 17px; max-width: 700px; margin-top: 16px; }
+.landing-ctas { margin-top: 36px; gap: 14px; }
+.cta { border-radius: var(--radius-sm); padding: 12px 24px; font-size: 15px; font-weight: 600; letter-spacing: 0; }
+.cta.primary { background: var(--cyan); color: var(--bg-1); box-shadow: none; }
+.cta.primary:hover { background: var(--cyan); box-shadow: 0 10px 28px rgba(0, 212, 255, .25); transform: scale(1.04); }
+.cta.teal { background: var(--teal); color: #fff; }
+.cta.teal:hover { box-shadow: 0 10px 28px rgba(32, 178, 170, .25); transform: scale(1.04); }
+.landing-stats {
+  gap: 14px; margin-top: 40px; width: min(940px, 100%);
+  background: transparent; border: 0; border-radius: 0; overflow: visible;
+}
+.landing-stat {
+  background: rgba(17, 24, 39, .55); backdrop-filter: blur(8px);
+  border: 1px solid rgba(55, 65, 81, .5); border-radius: var(--radius); padding: 16px 18px;
+  transition: all .3s ease;
+}
+.landing-stat:hover { border-color: rgba(0, 212, 255, .5); box-shadow: 0 12px 30px rgba(0, 212, 255, .10); transform: translateY(-4px); }
+.landing-hint { margin-top: 22px; }
+.landing-hint kbd { background: var(--glass-2); border-color: var(--glass-line-2); border-radius: 5px; }
+
+/* ----------------------------------------------------------- small screens */
+@media (max-width: 1100px) {
+  .masthead-right .chip:not(.live) { display: none; }
+}
+@media (max-width: 980px) {
+  .masthead-inner { padding: 0 16px; gap: 16px; }
+  .tabs { gap: 16px; }
+  .tab span { display: none; }
+  .tab .icon { width: 18px; height: 18px; }
+  .masthead .btn.back span { display: none; }
+  .page-head { padding: 18px 16px 0; }
+  .workspace { padding: 14px 16px 20px; }
+  .commandbar { top: 64px; padding: 10px 16px; }
+}
+@media (max-width: 760px) {
+  /* Phones: nothing may push the page sideways; wide tables and strips scroll
+     inside their own card instead. */
+  .workspace > *, .split > *, .rail > * { min-width: 0; }
+  .panel, .card { max-width: 100%; overflow-x: auto; }
+  .commandbar select, .commandbar input[type="search"] { max-width: 100%; min-width: 0; }
+  .cb-group { flex-wrap: wrap; min-width: 0; max-width: 100%; }
+}
+@media (max-width: 560px) {
+  .brand-mark { display: none; }
+  .masthead-right .chip.live { display: none; }
+  .landing-sub { font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel, .card, .modal, .modal-backdrop, .panel.bulletin { animation: none; }
+  .dotted-india .dot-hot { animation: none; }
+  .landing-stat:hover, .cta:hover, .btn.primary:hover { transform: none; }
+}
+
 /* ------------------------------------------------------------------ printing */
 @media print {
   /* The bulletin is the artefact that leaves the building. On paper the console's
@@ -574,13 +877,13 @@ table.data td.num, table.data th.num { text-align: right; font-family: var(--mon
   }
   * { background: transparent !important; box-shadow: none !important; text-shadow: none !important; }
   body { background: #fff !important; color: #111 !important; }
-  .masthead, .commandbar, .map-wrap, .timeline, .footer, .landing,
+  .masthead, .commandbar, .map-wrap, .timeline, .footer, .landing, .page-head, .modal-overlay,
   .progressbar, .toast, .seg, .btn { display: none !important; }
   /* Scroll panes are a screen affordance; the table itself is worth printing. */
   .table-scroll { max-height: none !important; overflow: visible !important; }
   table.data { font-size: 10.5px; }
   table.data th { position: static; }
-  .panel { border: 1px solid #c8c8c8 !important; break-inside: avoid; }
+  .panel { border: 1px solid #c8c8c8 !important; break-inside: avoid; animation: none !important; backdrop-filter: none !important; }
   .err { display: none !important; }
 
   /* Only an open bulletin should print, not the dashboard behind it. */
