@@ -31,9 +31,10 @@ from datetime import datetime
 import numpy as np
 
 from src.data.synthetic_generator import SyntheticMonsoonGenerator
+from src.config import P
 
-LEGACY = "data/synthetic/grid_sample_dates.npz"
-OUT = "data/synthetic/grid_feature_samples.npz"
+LEGACY = P("data/synthetic/grid_sample_dates.npz")
+OUT = P("data/synthetic/grid_feature_samples.npz")
 CHECK_FIELDS = {"true_rain": "true_rain", "nwp_d1": "raw_nwp_d1",
                 "nwp_d3": "raw_nwp_d3"}
 

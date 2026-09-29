@@ -1,0 +1,219 @@
+{
+  "headline": {
+    "regime_conditioning_gain_over_regime_agnostic_csi": -0.0194,
+    "gain_significant_95": true,
+    "gain_over_raw_nwp_csi": 0.0332,
+    "experts_alone_gain_over_raw_nwp_csi": 0.0271,
+    "crossover_accuracy": 0.85
+  },
+  "classifier": {
+    "holdout_accuracy": 0.8327,
+    "note": "Synthetic regimes are drawn from the same latent parameters that generate the predictors, so this accuracy is a property of the generator and is not evidence about real regime classification."
+  },
+  "systems": {
+    "raw_nwp": {
+      "rmse": 13.95,
+      "mae": 7.849,
+      "bias": -0.37,
+      "csi": 0.0513,
+      "ets": 0.0441,
+      "pod": 0.0527,
+      "far": 0.34,
+      "hits": 33,
+      "false_alarms": 17,
+      "misses": 593
+    },
+    "global_qm": {
+      "rmse": 18.065,
+      "mae": 8.939,
+      "bias": 1.005,
+      "csi": 0.1264,
+      "ets": 0.1048,
+      "pod": 0.1438,
+      "far": 0.4886,
+      "hits": 90,
+      "false_alarms": 86,
+      "misses": 536
+    },
+    "global_lgb": {
+      "rmse": 13.169,
+      "mae": 7.431,
+      "bias": 0.92,
+      "csi": 0.1039,
+      "ets": 0.0896,
+      "pod": 0.1102,
+      "far": 0.3551,
+      "hits": 69,
+      "false_alarms": 38,
+      "misses": 557
+    },
+    "moe_uniform_weights": {
+      "rmse": 13.837,
+      "mae": 7.924,
+      "bias": 1.195,
+      "csi": 0.0574,
+      "ets": 0.0493,
+      "pod": 0.0591,
+      "far": 0.3393,
+      "hits": 37,
+      "false_alarms": 19,
+      "misses": 589
+    },
+    "moe_classifier": {
+      "rmse": 13.333,
+      "mae": 7.436,
+      "bias": 0.627,
+      "csi": 0.0845,
+      "ets": 0.0734,
+      "pod": 0.0879,
+      "far": 0.3125,
+      "hits": 55,
+      "false_alarms": 25,
+      "misses": 571
+    },
+    "moe_oracle_regime": {
+      "rmse": 13.885,
+      "mae": 7.644,
+      "bias": 0.964,
+      "csi": 0.1111,
+      "ets": 0.096,
+      "pod": 0.1182,
+      "far": 0.3509,
+      "hits": 74,
+      "false_alarms": 40,
+      "misses": 552
+    }
+  },
+  "accuracy_sweep": [
+    {
+      "regime_classifier_accuracy": 1.0,
+      "moe_heavy_csi": 0.1073,
+      "moe_rmse": 13.847,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": true
+    },
+    {
+      "regime_classifier_accuracy": 0.97,
+      "moe_heavy_csi": 0.1056,
+      "moe_rmse": 13.944,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": true
+    },
+    {
+      "regime_classifier_accuracy": 0.95,
+      "moe_heavy_csi": 0.1041,
+      "moe_rmse": 13.946,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": true
+    },
+    {
+      "regime_classifier_accuracy": 0.9,
+      "moe_heavy_csi": 0.1075,
+      "moe_rmse": 13.958,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": true
+    },
+    {
+      "regime_classifier_accuracy": 0.85,
+      "moe_heavy_csi": 0.1045,
+      "moe_rmse": 13.713,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": true
+    },
+    {
+      "regime_classifier_accuracy": 0.8,
+      "moe_heavy_csi": 0.1011,
+      "moe_rmse": 14.399,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": false
+    },
+    {
+      "regime_classifier_accuracy": 0.75,
+      "moe_heavy_csi": 0.1017,
+      "moe_rmse": 15.128,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": false
+    },
+    {
+      "regime_classifier_accuracy": 0.65,
+      "moe_heavy_csi": 0.1037,
+      "moe_rmse": 14.441,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": false
+    },
+    {
+      "regime_classifier_accuracy": 0.5,
+      "moe_heavy_csi": 0.0945,
+      "moe_rmse": 14.84,
+      "regime_agnostic_lgb_csi": 0.1039,
+      "beats_regime_agnostic": false
+    }
+  ],
+  "comparisons": {
+    "moe_classifier_vs_raw_nwp": {
+      "metric": "csi",
+      "delta": 0.0332,
+      "ci95": [
+        0.01,
+        0.0543
+      ],
+      "p_positive": 0.993,
+      "significant_95": true,
+      "favours": "A",
+      "a_events": 626,
+      "b_events": 626
+    },
+    "moe_classifier_vs_global_lgb": {
+      "metric": "csi",
+      "delta": -0.0194,
+      "ci95": [
+        -0.0383,
+        -0.0024
+      ],
+      "p_positive": 0.003,
+      "significant_95": true,
+      "favours": "B",
+      "a_events": 626,
+      "b_events": 626
+    },
+    "moe_classifier_vs_uniform_weights": {
+      "metric": "csi",
+      "delta": 0.0271,
+      "ci95": [
+        0.0046,
+        0.0469
+      ],
+      "p_positive": 0.993,
+      "significant_95": true,
+      "favours": "A",
+      "a_events": 626,
+      "b_events": 626
+    },
+    "moe_oracle_vs_global_lgb": {
+      "metric": "csi",
+      "delta": 0.0072,
+      "ci95": [
+        -0.0135,
+        0.024
+      ],
+      "p_positive": 0.773,
+      "significant_95": false,
+      "favours": "A",
+      "a_events": 626,
+      "b_events": 626
+    },
+    "moe_classifier_vs_global_lgb_rmse": {
+      "metric": "rmse",
+      "delta": 0.164,
+      "ci95": [
+        -0.803,
+        1.1083
+      ],
+      "p_positive": 0.637,
+      "significant_95": false,
+      "favours": "B"
+    }
+  },
+  "interpretation": "Uniform regime weights reproduce a 'correction with no regime information' system; the gap between it and the classifier blend is the actual value of regime awareness. If that gap is inside the interval, the regime layer is not yet earning its complexity and the honest fix is more training seasons or a better regime classifier - not a stronger claim.",
+  "available": true
+}

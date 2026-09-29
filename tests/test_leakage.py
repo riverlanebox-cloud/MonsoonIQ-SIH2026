@@ -13,17 +13,20 @@ import pandas as pd
 import numpy as np
 from src.correction.quantile_mapping import EmpiricalQuantileMapper
 from src.correction.mixture_of_experts import MonsoonIQMixtureOfExperts
+from src.config import P
+from src.data.io import read_table
 
 
 def test_strict_temporal_split():
-    data_path = "data/synthetic/district_daily.parquet"
+    data_path = P("data/synthetic/district_daily.parquet")
     if not os.path.exists(data_path):
         pytest.skip("Dataset not yet generated.")
 
-    df = pd.read_parquet(data_path)
-    train_years = set([2016, 2017, 2018, 2019, 2020])
-    val_years = set([2021])
-    test_years = set([2022, 2023])
+    df = read_table(data_path)
+    from src.config import TRAIN_YEARS, VAL_YEARS, TEST_YEARS
+    train_years = set(TRAIN_YEARS)
+    val_years = set(VAL_YEARS)
+    test_years = set(TEST_YEARS)
 
     # Assert mutual exclusivity
     assert len(train_years.intersection(val_years)) == 0, "Train and Val years overlap!"
@@ -63,7 +66,7 @@ def test_quantile_mapping_no_test_leakage():
 
 def test_moe_artifact_leakage_check():
     """Verify loaded MoE model was trained only on 2016-2020."""
-    moe_path = "artifacts/models/mixture_of_experts.joblib"
+    moe_path = P("artifacts/models/mixture_of_experts.joblib")
     if not os.path.exists(moe_path):
         pytest.skip("MoE artifact not found.")
 

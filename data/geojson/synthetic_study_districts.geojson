@@ -1,0 +1,2337 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "KL_WAY",
+      "properties": {
+        "district_id": "KL_WAY",
+        "district_name": "Wayanad",
+        "state_name": "Kerala",
+        "zone": "West Coast",
+        "centroid_lat": 11.6854,
+        "centroid_lon": 76.132,
+        "elevation_m": 750
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.882,
+              11.4854
+            ],
+            [
+              76.33200000000001,
+              11.4354
+            ],
+            [
+              76.412,
+              11.8354
+            ],
+            [
+              76.08200000000001,
+              11.9354
+            ],
+            [
+              75.882,
+              11.7854
+            ],
+            [
+              75.882,
+              11.4854
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KL_IDK",
+      "properties": {
+        "district_id": "KL_IDK",
+        "district_name": "Idukki",
+        "state_name": "Kerala",
+        "zone": "West Coast",
+        "centroid_lat": 9.8494,
+        "centroid_lon": 76.971,
+        "elevation_m": 1200
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.721,
+              9.6494
+            ],
+            [
+              77.171,
+              9.5994
+            ],
+            [
+              77.251,
+              9.9994
+            ],
+            [
+              76.921,
+              10.0994
+            ],
+            [
+              76.721,
+              9.949399999999999
+            ],
+            [
+              76.721,
+              9.6494
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KL_EKM",
+      "properties": {
+        "district_id": "KL_EKM",
+        "district_name": "Ernakulam (Kochi)",
+        "state_name": "Kerala",
+        "zone": "West Coast",
+        "centroid_lat": 9.9816,
+        "centroid_lon": 76.2999,
+        "elevation_m": 10
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.0499,
+              9.781600000000001
+            ],
+            [
+              76.4999,
+              9.7316
+            ],
+            [
+              76.5799,
+              10.1316
+            ],
+            [
+              76.2499,
+              10.2316
+            ],
+            [
+              76.0499,
+              10.0816
+            ],
+            [
+              76.0499,
+              9.781600000000001
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KL_TVM",
+      "properties": {
+        "district_id": "KL_TVM",
+        "district_name": "Thiruvananthapuram",
+        "state_name": "Kerala",
+        "zone": "West Coast",
+        "centroid_lat": 8.5241,
+        "centroid_lon": 76.9366,
+        "elevation_m": 20
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.6866,
+              8.324100000000001
+            ],
+            [
+              77.1366,
+              8.2741
+            ],
+            [
+              77.2166,
+              8.674100000000001
+            ],
+            [
+              76.8866,
+              8.7741
+            ],
+            [
+              76.6866,
+              8.6241
+            ],
+            [
+              76.6866,
+              8.324100000000001
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_MUM",
+      "properties": {
+        "district_id": "MH_MUM",
+        "district_name": "Mumbai City",
+        "state_name": "Maharashtra",
+        "zone": "West Coast",
+        "centroid_lat": 18.9388,
+        "centroid_lon": 72.8354,
+        "elevation_m": 14
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.5854,
+              18.7388
+            ],
+            [
+              73.03540000000001,
+              18.6888
+            ],
+            [
+              73.11540000000001,
+              19.0888
+            ],
+            [
+              72.78540000000001,
+              19.1888
+            ],
+            [
+              72.5854,
+              19.038800000000002
+            ],
+            [
+              72.5854,
+              18.7388
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_SUB",
+      "properties": {
+        "district_id": "MH_SUB",
+        "district_name": "Mumbai Suburban",
+        "state_name": "Maharashtra",
+        "zone": "West Coast",
+        "centroid_lat": 19.1136,
+        "centroid_lon": 72.8697,
+        "elevation_m": 18
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.6197,
+              18.913600000000002
+            ],
+            [
+              73.0697,
+              18.8636
+            ],
+            [
+              73.1497,
+              19.2636
+            ],
+            [
+              72.8197,
+              19.3636
+            ],
+            [
+              72.6197,
+              19.213600000000003
+            ],
+            [
+              72.6197,
+              18.913600000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_THN",
+      "properties": {
+        "district_id": "MH_THN",
+        "district_name": "Thane",
+        "state_name": "Maharashtra",
+        "zone": "West Coast",
+        "centroid_lat": 19.2183,
+        "centroid_lon": 72.9781,
+        "elevation_m": 25
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.7281,
+              19.0183
+            ],
+            [
+              73.1781,
+              18.9683
+            ],
+            [
+              73.2581,
+              19.368299999999998
+            ],
+            [
+              72.9281,
+              19.4683
+            ],
+            [
+              72.7281,
+              19.3183
+            ],
+            [
+              72.7281,
+              19.0183
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_RTG",
+      "properties": {
+        "district_id": "MH_RTG",
+        "district_name": "Ratnagiri",
+        "state_name": "Maharashtra",
+        "zone": "West Coast",
+        "centroid_lat": 16.9902,
+        "centroid_lon": 73.312,
+        "elevation_m": 30
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.062,
+              16.790200000000002
+            ],
+            [
+              73.512,
+              16.7402
+            ],
+            [
+              73.592,
+              17.1402
+            ],
+            [
+              73.262,
+              17.2402
+            ],
+            [
+              73.062,
+              17.090200000000003
+            ],
+            [
+              73.062,
+              16.790200000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_PUN",
+      "properties": {
+        "district_id": "MH_PUN",
+        "district_name": "Pune",
+        "state_name": "Maharashtra",
+        "zone": "Central India",
+        "centroid_lat": 18.5204,
+        "centroid_lon": 73.8567,
+        "elevation_m": 560
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.6067,
+              18.3204
+            ],
+            [
+              74.0567,
+              18.2704
+            ],
+            [
+              74.1367,
+              18.670399999999997
+            ],
+            [
+              73.8067,
+              18.7704
+            ],
+            [
+              73.6067,
+              18.6204
+            ],
+            [
+              73.6067,
+              18.3204
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_SAT",
+      "properties": {
+        "district_id": "MH_SAT",
+        "district_name": "Satara (Mahabaleshwar)",
+        "state_name": "Maharashtra",
+        "zone": "West Coast",
+        "centroid_lat": 17.6805,
+        "centroid_lon": 73.9803,
+        "elevation_m": 1350
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.7303,
+              17.4805
+            ],
+            [
+              74.1803,
+              17.4305
+            ],
+            [
+              74.2603,
+              17.830499999999997
+            ],
+            [
+              73.9303,
+              17.9305
+            ],
+            [
+              73.7303,
+              17.7805
+            ],
+            [
+              73.7303,
+              17.4805
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MH_NGP",
+      "properties": {
+        "district_id": "MH_NGP",
+        "district_name": "Nagpur",
+        "state_name": "Maharashtra",
+        "zone": "Central India",
+        "centroid_lat": 21.1458,
+        "centroid_lon": 79.0882,
+        "elevation_m": 310
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.8382,
+              20.945800000000002
+            ],
+            [
+              79.2882,
+              20.8958
+            ],
+            [
+              79.3682,
+              21.2958
+            ],
+            [
+              79.0382,
+              21.3958
+            ],
+            [
+              78.8382,
+              21.245800000000003
+            ],
+            [
+              78.8382,
+              20.945800000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GA_NGA",
+      "properties": {
+        "district_id": "GA_NGA",
+        "district_name": "North Goa",
+        "state_name": "Goa",
+        "zone": "West Coast",
+        "centroid_lat": 15.4989,
+        "centroid_lon": 73.8278,
+        "elevation_m": 15
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.5778,
+              15.298900000000001
+            ],
+            [
+              74.0278,
+              15.2489
+            ],
+            [
+              74.1078,
+              15.648900000000001
+            ],
+            [
+              73.7778,
+              15.7489
+            ],
+            [
+              73.5778,
+              15.5989
+            ],
+            [
+              73.5778,
+              15.298900000000001
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KA_UDU",
+      "properties": {
+        "district_id": "KA_UDU",
+        "district_name": "Udupi",
+        "state_name": "Karnataka",
+        "zone": "West Coast",
+        "centroid_lat": 13.3409,
+        "centroid_lon": 74.7421,
+        "elevation_m": 25
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.4921,
+              13.1409
+            ],
+            [
+              74.9421,
+              13.0909
+            ],
+            [
+              75.0221,
+              13.4909
+            ],
+            [
+              74.6921,
+              13.5909
+            ],
+            [
+              74.4921,
+              13.4409
+            ],
+            [
+              74.4921,
+              13.1409
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KA_DKA",
+      "properties": {
+        "district_id": "KA_DKA",
+        "district_name": "Dakshina Kannada",
+        "state_name": "Karnataka",
+        "zone": "West Coast",
+        "centroid_lat": 12.87,
+        "centroid_lon": 74.88,
+        "elevation_m": 22
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.63,
+              12.67
+            ],
+            [
+              75.08,
+              12.62
+            ],
+            [
+              75.16,
+              13.02
+            ],
+            [
+              74.83,
+              13.12
+            ],
+            [
+              74.63,
+              12.969999999999999
+            ],
+            [
+              74.63,
+              12.67
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "KA_BLR",
+      "properties": {
+        "district_id": "KA_BLR",
+        "district_name": "Bengaluru Urban",
+        "state_name": "Karnataka",
+        "zone": "South Peninsula",
+        "centroid_lat": 12.9716,
+        "centroid_lon": 77.5946,
+        "elevation_m": 920
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.3446,
+              12.771600000000001
+            ],
+            [
+              77.7946,
+              12.7216
+            ],
+            [
+              77.8746,
+              13.1216
+            ],
+            [
+              77.5446,
+              13.2216
+            ],
+            [
+              77.3446,
+              13.0716
+            ],
+            [
+              77.3446,
+              12.771600000000001
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UK_DRN",
+      "properties": {
+        "district_id": "UK_DRN",
+        "district_name": "Dehradun",
+        "state_name": "Uttarakhand",
+        "zone": "Northwest",
+        "centroid_lat": 30.3165,
+        "centroid_lon": 78.0322,
+        "elevation_m": 640
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.7822,
+              30.116500000000002
+            ],
+            [
+              78.2322,
+              30.0665
+            ],
+            [
+              78.3122,
+              30.4665
+            ],
+            [
+              77.9822,
+              30.5665
+            ],
+            [
+              77.7822,
+              30.416500000000003
+            ],
+            [
+              77.7822,
+              30.116500000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UK_RUD",
+      "properties": {
+        "district_id": "UK_RUD",
+        "district_name": "Rudraprayag (Kedarnath)",
+        "state_name": "Uttarakhand",
+        "zone": "Northwest",
+        "centroid_lat": 30.2844,
+        "centroid_lon": 78.9811,
+        "elevation_m": 2100
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.7311,
+              30.084400000000002
+            ],
+            [
+              79.1811,
+              30.0344
+            ],
+            [
+              79.2611,
+              30.4344
+            ],
+            [
+              78.9311,
+              30.5344
+            ],
+            [
+              78.7311,
+              30.384400000000003
+            ],
+            [
+              78.7311,
+              30.084400000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UK_UTK",
+      "properties": {
+        "district_id": "UK_UTK",
+        "district_name": "Uttarkashi",
+        "state_name": "Uttarakhand",
+        "zone": "Northwest",
+        "centroid_lat": 30.7268,
+        "centroid_lon": 78.4354,
+        "elevation_m": 1158
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.1854,
+              30.5268
+            ],
+            [
+              78.6354,
+              30.4768
+            ],
+            [
+              78.7154,
+              30.8768
+            ],
+            [
+              78.3854,
+              30.9768
+            ],
+            [
+              78.1854,
+              30.826800000000002
+            ],
+            [
+              78.1854,
+              30.5268
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "HP_SML",
+      "properties": {
+        "district_id": "HP_SML",
+        "district_name": "Shimla",
+        "state_name": "Himachal Pradesh",
+        "zone": "Northwest",
+        "centroid_lat": 31.1048,
+        "centroid_lon": 77.1734,
+        "elevation_m": 2200
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.9234,
+              30.9048
+            ],
+            [
+              77.3734,
+              30.8548
+            ],
+            [
+              77.4534,
+              31.2548
+            ],
+            [
+              77.1234,
+              31.3548
+            ],
+            [
+              76.9234,
+              31.204800000000002
+            ],
+            [
+              76.9234,
+              30.9048
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "HP_KUL",
+      "properties": {
+        "district_id": "HP_KUL",
+        "district_name": "Kullu / Manali",
+        "state_name": "Himachal Pradesh",
+        "zone": "Northwest",
+        "centroid_lat": 31.9579,
+        "centroid_lon": 77.1095,
+        "elevation_m": 1279
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.8595,
+              31.7579
+            ],
+            [
+              77.3095,
+              31.7079
+            ],
+            [
+              77.3895,
+              32.1079
+            ],
+            [
+              77.0595,
+              32.207899999999995
+            ],
+            [
+              76.8595,
+              32.0579
+            ],
+            [
+              76.8595,
+              31.7579
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "JK_SRN",
+      "properties": {
+        "district_id": "JK_SRN",
+        "district_name": "Srinagar",
+        "state_name": "Jammu and Kashmir",
+        "zone": "Northwest",
+        "centroid_lat": 34.0837,
+        "centroid_lon": 74.7973,
+        "elevation_m": 1585
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.5473,
+              33.8837
+            ],
+            [
+              74.99730000000001,
+              33.8337
+            ],
+            [
+              75.07730000000001,
+              34.2337
+            ],
+            [
+              74.74730000000001,
+              34.3337
+            ],
+            [
+              74.5473,
+              34.1837
+            ],
+            [
+              74.5473,
+              33.8837
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "JK_JAM",
+      "properties": {
+        "district_id": "JK_JAM",
+        "district_name": "Jammu",
+        "state_name": "Jammu and Kashmir",
+        "zone": "Northwest",
+        "centroid_lat": 32.7266,
+        "centroid_lon": 74.857,
+        "elevation_m": 327
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.607,
+              32.526599999999995
+            ],
+            [
+              75.057,
+              32.4766
+            ],
+            [
+              75.137,
+              32.876599999999996
+            ],
+            [
+              74.807,
+              32.9766
+            ],
+            [
+              74.607,
+              32.8266
+            ],
+            [
+              74.607,
+              32.526599999999995
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "DL_NDL",
+      "properties": {
+        "district_id": "DL_NDL",
+        "district_name": "New Delhi",
+        "state_name": "Delhi",
+        "zone": "Northwest",
+        "centroid_lat": 28.6139,
+        "centroid_lon": 77.209,
+        "elevation_m": 216
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.959,
+              28.4139
+            ],
+            [
+              77.409,
+              28.3639
+            ],
+            [
+              77.489,
+              28.7639
+            ],
+            [
+              77.159,
+              28.8639
+            ],
+            [
+              76.959,
+              28.713900000000002
+            ],
+            [
+              76.959,
+              28.4139
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "PB_ASR",
+      "properties": {
+        "district_id": "PB_ASR",
+        "district_name": "Amritsar",
+        "state_name": "Punjab",
+        "zone": "Northwest",
+        "centroid_lat": 31.634,
+        "centroid_lon": 74.8723,
+        "elevation_m": 234
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.6223,
+              31.434
+            ],
+            [
+              75.0723,
+              31.384
+            ],
+            [
+              75.1523,
+              31.784
+            ],
+            [
+              74.8223,
+              31.884
+            ],
+            [
+              74.6223,
+              31.734
+            ],
+            [
+              74.6223,
+              31.434
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "RJ_JAI",
+      "properties": {
+        "district_id": "RJ_JAI",
+        "district_name": "Jaipur",
+        "state_name": "Rajasthan",
+        "zone": "Northwest",
+        "centroid_lat": 26.9124,
+        "centroid_lon": 75.7873,
+        "elevation_m": 431
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.5373,
+              26.712400000000002
+            ],
+            [
+              75.9873,
+              26.6624
+            ],
+            [
+              76.0673,
+              27.0624
+            ],
+            [
+              75.7373,
+              27.1624
+            ],
+            [
+              75.5373,
+              27.012400000000003
+            ],
+            [
+              75.5373,
+              26.712400000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "RJ_JOD",
+      "properties": {
+        "district_id": "RJ_JOD",
+        "district_name": "Jodhpur",
+        "state_name": "Rajasthan",
+        "zone": "Northwest",
+        "centroid_lat": 26.2389,
+        "centroid_lon": 73.0243,
+        "elevation_m": 231
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.7743,
+              26.0389
+            ],
+            [
+              73.2243,
+              25.9889
+            ],
+            [
+              73.3043,
+              26.3889
+            ],
+            [
+              72.9743,
+              26.4889
+            ],
+            [
+              72.7743,
+              26.338900000000002
+            ],
+            [
+              72.7743,
+              26.0389
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MP_BPL",
+      "properties": {
+        "district_id": "MP_BPL",
+        "district_name": "Bhopal",
+        "state_name": "Madhya Pradesh",
+        "zone": "Central India",
+        "centroid_lat": 23.2599,
+        "centroid_lon": 77.4126,
+        "elevation_m": 527
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              77.1626,
+              23.0599
+            ],
+            [
+              77.6126,
+              23.0099
+            ],
+            [
+              77.6926,
+              23.409899999999997
+            ],
+            [
+              77.3626,
+              23.5099
+            ],
+            [
+              77.1626,
+              23.3599
+            ],
+            [
+              77.1626,
+              23.0599
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MP_IND",
+      "properties": {
+        "district_id": "MP_IND",
+        "district_name": "Indore",
+        "state_name": "Madhya Pradesh",
+        "zone": "Central India",
+        "centroid_lat": 22.7196,
+        "centroid_lon": 75.8577,
+        "elevation_m": 553
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75.6077,
+              22.5196
+            ],
+            [
+              76.0577,
+              22.4696
+            ],
+            [
+              76.1377,
+              22.8696
+            ],
+            [
+              75.8077,
+              22.9696
+            ],
+            [
+              75.6077,
+              22.8196
+            ],
+            [
+              75.6077,
+              22.5196
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "MP_JBP",
+      "properties": {
+        "district_id": "MP_JBP",
+        "district_name": "Jabalpur",
+        "state_name": "Madhya Pradesh",
+        "zone": "Central India",
+        "centroid_lat": 23.1815,
+        "centroid_lon": 79.9864,
+        "elevation_m": 411
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              79.7364,
+              22.9815
+            ],
+            [
+              80.1864,
+              22.9315
+            ],
+            [
+              80.2664,
+              23.3315
+            ],
+            [
+              79.9364,
+              23.4315
+            ],
+            [
+              79.7364,
+              23.2815
+            ],
+            [
+              79.7364,
+              22.9815
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CG_RPR",
+      "properties": {
+        "district_id": "CG_RPR",
+        "district_name": "Raipur",
+        "state_name": "Chhattisgarh",
+        "zone": "Central India",
+        "centroid_lat": 21.2514,
+        "centroid_lon": 81.6296,
+        "elevation_m": 298
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.3796,
+              21.0514
+            ],
+            [
+              81.8296,
+              21.0014
+            ],
+            [
+              81.9096,
+              21.4014
+            ],
+            [
+              81.5796,
+              21.5014
+            ],
+            [
+              81.3796,
+              21.3514
+            ],
+            [
+              81.3796,
+              21.0514
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "CG_BST",
+      "properties": {
+        "district_id": "CG_BST",
+        "district_name": "Bastar",
+        "state_name": "Chhattisgarh",
+        "zone": "Central India",
+        "centroid_lat": 19.0744,
+        "centroid_lon": 82.0298,
+        "elevation_m": 552
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              81.7798,
+              18.8744
+            ],
+            [
+              82.2298,
+              18.8244
+            ],
+            [
+              82.3098,
+              19.2244
+            ],
+            [
+              81.9798,
+              19.3244
+            ],
+            [
+              81.7798,
+              19.174400000000002
+            ],
+            [
+              81.7798,
+              18.8744
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "OD_PVI",
+      "properties": {
+        "district_id": "OD_PVI",
+        "district_name": "Puri",
+        "state_name": "Odisha",
+        "zone": "East Coast",
+        "centroid_lat": 19.8135,
+        "centroid_lon": 85.8312,
+        "elevation_m": 10
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.5812,
+              19.613500000000002
+            ],
+            [
+              86.0312,
+              19.5635
+            ],
+            [
+              86.1112,
+              19.9635
+            ],
+            [
+              85.7812,
+              20.0635
+            ],
+            [
+              85.5812,
+              19.913500000000003
+            ],
+            [
+              85.5812,
+              19.613500000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "OD_BBS",
+      "properties": {
+        "district_id": "OD_BBS",
+        "district_name": "Khordha (Bhubaneswar)",
+        "state_name": "Odisha",
+        "zone": "East Coast",
+        "centroid_lat": 20.2961,
+        "centroid_lon": 85.8245,
+        "elevation_m": 45
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              85.5745,
+              20.0961
+            ],
+            [
+              86.0245,
+              20.0461
+            ],
+            [
+              86.1045,
+              20.446099999999998
+            ],
+            [
+              85.7745,
+              20.5461
+            ],
+            [
+              85.5745,
+              20.3961
+            ],
+            [
+              85.5745,
+              20.0961
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "OD_BAL",
+      "properties": {
+        "district_id": "OD_BAL",
+        "district_name": "Balasore",
+        "state_name": "Odisha",
+        "zone": "East Coast",
+        "centroid_lat": 21.4934,
+        "centroid_lon": 86.9135,
+        "elevation_m": 16
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              86.6635,
+              21.293400000000002
+            ],
+            [
+              87.1135,
+              21.2434
+            ],
+            [
+              87.1935,
+              21.6434
+            ],
+            [
+              86.8635,
+              21.7434
+            ],
+            [
+              86.6635,
+              21.593400000000003
+            ],
+            [
+              86.6635,
+              21.293400000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "OD_SMB",
+      "properties": {
+        "district_id": "OD_SMB",
+        "district_name": "Sambalpur",
+        "state_name": "Odisha",
+        "zone": "Central India",
+        "centroid_lat": 21.4669,
+        "centroid_lon": 83.9812,
+        "elevation_m": 150
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.7312,
+              21.2669
+            ],
+            [
+              84.1812,
+              21.2169
+            ],
+            [
+              84.2612,
+              21.616899999999998
+            ],
+            [
+              83.9312,
+              21.7169
+            ],
+            [
+              83.7312,
+              21.5669
+            ],
+            [
+              83.7312,
+              21.2669
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UP_LKO",
+      "properties": {
+        "district_id": "UP_LKO",
+        "district_name": "Lucknow",
+        "state_name": "Uttar Pradesh",
+        "zone": "Central India",
+        "centroid_lat": 26.8467,
+        "centroid_lon": 80.9462,
+        "elevation_m": 123
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.6962,
+              26.6467
+            ],
+            [
+              81.14620000000001,
+              26.5967
+            ],
+            [
+              81.2262,
+              26.996699999999997
+            ],
+            [
+              80.89620000000001,
+              27.0967
+            ],
+            [
+              80.6962,
+              26.9467
+            ],
+            [
+              80.6962,
+              26.6467
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UP_VNS",
+      "properties": {
+        "district_id": "UP_VNS",
+        "district_name": "Varanasi",
+        "state_name": "Uttar Pradesh",
+        "zone": "Central India",
+        "centroid_lat": 25.3176,
+        "centroid_lon": 82.9739,
+        "elevation_m": 81
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              82.7239,
+              25.1176
+            ],
+            [
+              83.1739,
+              25.0676
+            ],
+            [
+              83.2539,
+              25.467599999999997
+            ],
+            [
+              82.9239,
+              25.5676
+            ],
+            [
+              82.7239,
+              25.4176
+            ],
+            [
+              82.7239,
+              25.1176
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "UP_GKP",
+      "properties": {
+        "district_id": "UP_GKP",
+        "district_name": "Gorakhpur (Foothills)",
+        "state_name": "Uttar Pradesh",
+        "zone": "Gangetic Plain",
+        "centroid_lat": 26.7606,
+        "centroid_lon": 83.3732,
+        "elevation_m": 84
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              83.1232,
+              26.5606
+            ],
+            [
+              83.5732,
+              26.5106
+            ],
+            [
+              83.6532,
+              26.9106
+            ],
+            [
+              83.3232,
+              27.0106
+            ],
+            [
+              83.1232,
+              26.8606
+            ],
+            [
+              83.1232,
+              26.5606
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "BR_PAT",
+      "properties": {
+        "district_id": "BR_PAT",
+        "district_name": "Patna",
+        "state_name": "Bihar",
+        "zone": "Gangetic Plain",
+        "centroid_lat": 25.5941,
+        "centroid_lon": 85.1376,
+        "elevation_m": 53
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.8876,
+              25.3941
+            ],
+            [
+              85.33760000000001,
+              25.3441
+            ],
+            [
+              85.41760000000001,
+              25.7441
+            ],
+            [
+              85.08760000000001,
+              25.8441
+            ],
+            [
+              84.8876,
+              25.694100000000002
+            ],
+            [
+              84.8876,
+              25.3941
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "BR_GAY",
+      "properties": {
+        "district_id": "BR_GAY",
+        "district_name": "Gaya",
+        "state_name": "Bihar",
+        "zone": "Gangetic Plain",
+        "centroid_lat": 24.7914,
+        "centroid_lon": 85.0002,
+        "elevation_m": 111
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.7502,
+              24.5914
+            ],
+            [
+              85.20020000000001,
+              24.5414
+            ],
+            [
+              85.28020000000001,
+              24.941399999999998
+            ],
+            [
+              84.95020000000001,
+              25.0414
+            ],
+            [
+              84.7502,
+              24.8914
+            ],
+            [
+              84.7502,
+              24.5914
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ_AMD",
+      "properties": {
+        "district_id": "GJ_AMD",
+        "district_name": "Ahmedabad",
+        "state_name": "Gujarat",
+        "zone": "West Coast",
+        "centroid_lat": 23.0225,
+        "centroid_lon": 72.5714,
+        "elevation_m": 53
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.3214,
+              22.8225
+            ],
+            [
+              72.7714,
+              22.7725
+            ],
+            [
+              72.8514,
+              23.1725
+            ],
+            [
+              72.5214,
+              23.2725
+            ],
+            [
+              72.3214,
+              23.122500000000002
+            ],
+            [
+              72.3214,
+              22.8225
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ_SRT",
+      "properties": {
+        "district_id": "GJ_SRT",
+        "district_name": "Surat",
+        "state_name": "Gujarat",
+        "zone": "West Coast",
+        "centroid_lat": 21.1702,
+        "centroid_lon": 72.8311,
+        "elevation_m": 13
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              72.5811,
+              20.970200000000002
+            ],
+            [
+              73.03110000000001,
+              20.9202
+            ],
+            [
+              73.11110000000001,
+              21.3202
+            ],
+            [
+              72.78110000000001,
+              21.4202
+            ],
+            [
+              72.5811,
+              21.270200000000003
+            ],
+            [
+              72.5811,
+              20.970200000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "GJ_KCH",
+      "properties": {
+        "district_id": "GJ_KCH",
+        "district_name": "Kutch (Bhuj)",
+        "state_name": "Gujarat",
+        "zone": "Northwest",
+        "centroid_lat": 23.242,
+        "centroid_lon": 69.6669,
+        "elevation_m": 110
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              69.4169,
+              23.042
+            ],
+            [
+              69.8669,
+              22.992
+            ],
+            [
+              69.9469,
+              23.392
+            ],
+            [
+              69.6169,
+              23.492
+            ],
+            [
+              69.4169,
+              23.342000000000002
+            ],
+            [
+              69.4169,
+              23.042
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "AS_GHY",
+      "properties": {
+        "district_id": "AS_GHY",
+        "district_name": "Kamrup (Guwahati)",
+        "state_name": "Assam",
+        "zone": "Northeast",
+        "centroid_lat": 26.1445,
+        "centroid_lon": 91.7362,
+        "elevation_m": 55
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              91.4862,
+              25.9445
+            ],
+            [
+              91.9362,
+              25.8945
+            ],
+            [
+              92.0162,
+              26.2945
+            ],
+            [
+              91.6862,
+              26.3945
+            ],
+            [
+              91.4862,
+              26.244500000000002
+            ],
+            [
+              91.4862,
+              25.9445
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ML_SHL",
+      "properties": {
+        "district_id": "ML_SHL",
+        "district_name": "East Khasi Hills (Cherrapunji/Shillong)",
+        "state_name": "Meghalaya",
+        "zone": "Northeast",
+        "centroid_lat": 25.2986,
+        "centroid_lon": 91.5822,
+        "elevation_m": 1484
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              91.3322,
+              25.0986
+            ],
+            [
+              91.7822,
+              25.0486
+            ],
+            [
+              91.8622,
+              25.4486
+            ],
+            [
+              91.5322,
+              25.5486
+            ],
+            [
+              91.3322,
+              25.398600000000002
+            ],
+            [
+              91.3322,
+              25.0986
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "AR_ITA",
+      "properties": {
+        "district_id": "AR_ITA",
+        "district_name": "Papum Pare (Itanagar)",
+        "state_name": "Arunachal Pradesh",
+        "zone": "Northeast",
+        "centroid_lat": 27.0844,
+        "centroid_lon": 93.6053,
+        "elevation_m": 320
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              93.3553,
+              26.8844
+            ],
+            [
+              93.8053,
+              26.8344
+            ],
+            [
+              93.8853,
+              27.234399999999997
+            ],
+            [
+              93.5553,
+              27.3344
+            ],
+            [
+              93.3553,
+              27.1844
+            ],
+            [
+              93.3553,
+              26.8844
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "WB_KOL",
+      "properties": {
+        "district_id": "WB_KOL",
+        "district_name": "Kolkata",
+        "state_name": "West Bengal",
+        "zone": "East Coast",
+        "centroid_lat": 22.5726,
+        "centroid_lon": 88.3639,
+        "elevation_m": 9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.1139,
+              22.372600000000002
+            ],
+            [
+              88.5639,
+              22.3226
+            ],
+            [
+              88.6439,
+              22.7226
+            ],
+            [
+              88.3139,
+              22.8226
+            ],
+            [
+              88.1139,
+              22.672600000000003
+            ],
+            [
+              88.1139,
+              22.372600000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "WB_24P",
+      "properties": {
+        "district_id": "WB_24P",
+        "district_name": "South 24 Parganas (Sundarbans)",
+        "state_name": "West Bengal",
+        "zone": "East Coast",
+        "centroid_lat": 22.1352,
+        "centroid_lon": 88.5448,
+        "elevation_m": 6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              88.2948,
+              21.935200000000002
+            ],
+            [
+              88.7448,
+              21.8852
+            ],
+            [
+              88.8248,
+              22.2852
+            ],
+            [
+              88.4948,
+              22.3852
+            ],
+            [
+              88.2948,
+              22.235200000000003
+            ],
+            [
+              88.2948,
+              21.935200000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "AP_VSK",
+      "properties": {
+        "district_id": "AP_VSK",
+        "district_name": "Visakhapatnam",
+        "state_name": "Andhra Pradesh",
+        "zone": "East Coast",
+        "centroid_lat": 17.6868,
+        "centroid_lon": 83.2185,
+        "elevation_m": 45
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              82.9685,
+              17.486800000000002
+            ],
+            [
+              83.41850000000001,
+              17.4368
+            ],
+            [
+              83.4985,
+              17.8368
+            ],
+            [
+              83.16850000000001,
+              17.9368
+            ],
+            [
+              82.9685,
+              17.786800000000003
+            ],
+            [
+              82.9685,
+              17.486800000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "AP_VJA",
+      "properties": {
+        "district_id": "AP_VJA",
+        "district_name": "Krishna (Vijayawada)",
+        "state_name": "Andhra Pradesh",
+        "zone": "East Coast",
+        "centroid_lat": 16.5062,
+        "centroid_lon": 80.648,
+        "elevation_m": 25
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.398,
+              16.3062
+            ],
+            [
+              80.848,
+              16.2562
+            ],
+            [
+              80.928,
+              16.6562
+            ],
+            [
+              80.598,
+              16.7562
+            ],
+            [
+              80.398,
+              16.6062
+            ],
+            [
+              80.398,
+              16.3062
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN_CHN",
+      "properties": {
+        "district_id": "TN_CHN",
+        "district_name": "Chennai",
+        "state_name": "Tamil Nadu",
+        "zone": "South Peninsula",
+        "centroid_lat": 13.0827,
+        "centroid_lon": 80.2707,
+        "elevation_m": 7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              80.0207,
+              12.882700000000002
+            ],
+            [
+              80.47070000000001,
+              12.8327
+            ],
+            [
+              80.5507,
+              13.232700000000001
+            ],
+            [
+              80.22070000000001,
+              13.3327
+            ],
+            [
+              80.0207,
+              13.1827
+            ],
+            [
+              80.0207,
+              12.882700000000002
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TN_CBE",
+      "properties": {
+        "district_id": "TN_CBE",
+        "district_name": "Coimbatore",
+        "state_name": "Tamil Nadu",
+        "zone": "South Peninsula",
+        "centroid_lat": 11.0168,
+        "centroid_lon": 76.9558,
+        "elevation_m": 411
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              76.7058,
+              10.8168
+            ],
+            [
+              77.1558,
+              10.7668
+            ],
+            [
+              77.2358,
+              11.1668
+            ],
+            [
+              76.9058,
+              11.2668
+            ],
+            [
+              76.7058,
+              11.1168
+            ],
+            [
+              76.7058,
+              10.8168
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "TS_HYD",
+      "properties": {
+        "district_id": "TS_HYD",
+        "district_name": "Hyderabad",
+        "state_name": "Telangana",
+        "zone": "South Peninsula",
+        "centroid_lat": 17.385,
+        "centroid_lon": 78.4867,
+        "elevation_m": 542
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              78.2367,
+              17.185000000000002
+            ],
+            [
+              78.6867,
+              17.135
+            ],
+            [
+              78.7667,
+              17.535
+            ],
+            [
+              78.4367,
+              17.635
+            ],
+            [
+              78.2367,
+              17.485000000000003
+            ],
+            [
+              78.2367,
+              17.185000000000002
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

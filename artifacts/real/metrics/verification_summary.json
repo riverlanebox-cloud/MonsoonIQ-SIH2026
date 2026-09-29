@@ -1,0 +1,3283 @@
+{
+  "data_provenance": "REAL_OBSERVED_IMD_NWP",
+  "provenance_detail": {
+    "provenance": "REAL_OBSERVED_IMD_NWP",
+    "is_synthetic": false,
+    "seed": null,
+    "domain": null,
+    "districts": 53,
+    "total_days": 605,
+    "archive_sha256_16": "dd1fbceaf280c7ae",
+    "note": "Observed IMD 0.25 deg gridded rainfall aggregated to Census-2011 district polygons; raw forecasts are archived operational NWP runs. Skill figures on this archive are genuine out-of-sample verification."
+  },
+  "verification_period": {
+    "test_years": [
+      2025
+    ],
+    "district_days": 6413,
+    "calendar_days": 121,
+    "districts": 53
+  },
+  "test_sample_count": 6413,
+  "test_years": [
+    2025
+  ],
+  "systems": {
+    "raw_nwp": "Raw NWP",
+    "global_qm": "Quantile mapping (regime-agnostic)",
+    "global_lgb": "Gradient boosting (regime-agnostic)",
+    "monsooniq": "MonsoonIQ (regime-aware)"
+  },
+  "continuous_metrics": {
+    "raw_nwp": {
+      "rmse": 13.95,
+      "mae": 7.849,
+      "bias": -0.37,
+      "correlation": 0.628
+    },
+    "global_qm": {
+      "rmse": 18.065,
+      "mae": 8.939,
+      "bias": 1.005,
+      "correlation": 0.607
+    },
+    "global_lgb": {
+      "rmse": 13.169,
+      "mae": 7.431,
+      "bias": 0.92,
+      "correlation": 0.677
+    },
+    "monsooniq": {
+      "rmse": 13.333,
+      "mae": 7.436,
+      "bias": 0.627,
+      "correlation": 0.671
+    }
+  },
+  "threshold_metrics": {
+    "2.5": {
+      "raw_nwp": {
+        "hits": 3621,
+        "false_alarms": 495,
+        "misses": 1112,
+        "correct_negatives": 1185,
+        "event_count": 4733,
+        "pod": 0.7651,
+        "far": 0.1203,
+        "csi": 0.6926,
+        "frequency_bias": 0.87,
+        "ets": 0.2663,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_qm": {
+        "hits": 3318,
+        "false_alarms": 407,
+        "misses": 1415,
+        "correct_negatives": 1273,
+        "event_count": 4733,
+        "pod": 0.701,
+        "far": 0.1093,
+        "csi": 0.6455,
+        "frequency_bias": 0.787,
+        "ets": 0.2379,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_lgb": {
+        "hits": 4359,
+        "false_alarms": 848,
+        "misses": 374,
+        "correct_negatives": 832,
+        "event_count": 4733,
+        "pod": 0.921,
+        "far": 0.1629,
+        "csi": 0.781,
+        "frequency_bias": 1.1,
+        "ets": 0.2969,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "monsooniq": {
+        "hits": 4255,
+        "false_alarms": 801,
+        "misses": 478,
+        "correct_negatives": 879,
+        "event_count": 4733,
+        "pod": 0.899,
+        "far": 0.1584,
+        "csi": 0.7689,
+        "frequency_bias": 1.068,
+        "ets": 0.2904,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "event_count": 4733,
+      "reliability": "reliable"
+    },
+    "15.6": {
+      "raw_nwp": {
+        "hits": 1203,
+        "false_alarms": 348,
+        "misses": 1725,
+        "correct_negatives": 3137,
+        "event_count": 2928,
+        "pod": 0.4109,
+        "far": 0.2244,
+        "csi": 0.3672,
+        "frequency_bias": 0.53,
+        "ets": 0.1927,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_qm": {
+        "hits": 1178,
+        "false_alarms": 337,
+        "misses": 1750,
+        "correct_negatives": 3148,
+        "event_count": 2928,
+        "pod": 0.4023,
+        "far": 0.2224,
+        "csi": 0.3608,
+        "frequency_bias": 0.517,
+        "ets": 0.189,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_lgb": {
+        "hits": 1087,
+        "false_alarms": 261,
+        "misses": 1841,
+        "correct_negatives": 3224,
+        "event_count": 2928,
+        "pod": 0.3712,
+        "far": 0.1936,
+        "csi": 0.3409,
+        "frequency_bias": 0.46,
+        "ets": 0.1832,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "monsooniq": {
+        "hits": 1126,
+        "false_alarms": 269,
+        "misses": 1802,
+        "correct_negatives": 3216,
+        "event_count": 2928,
+        "pod": 0.3846,
+        "far": 0.1928,
+        "csi": 0.3522,
+        "frequency_bias": 0.476,
+        "ets": 0.191,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "event_count": 2928,
+      "reliability": "reliable"
+    },
+    "64.5": {
+      "raw_nwp": {
+        "hits": 33,
+        "false_alarms": 17,
+        "misses": 593,
+        "correct_negatives": 5770,
+        "event_count": 626,
+        "pod": 0.0527,
+        "far": 0.34,
+        "csi": 0.0513,
+        "frequency_bias": 0.08,
+        "ets": 0.0441,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_qm": {
+        "hits": 90,
+        "false_alarms": 86,
+        "misses": 536,
+        "correct_negatives": 5701,
+        "event_count": 626,
+        "pod": 0.1438,
+        "far": 0.4886,
+        "csi": 0.1264,
+        "frequency_bias": 0.281,
+        "ets": 0.1048,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_lgb": {
+        "hits": 69,
+        "false_alarms": 38,
+        "misses": 557,
+        "correct_negatives": 5749,
+        "event_count": 626,
+        "pod": 0.1102,
+        "far": 0.3551,
+        "csi": 0.1039,
+        "frequency_bias": 0.171,
+        "ets": 0.0896,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "monsooniq": {
+        "hits": 55,
+        "false_alarms": 25,
+        "misses": 571,
+        "correct_negatives": 5762,
+        "event_count": 626,
+        "pod": 0.0879,
+        "far": 0.3125,
+        "csi": 0.0845,
+        "frequency_bias": 0.128,
+        "ets": 0.0734,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "event_count": 626,
+      "reliability": "reliable"
+    },
+    "115.6": {
+      "raw_nwp": {
+        "hits": 3,
+        "false_alarms": 1,
+        "misses": 164,
+        "correct_negatives": 6245,
+        "event_count": 167,
+        "pod": 0.018,
+        "far": 0.25,
+        "csi": 0.0179,
+        "frequency_bias": 0.024,
+        "ets": 0.0172,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_qm": {
+        "hits": 17,
+        "false_alarms": 25,
+        "misses": 150,
+        "correct_negatives": 6221,
+        "event_count": 167,
+        "pod": 0.1018,
+        "far": 0.5952,
+        "csi": 0.0885,
+        "frequency_bias": 0.251,
+        "ets": 0.0833,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "global_lgb": {
+        "hits": 2,
+        "false_alarms": 1,
+        "misses": 165,
+        "correct_negatives": 6245,
+        "event_count": 167,
+        "pod": 0.012,
+        "far": 0.3333,
+        "csi": 0.0119,
+        "frequency_bias": 0.018,
+        "ets": 0.0114,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "monsooniq": {
+        "hits": 10,
+        "false_alarms": 4,
+        "misses": 157,
+        "correct_negatives": 6242,
+        "event_count": 167,
+        "pod": 0.0599,
+        "far": 0.2857,
+        "csi": 0.0585,
+        "frequency_bias": 0.084,
+        "ets": 0.0565,
+        "sample_count": 6413,
+        "reliability": "reliable",
+        "reportable": true
+      },
+      "event_count": 167,
+      "reliability": "reliable"
+    },
+    "204.5": {
+      "raw_nwp": {
+        "hits": 0,
+        "false_alarms": 1,
+        "misses": 18,
+        "correct_negatives": 6394,
+        "event_count": 18,
+        "pod": 0.0,
+        "far": 1.0,
+        "csi": 0.0,
+        "frequency_bias": 0.056,
+        "ets": -0.0001,
+        "sample_count": 6413,
+        "reliability": "indicative",
+        "reportable": true
+      },
+      "global_qm": {
+        "hits": 5,
+        "false_alarms": 6,
+        "misses": 13,
+        "correct_negatives": 6389,
+        "event_count": 18,
+        "pod": 0.2778,
+        "far": 0.5455,
+        "csi": 0.2083,
+        "frequency_bias": 0.611,
+        "ets": 0.2073,
+        "sample_count": 6413,
+        "reliability": "indicative",
+        "reportable": true
+      },
+      "global_lgb": {
+        "hits": 0,
+        "false_alarms": 0,
+        "misses": 18,
+        "correct_negatives": 6395,
+        "event_count": 18,
+        "pod": 0.0,
+        "far": 0.0,
+        "csi": 0.0,
+        "frequency_bias": 0.0,
+        "ets": 0.0,
+        "sample_count": 6413,
+        "reliability": "indicative",
+        "reportable": true
+      },
+      "monsooniq": {
+        "hits": 1,
+        "false_alarms": 1,
+        "misses": 17,
+        "correct_negatives": 6394,
+        "event_count": 18,
+        "pod": 0.0556,
+        "far": 0.5,
+        "csi": 0.0526,
+        "frequency_bias": 0.111,
+        "ets": 0.0524,
+        "sample_count": 6413,
+        "reliability": "indicative",
+        "reportable": true
+      },
+      "event_count": 18,
+      "reliability": "indicative"
+    }
+  },
+  "regime_breakdown": {
+    "Active Monsoon": {
+      "sample_count": 351,
+      "day_count": 12,
+      "heavy_events": 33,
+      "very_heavy_events": 6,
+      "reliability": "reliable",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 13.058,
+        "global_qm": 19.245,
+        "global_lgb": 8.721,
+        "monsooniq": 9.761
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0278,
+        "global_qm": 0.0513,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.0175,
+        "global_qm": 0.0326,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.0303,
+        "global_qm": 0.0606,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "heavy_far": {
+        "raw_nwp": 0.75,
+        "global_qm": 0.75,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": -0.0278,
+        "ci95": [
+          -0.0924,
+          0.0
+        ],
+        "p_positive": 0.0,
+        "significant_95": false,
+        "favours": "B",
+        "a_events": 33,
+        "b_events": 33
+      }
+    },
+    "Break Monsoon": {
+      "sample_count": 255,
+      "day_count": 6,
+      "heavy_events": 20,
+      "very_heavy_events": 3,
+      "reliability": "indicative",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 14.206,
+        "global_qm": 26.269,
+        "global_lgb": 11.935,
+        "monsooniq": 15.869
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0952,
+        "global_qm": 0.0909,
+        "global_lgb": 0.0,
+        "monsooniq": 0.05
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.085,
+        "global_qm": 0.0778,
+        "global_lgb": -0.0037,
+        "monsooniq": 0.0463
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.1,
+        "global_qm": 0.1,
+        "global_lgb": 0.0,
+        "monsooniq": 0.05
+      },
+      "heavy_far": {
+        "raw_nwp": 0.3333,
+        "global_qm": 0.5,
+        "global_lgb": 1.0,
+        "monsooniq": 0.0
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": -0.0452,
+        "ci95": [
+          -0.1855,
+          0.006
+        ],
+        "p_positive": 0.123,
+        "significant_95": false,
+        "favours": "B",
+        "a_events": 20,
+        "b_events": 20
+      }
+    },
+    "Coastal": {
+      "sample_count": 1035,
+      "day_count": 120,
+      "heavy_events": 203,
+      "very_heavy_events": 56,
+      "reliability": "reliable",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 18.978,
+        "global_qm": 23.124,
+        "global_lgb": 19.336,
+        "monsooniq": 18.92
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0762,
+        "global_qm": 0.2116,
+        "global_lgb": 0.2222,
+        "monsooniq": 0.1814
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.0559,
+        "global_qm": 0.1501,
+        "global_lgb": 0.1641,
+        "monsooniq": 0.1333
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.0788,
+        "global_qm": 0.2512,
+        "global_lgb": 0.2562,
+        "monsooniq": 0.202
+      },
+      "heavy_far": {
+        "raw_nwp": 0.3043,
+        "global_qm": 0.427,
+        "global_lgb": 0.3735,
+        "monsooniq": 0.3594
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": 0.1052,
+        "ci95": [
+          0.0629,
+          0.1508
+        ],
+        "p_positive": 1.0,
+        "significant_95": true,
+        "favours": "A",
+        "a_events": 203,
+        "b_events": 203
+      }
+    },
+    "Monsoon Low/Depression": {
+      "sample_count": 199,
+      "day_count": 49,
+      "heavy_events": 54,
+      "very_heavy_events": 27,
+      "reliability": "reliable",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 24.74,
+        "global_qm": 28.933,
+        "global_lgb": 24.923,
+        "monsooniq": 23.483
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.1481,
+        "global_qm": 0.2373,
+        "global_lgb": 0.2414,
+        "monsooniq": 0.1964
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.1125,
+        "global_qm": 0.1643,
+        "global_lgb": 0.1716,
+        "monsooniq": 0.1424
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.1481,
+        "global_qm": 0.2593,
+        "global_lgb": 0.2593,
+        "monsooniq": 0.2037
+      },
+      "heavy_far": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.2632,
+        "global_lgb": 0.2222,
+        "monsooniq": 0.1538
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": 0.0483,
+        "ci95": [
+          -0.0249,
+          0.1209
+        ],
+        "p_positive": 0.917,
+        "significant_95": false,
+        "favours": "A",
+        "a_events": 54,
+        "b_events": 54
+      }
+    },
+    "Orographic": {
+      "sample_count": 707,
+      "day_count": 106,
+      "heavy_events": 85,
+      "very_heavy_events": 29,
+      "reliability": "reliable",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 11.767,
+        "global_qm": 13.082,
+        "global_lgb": 11.175,
+        "monsooniq": 11.017
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0109,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0004,
+        "global_lgb": -0.0014,
+        "monsooniq": 0.0
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0118,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      },
+      "heavy_far": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.875,
+        "global_lgb": 1.0,
+        "monsooniq": 0.0
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_positive": 0.0,
+        "significant_95": false,
+        "favours": "tie",
+        "a_events": 85,
+        "b_events": 85
+      }
+    },
+    "Weak/Normal": {
+      "sample_count": 3866,
+      "day_count": 103,
+      "heavy_events": 231,
+      "very_heavy_events": 46,
+      "reliability": "reliable",
+      "reportable": true,
+      "rmse": {
+        "raw_nwp": 11.864,
+        "global_qm": 15.642,
+        "global_lgb": 10.793,
+        "monsooniq": 11.1
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0253,
+        "global_qm": 0.0772,
+        "global_lgb": 0.0129,
+        "monsooniq": 0.0087
+      },
+      "heavy_ets": {
+        "raw_nwp": 0.0224,
+        "global_qm": 0.0669,
+        "global_lgb": 0.0119,
+        "monsooniq": 0.0081
+      },
+      "heavy_pod": {
+        "raw_nwp": 0.026,
+        "global_qm": 0.0866,
+        "global_lgb": 0.013,
+        "monsooniq": 0.0087
+      },
+      "heavy_far": {
+        "raw_nwp": 0.5,
+        "global_qm": 0.5833,
+        "global_lgb": 0.25,
+        "monsooniq": 0.0
+      },
+      "improvement_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": -0.0166,
+        "ci95": [
+          -0.0342,
+          -0.0033
+        ],
+        "p_positive": 0.017,
+        "significant_95": true,
+        "favours": "B",
+        "a_events": 231,
+        "b_events": 231
+      }
+    }
+  },
+  "regime_stratified": {
+    "Active Monsoon": {
+      "sample_count": 351,
+      "day_count": 12,
+      "events": 33,
+      "event_counts": {
+        "heavy": 33,
+        "very_heavy": 6,
+        "extremely_heavy": 0
+      },
+      "reliability": "reliable",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 1,
+          "false_alarms": 3,
+          "misses": 32,
+          "correct_negatives": 315,
+          "event_count": 33,
+          "pod": 0.0303,
+          "far": 0.75,
+          "csi": 0.0278,
+          "frequency_bias": 0.121,
+          "ets": 0.0175,
+          "sample_count": 351,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 13.058,
+          "bias": 1.396
+        },
+        "global_qm": {
+          "hits": 2,
+          "false_alarms": 6,
+          "misses": 31,
+          "correct_negatives": 312,
+          "event_count": 33,
+          "pod": 0.0606,
+          "far": 0.75,
+          "csi": 0.0513,
+          "frequency_bias": 0.242,
+          "ets": 0.0326,
+          "sample_count": 351,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 19.245,
+          "bias": 2.657
+        },
+        "global_lgb": {
+          "hits": 0,
+          "false_alarms": 0,
+          "misses": 33,
+          "correct_negatives": 318,
+          "event_count": 33,
+          "pod": 0.0,
+          "far": 0.0,
+          "csi": 0.0,
+          "frequency_bias": 0.0,
+          "ets": 0.0,
+          "sample_count": 351,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 8.721,
+          "bias": 0.977
+        },
+        "monsooniq": {
+          "hits": 0,
+          "false_alarms": 0,
+          "misses": 33,
+          "correct_negatives": 318,
+          "event_count": 33,
+          "pod": 0.0,
+          "far": 0.0,
+          "csi": 0.0,
+          "frequency_bias": 0.0,
+          "ets": 0.0,
+          "sample_count": 351,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 9.761,
+          "bias": 0.97
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": -0.0278,
+        "ci95": [
+          -0.0924,
+          0.0
+        ],
+        "p_positive": 0.0,
+        "significant_95": false,
+        "favours": "B",
+        "a_events": 33,
+        "b_events": 33
+      }
+    },
+    "Break Monsoon": {
+      "sample_count": 255,
+      "day_count": 6,
+      "events": 20,
+      "event_counts": {
+        "heavy": 20,
+        "very_heavy": 3,
+        "extremely_heavy": 1
+      },
+      "reliability": "indicative",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 2,
+          "false_alarms": 1,
+          "misses": 18,
+          "correct_negatives": 234,
+          "event_count": 20,
+          "pod": 0.1,
+          "far": 0.3333,
+          "csi": 0.0952,
+          "frequency_bias": 0.15,
+          "ets": 0.085,
+          "sample_count": 255,
+          "reliability": "indicative",
+          "reportable": true,
+          "rmse": 14.206,
+          "bias": 0.185
+        },
+        "global_qm": {
+          "hits": 2,
+          "false_alarms": 2,
+          "misses": 18,
+          "correct_negatives": 233,
+          "event_count": 20,
+          "pod": 0.1,
+          "far": 0.5,
+          "csi": 0.0909,
+          "frequency_bias": 0.2,
+          "ets": 0.0778,
+          "sample_count": 255,
+          "reliability": "indicative",
+          "reportable": true,
+          "rmse": 26.269,
+          "bias": 1.461
+        },
+        "global_lgb": {
+          "hits": 0,
+          "false_alarms": 1,
+          "misses": 20,
+          "correct_negatives": 234,
+          "event_count": 20,
+          "pod": 0.0,
+          "far": 1.0,
+          "csi": 0.0,
+          "frequency_bias": 0.05,
+          "ets": -0.0037,
+          "sample_count": 255,
+          "reliability": "indicative",
+          "reportable": true,
+          "rmse": 11.935,
+          "bias": -0.151
+        },
+        "monsooniq": {
+          "hits": 1,
+          "false_alarms": 0,
+          "misses": 19,
+          "correct_negatives": 235,
+          "event_count": 20,
+          "pod": 0.05,
+          "far": 0.0,
+          "csi": 0.05,
+          "frequency_bias": 0.05,
+          "ets": 0.0463,
+          "sample_count": 255,
+          "reliability": "indicative",
+          "reportable": true,
+          "rmse": 15.869,
+          "bias": -0.067
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": -0.0452,
+        "ci95": [
+          -0.1855,
+          0.006
+        ],
+        "p_positive": 0.123,
+        "significant_95": false,
+        "favours": "B",
+        "a_events": 20,
+        "b_events": 20
+      }
+    },
+    "Coastal": {
+      "sample_count": 1035,
+      "day_count": 120,
+      "events": 203,
+      "event_counts": {
+        "heavy": 203,
+        "very_heavy": 56,
+        "extremely_heavy": 5
+      },
+      "reliability": "reliable",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 16,
+          "false_alarms": 7,
+          "misses": 187,
+          "correct_negatives": 825,
+          "event_count": 203,
+          "pod": 0.0788,
+          "far": 0.3043,
+          "csi": 0.0762,
+          "frequency_bias": 0.113,
+          "ets": 0.0559,
+          "sample_count": 1035,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 18.978,
+          "bias": -3.475
+        },
+        "global_qm": {
+          "hits": 51,
+          "false_alarms": 38,
+          "misses": 152,
+          "correct_negatives": 794,
+          "event_count": 203,
+          "pod": 0.2512,
+          "far": 0.427,
+          "csi": 0.2116,
+          "frequency_bias": 0.438,
+          "ets": 0.1501,
+          "sample_count": 1035,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 23.124,
+          "bias": 0.996
+        },
+        "global_lgb": {
+          "hits": 52,
+          "false_alarms": 31,
+          "misses": 151,
+          "correct_negatives": 801,
+          "event_count": 203,
+          "pod": 0.2562,
+          "far": 0.3735,
+          "csi": 0.2222,
+          "frequency_bias": 0.409,
+          "ets": 0.1641,
+          "sample_count": 1035,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 19.336,
+          "bias": 3.724
+        },
+        "monsooniq": {
+          "hits": 41,
+          "false_alarms": 23,
+          "misses": 162,
+          "correct_negatives": 809,
+          "event_count": 203,
+          "pod": 0.202,
+          "far": 0.3594,
+          "csi": 0.1814,
+          "frequency_bias": 0.315,
+          "ets": 0.1333,
+          "sample_count": 1035,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 18.92,
+          "bias": 2.578
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": 0.1052,
+        "ci95": [
+          0.0629,
+          0.1508
+        ],
+        "p_positive": 1.0,
+        "significant_95": true,
+        "favours": "A",
+        "a_events": 203,
+        "b_events": 203
+      }
+    },
+    "Monsoon Low/Depression": {
+      "sample_count": 199,
+      "day_count": 49,
+      "events": 54,
+      "event_counts": {
+        "heavy": 54,
+        "very_heavy": 27,
+        "extremely_heavy": 6
+      },
+      "reliability": "reliable",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 8,
+          "false_alarms": 0,
+          "misses": 46,
+          "correct_negatives": 145,
+          "event_count": 54,
+          "pod": 0.1481,
+          "far": 0.0,
+          "csi": 0.1481,
+          "frequency_bias": 0.148,
+          "ets": 0.1125,
+          "sample_count": 199,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 24.74,
+          "bias": -5.217
+        },
+        "global_qm": {
+          "hits": 14,
+          "false_alarms": 5,
+          "misses": 40,
+          "correct_negatives": 140,
+          "event_count": 54,
+          "pod": 0.2593,
+          "far": 0.2632,
+          "csi": 0.2373,
+          "frequency_bias": 0.352,
+          "ets": 0.1643,
+          "sample_count": 199,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 28.933,
+          "bias": 2.475
+        },
+        "global_lgb": {
+          "hits": 14,
+          "false_alarms": 4,
+          "misses": 40,
+          "correct_negatives": 141,
+          "event_count": 54,
+          "pod": 0.2593,
+          "far": 0.2222,
+          "csi": 0.2414,
+          "frequency_bias": 0.333,
+          "ets": 0.1716,
+          "sample_count": 199,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 24.923,
+          "bias": -0.454
+        },
+        "monsooniq": {
+          "hits": 11,
+          "false_alarms": 2,
+          "misses": 43,
+          "correct_negatives": 143,
+          "event_count": 54,
+          "pod": 0.2037,
+          "far": 0.1538,
+          "csi": 0.1964,
+          "frequency_bias": 0.241,
+          "ets": 0.1424,
+          "sample_count": 199,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 23.483,
+          "bias": -2.159
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": 0.0483,
+        "ci95": [
+          -0.0249,
+          0.1209
+        ],
+        "p_positive": 0.917,
+        "significant_95": false,
+        "favours": "A",
+        "a_events": 54,
+        "b_events": 54
+      }
+    },
+    "Orographic": {
+      "sample_count": 707,
+      "day_count": 106,
+      "events": 85,
+      "event_counts": {
+        "heavy": 85,
+        "very_heavy": 29,
+        "extremely_heavy": 3
+      },
+      "reliability": "reliable",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 0,
+          "false_alarms": 0,
+          "misses": 85,
+          "correct_negatives": 622,
+          "event_count": 85,
+          "pod": 0.0,
+          "far": 0.0,
+          "csi": 0.0,
+          "frequency_bias": 0.0,
+          "ets": 0.0,
+          "sample_count": 707,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 11.767,
+          "bias": -2.68
+        },
+        "global_qm": {
+          "hits": 1,
+          "false_alarms": 7,
+          "misses": 84,
+          "correct_negatives": 615,
+          "event_count": 85,
+          "pod": 0.0118,
+          "far": 0.875,
+          "csi": 0.0109,
+          "frequency_bias": 0.094,
+          "ets": 0.0004,
+          "sample_count": 707,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 13.082,
+          "bias": -2.759
+        },
+        "global_lgb": {
+          "hits": 0,
+          "false_alarms": 1,
+          "misses": 85,
+          "correct_negatives": 621,
+          "event_count": 85,
+          "pod": 0.0,
+          "far": 1.0,
+          "csi": 0.0,
+          "frequency_bias": 0.012,
+          "ets": -0.0014,
+          "sample_count": 707,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 11.175,
+          "bias": -0.073
+        },
+        "monsooniq": {
+          "hits": 0,
+          "false_alarms": 0,
+          "misses": 85,
+          "correct_negatives": 622,
+          "event_count": 85,
+          "pod": 0.0,
+          "far": 0.0,
+          "csi": 0.0,
+          "frequency_bias": 0.0,
+          "ets": 0.0,
+          "sample_count": 707,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 11.017,
+          "bias": -0.442
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_positive": 0.0,
+        "significant_95": false,
+        "favours": "tie",
+        "a_events": 85,
+        "b_events": 85
+      }
+    },
+    "Weak/Normal": {
+      "sample_count": 3866,
+      "day_count": 103,
+      "events": 231,
+      "event_counts": {
+        "heavy": 231,
+        "very_heavy": 46,
+        "extremely_heavy": 3
+      },
+      "reliability": "reliable",
+      "reportable": true,
+      "systems": {
+        "raw_nwp": {
+          "hits": 6,
+          "false_alarms": 6,
+          "misses": 225,
+          "correct_negatives": 3629,
+          "event_count": 231,
+          "pod": 0.026,
+          "far": 0.5,
+          "csi": 0.0253,
+          "frequency_bias": 0.052,
+          "ets": 0.0224,
+          "sample_count": 3866,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 11.864,
+          "bias": 0.936
+        },
+        "global_qm": {
+          "hits": 20,
+          "false_alarms": 28,
+          "misses": 211,
+          "correct_negatives": 3607,
+          "event_count": 231,
+          "pod": 0.0866,
+          "far": 0.5833,
+          "csi": 0.0772,
+          "frequency_bias": 0.208,
+          "ets": 0.0669,
+          "sample_count": 3866,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 15.642,
+          "bias": 1.439
+        },
+        "global_lgb": {
+          "hits": 3,
+          "false_alarms": 1,
+          "misses": 228,
+          "correct_negatives": 3634,
+          "event_count": 231,
+          "pod": 0.013,
+          "far": 0.25,
+          "csi": 0.0129,
+          "frequency_bias": 0.017,
+          "ets": 0.0119,
+          "sample_count": 3866,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 10.793,
+          "bias": 0.487
+        },
+        "monsooniq": {
+          "hits": 2,
+          "false_alarms": 0,
+          "misses": 229,
+          "correct_negatives": 3635,
+          "event_count": 231,
+          "pod": 0.0087,
+          "far": 0.0,
+          "csi": 0.0087,
+          "frequency_bias": 0.009,
+          "ets": 0.0081,
+          "sample_count": 3866,
+          "reliability": "reliable",
+          "reportable": true,
+          "rmse": 11.1,
+          "bias": 0.458
+        }
+      },
+      "improvement": {
+        "metric": "csi",
+        "delta": -0.0166,
+        "ci95": [
+          -0.0342,
+          -0.0033
+        ],
+        "p_positive": 0.017,
+        "significant_95": true,
+        "favours": "B",
+        "a_events": 231,
+        "b_events": 231
+      }
+    }
+  },
+  "zone_breakdown": {
+    "Central India": {
+      "sample_count": 1210,
+      "heavy_events": 101,
+      "reliability": "reliable",
+      "rmse": {
+        "raw_nwp": 11.29,
+        "global_qm": 12.417,
+        "global_lgb": 10.598,
+        "monsooniq": 10.592
+      },
+      "bias": {
+        "raw_nwp": 0.513,
+        "global_qm": 0.575,
+        "global_lgb": -0.309,
+        "monsooniq": -0.256
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0189,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      }
+    },
+    "East Coast": {
+      "sample_count": 847,
+      "heavy_events": 45,
+      "reliability": "reliable",
+      "rmse": {
+        "raw_nwp": 11.909,
+        "global_qm": 13.39,
+        "global_lgb": 10.493,
+        "monsooniq": 10.752
+      },
+      "bias": {
+        "raw_nwp": 2.449,
+        "global_qm": 2.569,
+        "global_lgb": 0.659,
+        "monsooniq": 0.901
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0217,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      }
+    },
+    "Gangetic Plain": {
+      "sample_count": 363,
+      "heavy_events": 16,
+      "reliability": "indicative",
+      "rmse": {
+        "raw_nwp": 8.458,
+        "global_qm": 10.635,
+        "global_lgb": 6.55,
+        "monsooniq": 6.908
+      },
+      "bias": {
+        "raw_nwp": 2.177,
+        "global_qm": 2.232,
+        "global_lgb": -0.25,
+        "monsooniq": 0.037
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0625,
+        "global_qm": 0.125,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      }
+    },
+    "Northeast": {
+      "sample_count": 363,
+      "heavy_events": 36,
+      "reliability": "reliable",
+      "rmse": {
+        "raw_nwp": 17.037,
+        "global_qm": 22.412,
+        "global_lgb": 11.862,
+        "monsooniq": 12.558
+      },
+      "bias": {
+        "raw_nwp": 0.449,
+        "global_qm": 1.785,
+        "global_lgb": 1.656,
+        "monsooniq": 1.727
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0244,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      }
+    },
+    "Northwest": {
+      "sample_count": 1452,
+      "heavy_events": 92,
+      "reliability": "reliable",
+      "rmse": {
+        "raw_nwp": 13.472,
+        "global_qm": 22.097,
+        "global_lgb": 12.468,
+        "monsooniq": 14.172
+      },
+      "bias": {
+        "raw_nwp": 0.323,
+        "global_qm": 1.966,
+        "global_lgb": -0.007,
+        "monsooniq": 0.229
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0909,
+        "global_qm": 0.1368,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0326
+      }
+    },
+    "South Peninsula": {
+      "sample_count": 484,
+      "heavy_events": 26,
+      "reliability": "indicative",
+      "rmse": {
+        "raw_nwp": 9.194,
+        "global_qm": 10.006,
+        "global_lgb": 8.236,
+        "monsooniq": 8.076
+      },
+      "bias": {
+        "raw_nwp": -0.974,
+        "global_qm": -1.35,
+        "global_lgb": 0.778,
+        "monsooniq": 0.311
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0,
+        "global_qm": 0.0,
+        "global_lgb": 0.0,
+        "monsooniq": 0.0
+      }
+    },
+    "West Coast": {
+      "sample_count": 1694,
+      "heavy_events": 310,
+      "reliability": "reliable",
+      "rmse": {
+        "raw_nwp": 17.818,
+        "global_qm": 21.371,
+        "global_lgb": 18.147,
+        "monsooniq": 17.328
+      },
+      "bias": {
+        "raw_nwp": -3.554,
+        "global_qm": -0.052,
+        "global_lgb": 2.857,
+        "monsooniq": 1.442
+      },
+      "heavy_csi": {
+        "raw_nwp": 0.0726,
+        "global_qm": 0.1894,
+        "global_lgb": 0.1983,
+        "monsooniq": 0.1552
+      }
+    }
+  },
+  "lead_time_breakdown": {
+    "available": true,
+    "note": "Each lead is a separately fitted correction system; comparisons are like-for-like within a lead.",
+    "leads": {
+      "day_1": {
+        "lead_days": 1,
+        "systems": {
+          "raw_nwp": {
+            "rmse": 13.95,
+            "mae": 7.849,
+            "bias": -0.37,
+            "csi_64.5": 0.0513,
+            "ets_64.5": 0.0441,
+            "pod_64.5": 0.0527,
+            "far_64.5": 0.34,
+            "csi_115.6": 0.0179,
+            "ets_115.6": 0.0172,
+            "pod_115.6": 0.018,
+            "far_115.6": 0.25
+          },
+          "global_qm": {
+            "rmse": 18.065,
+            "mae": 8.939,
+            "bias": 1.005,
+            "csi_64.5": 0.1264,
+            "ets_64.5": 0.1048,
+            "pod_64.5": 0.1438,
+            "far_64.5": 0.4886,
+            "csi_115.6": 0.0885,
+            "ets_115.6": 0.0833,
+            "pod_115.6": 0.1018,
+            "far_115.6": 0.5952
+          },
+          "global_lgb": {
+            "rmse": 13.169,
+            "mae": 7.431,
+            "bias": 0.92,
+            "csi_64.5": 0.1039,
+            "ets_64.5": 0.0896,
+            "pod_64.5": 0.1102,
+            "far_64.5": 0.3551,
+            "csi_115.6": 0.0119,
+            "ets_115.6": 0.0114,
+            "pod_115.6": 0.012,
+            "far_115.6": 0.3333
+          },
+          "monsooniq": {
+            "rmse": 13.333,
+            "mae": 7.436,
+            "bias": 0.627,
+            "csi_64.5": 0.0845,
+            "ets_64.5": 0.0734,
+            "pod_64.5": 0.0879,
+            "far_64.5": 0.3125,
+            "csi_115.6": 0.0585,
+            "ets_115.6": 0.0565,
+            "pod_115.6": 0.0599,
+            "far_115.6": 0.2857
+          }
+        }
+      },
+      "day_2": {
+        "lead_days": 2,
+        "systems": {
+          "raw_nwp": {
+            "rmse": 15.192,
+            "mae": 8.636,
+            "bias": -0.191,
+            "csi_64.5": 0.0479,
+            "ets_64.5": 0.0404,
+            "pod_64.5": 0.0495,
+            "far_64.5": 0.4038,
+            "csi_115.6": 0.0118,
+            "ets_115.6": 0.0112,
+            "pod_115.6": 0.012,
+            "far_115.6": 0.5
+          },
+          "global_qm": {
+            "rmse": 18.668,
+            "mae": 9.797,
+            "bias": 1.204,
+            "csi_64.5": 0.1062,
+            "ets_64.5": 0.0845,
+            "pod_64.5": 0.123,
+            "far_64.5": 0.5625,
+            "csi_115.6": 0.0493,
+            "ets_115.6": 0.0436,
+            "pod_115.6": 0.0599,
+            "far_115.6": 0.7826
+          },
+          "global_lgb": {
+            "rmse": 13.799,
+            "mae": 7.944,
+            "bias": 0.883,
+            "csi_64.5": 0.0777,
+            "ets_64.5": 0.0665,
+            "pod_64.5": 0.0815,
+            "far_64.5": 0.3704,
+            "csi_115.6": 0.0,
+            "ets_115.6": 0.0,
+            "pod_115.6": 0.0,
+            "far_115.6": 0.0
+          },
+          "monsooniq": {
+            "rmse": 13.824,
+            "mae": 7.855,
+            "bias": 0.648,
+            "csi_64.5": 0.0658,
+            "ets_64.5": 0.056,
+            "pod_64.5": 0.0687,
+            "far_64.5": 0.3857,
+            "csi_115.6": 0.0119,
+            "ets_115.6": 0.0114,
+            "pod_115.6": 0.012,
+            "far_115.6": 0.3333
+          }
+        }
+      },
+      "day_3": {
+        "lead_days": 3,
+        "systems": {
+          "raw_nwp": {
+            "rmse": 15.775,
+            "mae": 9.011,
+            "bias": -0.266,
+            "csi_64.5": 0.051,
+            "ets_64.5": 0.0432,
+            "pod_64.5": 0.0527,
+            "far_64.5": 0.3889,
+            "csi_115.6": 0.0,
+            "ets_115.6": 0.0,
+            "pod_115.6": 0.0,
+            "far_115.6": 0.0
+          },
+          "global_qm": {
+            "rmse": 19.721,
+            "mae": 10.438,
+            "bias": 1.54,
+            "csi_64.5": 0.0843,
+            "ets_64.5": 0.0605,
+            "pod_64.5": 0.1022,
+            "far_64.5": 0.6751,
+            "csi_115.6": 0.0597,
+            "ets_115.6": 0.0541,
+            "pod_115.6": 0.0719,
+            "far_115.6": 0.7391
+          },
+          "global_lgb": {
+            "rmse": 13.909,
+            "mae": 8.204,
+            "bias": 0.851,
+            "csi_64.5": 0.0605,
+            "ets_64.5": 0.0521,
+            "pod_64.5": 0.0623,
+            "far_64.5": 0.3276,
+            "csi_115.6": 0.0,
+            "ets_115.6": 0.0,
+            "pod_115.6": 0.0,
+            "far_115.6": 0.0
+          },
+          "monsooniq": {
+            "rmse": 14.624,
+            "mae": 8.246,
+            "bias": 0.808,
+            "csi_64.5": 0.0625,
+            "ets_64.5": 0.0525,
+            "pod_64.5": 0.0655,
+            "far_64.5": 0.4225,
+            "csi_115.6": 0.0059,
+            "ets_115.6": 0.0053,
+            "pod_115.6": 0.006,
+            "far_115.6": 0.75
+          }
+        }
+      },
+      "day_4": {
+        "lead_days": 4,
+        "systems": {
+          "raw_nwp": {
+            "rmse": 16.527,
+            "mae": 9.232,
+            "bias": -0.354,
+            "csi_64.5": 0.0426,
+            "ets_64.5": 0.0342,
+            "pod_64.5": 0.0447,
+            "far_64.5": 0.5254,
+            "csi_115.6": 0.0,
+            "ets_115.6": -0.0009,
+            "pod_115.6": 0.0,
+            "far_115.6": 1.0
+          },
+          "global_qm": {
+            "rmse": 20.832,
+            "mae": 10.816,
+            "bias": 1.617,
+            "csi_64.5": 0.084,
+            "ets_64.5": 0.0599,
+            "pod_64.5": 0.1022,
+            "far_64.5": 0.68,
+            "csi_115.6": 0.0239,
+            "ets_115.6": 0.0182,
+            "pod_115.6": 0.0299,
+            "far_115.6": 0.8936
+          },
+          "global_lgb": {
+            "rmse": 14.19,
+            "mae": 8.402,
+            "bias": 0.97,
+            "csi_64.5": 0.0555,
+            "ets_64.5": 0.047,
+            "pod_64.5": 0.0575,
+            "far_64.5": 0.3898,
+            "csi_115.6": 0.0,
+            "ets_115.6": 0.0,
+            "pod_115.6": 0.0,
+            "far_115.6": 0.0
+          },
+          "monsooniq": {
+            "rmse": 14.847,
+            "mae": 8.364,
+            "bias": 0.915,
+            "csi_64.5": 0.0473,
+            "ets_64.5": 0.0385,
+            "pod_64.5": 0.0495,
+            "far_64.5": 0.4918,
+            "csi_115.6": 0.0,
+            "ets_115.6": -0.0009,
+            "pod_115.6": 0.0,
+            "far_115.6": 1.0
+          }
+        }
+      },
+      "day_5": {
+        "lead_days": 5,
+        "systems": {
+          "raw_nwp": {
+            "rmse": 17.051,
+            "mae": 9.671,
+            "bias": -0.238,
+            "csi_64.5": 0.0274,
+            "ets_64.5": 0.0201,
+            "pod_64.5": 0.0288,
+            "far_64.5": 0.64,
+            "csi_115.6": 0.0,
+            "ets_115.6": -0.0005,
+            "pod_115.6": 0.0,
+            "far_115.6": 1.0
+          },
+          "global_qm": {
+            "rmse": 21.489,
+            "mae": 11.134,
+            "bias": 1.418,
+            "csi_64.5": 0.0739,
+            "ets_64.5": 0.0509,
+            "pod_64.5": 0.0895,
+            "far_64.5": 0.7021,
+            "csi_115.6": 0.0343,
+            "ets_115.6": 0.0289,
+            "pod_115.6": 0.0419,
+            "far_115.6": 0.8409
+          },
+          "global_lgb": {
+            "rmse": 14.35,
+            "mae": 8.462,
+            "bias": 0.942,
+            "csi_64.5": 0.0598,
+            "ets_64.5": 0.0506,
+            "pod_64.5": 0.0623,
+            "far_64.5": 0.4,
+            "csi_115.6": 0.0,
+            "ets_115.6": 0.0,
+            "pod_115.6": 0.0,
+            "far_115.6": 0.0
+          },
+          "monsooniq": {
+            "rmse": 15.19,
+            "mae": 8.47,
+            "bias": 0.828,
+            "csi_64.5": 0.053,
+            "ets_64.5": 0.0433,
+            "pod_64.5": 0.0559,
+            "far_64.5": 0.4928,
+            "csi_115.6": 0.0,
+            "ets_115.6": -0.0008,
+            "pod_115.6": 0.0,
+            "far_115.6": 1.0
+          }
+        }
+      }
+    }
+  },
+  "confidence_intervals": {
+    "rmse": {
+      "raw_nwp": {
+        "val": 13.95,
+        "ci_95": [
+          12.9487,
+          14.9438
+        ]
+      },
+      "monsooniq": {
+        "val": 13.333,
+        "ci_95": [
+          12.311,
+          14.5045
+        ]
+      },
+      "method": "day-block bootstrap (whole calendar days resampled)",
+      "statistically_significant": false
+    },
+    "heavy_csi": {
+      "raw_nwp": {
+        "val": 0.0513
+      },
+      "monsooniq": {
+        "val": 0.0845
+      },
+      "method": "day-block bootstrap (whole calendar days resampled)",
+      "statistically_significant": true
+    }
+  },
+  "paired_comparisons": {
+    "rmse_vs_raw_nwp": {
+      "metric": "rmse",
+      "baseline": "raw_nwp",
+      "a_value": 13.333,
+      "b_value": 13.95,
+      "delta": -0.6071,
+      "ci95": [
+        -1.2616,
+        0.0217
+      ],
+      "a_ci95": [
+        12.311,
+        14.5045
+      ],
+      "b_ci95": [
+        12.9487,
+        14.9438
+      ],
+      "significant_95": false,
+      "favours": "neither"
+    },
+    "rmse_vs_global_lgb": {
+      "metric": "rmse",
+      "baseline": "global_lgb",
+      "a_value": 13.333,
+      "b_value": 13.169,
+      "delta": 0.1671,
+      "ci95": [
+        -0.8198,
+        1.1571
+      ],
+      "a_ci95": [
+        12.311,
+        14.5045
+      ],
+      "b_ci95": [
+        12.2575,
+        14.2174
+      ],
+      "significant_95": false,
+      "favours": "neither"
+    },
+    "heavy_csi_vs_raw_nwp": {
+      "metric": "csi",
+      "delta": 0.0332,
+      "ci95": [
+        0.01,
+        0.0543
+      ],
+      "p_positive": 0.993,
+      "significant_95": true,
+      "favours": "A",
+      "a_events": 626,
+      "b_events": 626
+    },
+    "heavy_csi_vs_global_lgb": {
+      "metric": "csi",
+      "delta": -0.0194,
+      "ci95": [
+        -0.0383,
+        -0.0024
+      ],
+      "p_positive": 0.003,
+      "significant_95": true,
+      "favours": "B",
+      "a_events": 626,
+      "b_events": 626
+    }
+  },
+  "probabilistic_verification": {
+    "heavy": {
+      "threshold_mm": 64.5,
+      "event_count": 626,
+      "reliability": "reliable",
+      "brier_score": 0.06572,
+      "mean_forecast_probability": 0.1,
+      "observed_frequency": 0.0976,
+      "reliability_diagram": {
+        "bin_edges": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "mean_forecast_probs": [
+          0.0252,
+          0.1463,
+          0.2355,
+          0.328,
+          0.4549,
+          0.5961,
+          0.6912,
+          0.7713,
+          0.86,
+          0.9523
+        ],
+        "observed_frequencies": [
+          0.0295,
+          0.1705,
+          0.1971,
+          0.3263,
+          0.3934,
+          0.549,
+          0.0,
+          0.6486,
+          0.8,
+          1.0
+        ],
+        "sample_counts": [
+          4880,
+          516,
+          274,
+          236,
+          272,
+          51,
+          1,
+          148,
+          15,
+          20
+        ],
+        "brier_score": 0.0657
+      },
+      "roc": {
+        "fpr": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0036,
+          0.0036,
+          0.0076,
+          0.0076,
+          0.0095,
+          0.0095,
+          0.0097,
+          0.0097,
+          0.0097,
+          0.0097,
+          0.0137,
+          0.0137,
+          0.0137,
+          0.0137,
+          0.0137,
+          0.0257,
+          0.0259,
+          0.0259,
+          0.0273,
+          0.0413,
+          0.0422,
+          0.0422,
+          0.0423,
+          0.0658,
+          0.0696,
+          0.0696,
+          0.0696,
+          0.0855,
+          0.107,
+          0.107,
+          0.1078,
+          0.1255,
+          0.1448,
+          0.1792,
+          0.1816,
+          0.2144,
+          0.292,
+          0.3741,
+          0.508,
+          1.0,
+          1.0
+        ],
+        "tpr": [
+          0.0,
+          0.0144,
+          0.0144,
+          0.0144,
+          0.016,
+          0.016,
+          0.0319,
+          0.0319,
+          0.0511,
+          0.0511,
+          0.0511,
+          0.1006,
+          0.1006,
+          0.1805,
+          0.1821,
+          0.2045,
+          0.2045,
+          0.2045,
+          0.2045,
+          0.2045,
+          0.2045,
+          0.2476,
+          0.2476,
+          0.2492,
+          0.2492,
+          0.2492,
+          0.3275,
+          0.3275,
+          0.3275,
+          0.3387,
+          0.4201,
+          0.4201,
+          0.4201,
+          0.4201,
+          0.5335,
+          0.5431,
+          0.5431,
+          0.5431,
+          0.5911,
+          0.6294,
+          0.6294,
+          0.631,
+          0.6757,
+          0.7045,
+          0.7668,
+          0.77,
+          0.7971,
+          0.8658,
+          0.9105,
+          0.9633,
+          1.0,
+          1.0
+        ],
+        "auc": 0.8713
+      }
+    },
+    "very_heavy": {
+      "threshold_mm": 115.6,
+      "event_count": 167,
+      "reliability": "reliable",
+      "brier_score": 0.02242,
+      "mean_forecast_probability": 0.0275,
+      "observed_frequency": 0.026,
+      "reliability_diagram": {
+        "bin_edges": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "mean_forecast_probs": [
+          0.0088,
+          0.1637,
+          0.2812,
+          0.3841,
+          0.4737,
+          0.5957,
+          0.6667,
+          0.75,
+          0.85,
+          0.95
+        ],
+        "observed_frequencies": [
+          0.0114,
+          0.1349,
+          0.2903,
+          0.2727,
+          0.4,
+          0.4167,
+          0.3333,
+          0.75,
+          0.85,
+          0.95
+        ],
+        "sample_counts": [
+          5877,
+          393,
+          31,
+          55,
+          30,
+          24,
+          3,
+          0,
+          0,
+          0
+        ],
+        "brier_score": 0.0224
+      },
+      "roc": {
+        "fpr": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0003,
+          0.0003,
+          0.0003,
+          0.0024,
+          0.0024,
+          0.0024,
+          0.0024,
+          0.0024,
+          0.0026,
+          0.0054,
+          0.0054,
+          0.0054,
+          0.0054,
+          0.0054,
+          0.0115,
+          0.0117,
+          0.0118,
+          0.0118,
+          0.0144,
+          0.0144,
+          0.0154,
+          0.0154,
+          0.0154,
+          0.0493,
+          0.05,
+          0.0503,
+          0.0696,
+          0.0698,
+          0.0704,
+          0.0716,
+          0.1422,
+          0.184,
+          1.0,
+          1.0
+        ],
+        "tpr": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.006,
+          0.006,
+          0.006,
+          0.0659,
+          0.0659,
+          0.0659,
+          0.0659,
+          0.0659,
+          0.0659,
+          0.1377,
+          0.1377,
+          0.1377,
+          0.1377,
+          0.1377,
+          0.2275,
+          0.2275,
+          0.2275,
+          0.2275,
+          0.2695,
+          0.2695,
+          0.2814,
+          0.2814,
+          0.2814,
+          0.5269,
+          0.5269,
+          0.5269,
+          0.5988,
+          0.5988,
+          0.5988,
+          0.5988,
+          0.7305,
+          0.8144,
+          1.0,
+          1.0
+        ],
+        "auc": 0.8483
+      }
+    },
+    "extremely_heavy": {
+      "threshold_mm": 204.5,
+      "event_count": 18,
+      "reliability": "indicative",
+      "brier_score": 0.00276,
+      "mean_forecast_probability": 0.0041,
+      "observed_frequency": 0.0028,
+      "reliability_diagram": {
+        "bin_edges": [
+          0.0,
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          1.0
+        ],
+        "mean_forecast_probs": [
+          0.0032,
+          0.1849,
+          0.2,
+          0.35,
+          0.45,
+          0.5,
+          0.65,
+          0.75,
+          0.85,
+          0.95
+        ],
+        "observed_frequencies": [
+          0.0023,
+          0.0,
+          0.1154,
+          0.35,
+          0.45,
+          0.0,
+          0.65,
+          0.75,
+          0.85,
+          0.95
+        ],
+        "sample_counts": [
+          6385,
+          1,
+          26,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        "brier_score": 0.0028
+      },
+      "roc": {
+        "fpr": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0002,
+          0.0039,
+          0.0039,
+          0.0039,
+          0.0039,
+          0.0039,
+          0.0106,
+          0.0117,
+          0.0178,
+          0.0328,
+          1.0,
+          1.0
+        ],
+        "tpr": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1667,
+          0.1667,
+          0.1667,
+          0.1667,
+          0.1667,
+          0.4444,
+          0.4444,
+          0.4444,
+          0.4444,
+          1.0,
+          1.0
+        ],
+        "auc": 0.7107
+      }
+    }
+  },
+  "grid_fss": {
+    "available": false
+  },
+  "regime_value": {
+    "headline": {
+      "regime_conditioning_gain_over_regime_agnostic_csi": -0.0194,
+      "gain_significant_95": true,
+      "gain_over_raw_nwp_csi": 0.0332,
+      "experts_alone_gain_over_raw_nwp_csi": 0.0271,
+      "crossover_accuracy": 0.85
+    },
+    "classifier": {
+      "holdout_accuracy": 0.8327,
+      "note": "Synthetic regimes are drawn from the same latent parameters that generate the predictors, so this accuracy is a property of the generator and is not evidence about real regime classification."
+    },
+    "systems": {
+      "raw_nwp": {
+        "rmse": 13.95,
+        "mae": 7.849,
+        "bias": -0.37,
+        "csi": 0.0513,
+        "ets": 0.0441,
+        "pod": 0.0527,
+        "far": 0.34,
+        "hits": 33,
+        "false_alarms": 17,
+        "misses": 593
+      },
+      "global_qm": {
+        "rmse": 18.065,
+        "mae": 8.939,
+        "bias": 1.005,
+        "csi": 0.1264,
+        "ets": 0.1048,
+        "pod": 0.1438,
+        "far": 0.4886,
+        "hits": 90,
+        "false_alarms": 86,
+        "misses": 536
+      },
+      "global_lgb": {
+        "rmse": 13.169,
+        "mae": 7.431,
+        "bias": 0.92,
+        "csi": 0.1039,
+        "ets": 0.0896,
+        "pod": 0.1102,
+        "far": 0.3551,
+        "hits": 69,
+        "false_alarms": 38,
+        "misses": 557
+      },
+      "moe_uniform_weights": {
+        "rmse": 13.837,
+        "mae": 7.924,
+        "bias": 1.195,
+        "csi": 0.0574,
+        "ets": 0.0493,
+        "pod": 0.0591,
+        "far": 0.3393,
+        "hits": 37,
+        "false_alarms": 19,
+        "misses": 589
+      },
+      "moe_classifier": {
+        "rmse": 13.333,
+        "mae": 7.436,
+        "bias": 0.627,
+        "csi": 0.0845,
+        "ets": 0.0734,
+        "pod": 0.0879,
+        "far": 0.3125,
+        "hits": 55,
+        "false_alarms": 25,
+        "misses": 571
+      },
+      "moe_oracle_regime": {
+        "rmse": 13.885,
+        "mae": 7.644,
+        "bias": 0.964,
+        "csi": 0.1111,
+        "ets": 0.096,
+        "pod": 0.1182,
+        "far": 0.3509,
+        "hits": 74,
+        "false_alarms": 40,
+        "misses": 552
+      }
+    },
+    "accuracy_sweep": [
+      {
+        "regime_classifier_accuracy": 1.0,
+        "moe_heavy_csi": 0.1073,
+        "moe_rmse": 13.847,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": true
+      },
+      {
+        "regime_classifier_accuracy": 0.97,
+        "moe_heavy_csi": 0.1056,
+        "moe_rmse": 13.944,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": true
+      },
+      {
+        "regime_classifier_accuracy": 0.95,
+        "moe_heavy_csi": 0.1041,
+        "moe_rmse": 13.946,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": true
+      },
+      {
+        "regime_classifier_accuracy": 0.9,
+        "moe_heavy_csi": 0.1075,
+        "moe_rmse": 13.958,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": true
+      },
+      {
+        "regime_classifier_accuracy": 0.85,
+        "moe_heavy_csi": 0.1045,
+        "moe_rmse": 13.713,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": true
+      },
+      {
+        "regime_classifier_accuracy": 0.8,
+        "moe_heavy_csi": 0.1011,
+        "moe_rmse": 14.399,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": false
+      },
+      {
+        "regime_classifier_accuracy": 0.75,
+        "moe_heavy_csi": 0.1017,
+        "moe_rmse": 15.128,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": false
+      },
+      {
+        "regime_classifier_accuracy": 0.65,
+        "moe_heavy_csi": 0.1037,
+        "moe_rmse": 14.441,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": false
+      },
+      {
+        "regime_classifier_accuracy": 0.5,
+        "moe_heavy_csi": 0.0945,
+        "moe_rmse": 14.84,
+        "regime_agnostic_lgb_csi": 0.1039,
+        "beats_regime_agnostic": false
+      }
+    ],
+    "comparisons": {
+      "moe_classifier_vs_raw_nwp": {
+        "metric": "csi",
+        "delta": 0.0332,
+        "ci95": [
+          0.01,
+          0.0543
+        ],
+        "p_positive": 0.993,
+        "significant_95": true,
+        "favours": "A",
+        "a_events": 626,
+        "b_events": 626
+      },
+      "moe_classifier_vs_global_lgb": {
+        "metric": "csi",
+        "delta": -0.0194,
+        "ci95": [
+          -0.0383,
+          -0.0024
+        ],
+        "p_positive": 0.003,
+        "significant_95": true,
+        "favours": "B",
+        "a_events": 626,
+        "b_events": 626
+      },
+      "moe_classifier_vs_uniform_weights": {
+        "metric": "csi",
+        "delta": 0.0271,
+        "ci95": [
+          0.0046,
+          0.0469
+        ],
+        "p_positive": 0.993,
+        "significant_95": true,
+        "favours": "A",
+        "a_events": 626,
+        "b_events": 626
+      },
+      "moe_oracle_vs_global_lgb": {
+        "metric": "csi",
+        "delta": 0.0072,
+        "ci95": [
+          -0.0135,
+          0.024
+        ],
+        "p_positive": 0.773,
+        "significant_95": false,
+        "favours": "A",
+        "a_events": 626,
+        "b_events": 626
+      },
+      "moe_classifier_vs_global_lgb_rmse": {
+        "metric": "rmse",
+        "delta": 0.164,
+        "ci95": [
+          -0.803,
+          1.1083
+        ],
+        "p_positive": 0.637,
+        "significant_95": false,
+        "favours": "B"
+      }
+    },
+    "interpretation": "Uniform regime weights reproduce a 'correction with no regime information' system; the gap between it and the classifier blend is the actual value of regime awareness. If that gap is inside the interval, the regime layer is not yet earning its complexity and the honest fix is more training seasons or a better regime classifier - not a stronger claim.",
+    "available": true
+  },
+  "significance_statement": {
+    "claims": [
+      {
+        "claim": "Post-processing reduces RMSE relative to the raw model",
+        "supported": false,
+        "evidence": "\u0394RMSE -0.607 mm/day, 95% CI [-1.262, +0.022]",
+        "verified_on": "held-out real seasons (IMD-verified)"
+      },
+      {
+        "claim": "Post-processing improves the heavy-rainfall categorical score relative to the raw model",
+        "supported": true,
+        "evidence": "\u0394CSI +0.0332, 95% CI [+0.0100, +0.0543]",
+        "verified_on": "held-out real seasons (IMD-verified)"
+      },
+      {
+        "claim": "Regime conditioning beats a regime-agnostic model fitted on the same predictors (heavy-rainfall categorical score)",
+        "supported": false,
+        "evidence": "\u0394CSI -0.0194, 95% CI [-0.0383, -0.0024]",
+        "verified_on": "held-out real seasons (IMD-verified)"
+      },
+      {
+        "claim": "Regime conditioning beats a regime-agnostic model on RMSE",
+        "supported": false,
+        "evidence": "\u0394RMSE +0.167 mm/day, 95% CI [-0.820, +1.157]",
+        "verified_on": "held-out real seasons (IMD-verified)"
+      }
+    ],
+    "headline": "Not all claims are supported: Post-processing reduces RMSE relative to the raw model; Regime conditioning beats a regime-agnostic model fitted on the same predictors (heavy-rainfall categorical score); Regime conditioning beats a regime-agnostic model on RMSE",
+    "caveat": "Intervals resample whole calendar days. Comparisons use archived operational forecasts against IMD gridded observations on seasons never seen in training."
+  },
+  "scorecard": {
+    "cards": [
+      {
+        "label": "Heavy-rain warning CSI (\u226564.5 mm, Day 1)",
+        "raw": 0.0513,
+        "baseline": 0.0513,
+        "corrected": 0.3272,
+        "unit": "",
+        "lower_is_better": false,
+        "vs_raw_pct": 537.8,
+        "vs_baseline_pct": null,
+        "note": "warning product (probabilities + P90 + corrected amount) vs observed district maximum"
+      },
+      {
+        "label": "RMSE",
+        "raw": 13.95,
+        "baseline": 13.169,
+        "corrected": 13.333,
+        "unit": "mm/day",
+        "lower_is_better": true,
+        "vs_raw_pct": -4.4,
+        "vs_baseline_pct": 1.2
+      },
+      {
+        "label": "Heavy-rain CSI (\u226564.5 mm)",
+        "raw": 0.0513,
+        "baseline": 0.1039,
+        "corrected": 0.0845,
+        "unit": "",
+        "lower_is_better": false,
+        "vs_raw_pct": 64.7,
+        "vs_baseline_pct": -18.7
+      },
+      {
+        "label": "Heavy-rain ETS (\u226564.5 mm)",
+        "raw": 0.0441,
+        "baseline": 0.0896,
+        "corrected": 0.0734,
+        "unit": "",
+        "lower_is_better": false,
+        "vs_raw_pct": 66.4,
+        "vs_baseline_pct": -18.1
+      },
+      {
+        "label": "Very heavy-rain POD (\u2265115.6 mm)",
+        "raw": 0.018,
+        "baseline": 0.012,
+        "corrected": 0.0599,
+        "unit": "",
+        "lower_is_better": false,
+        "vs_raw_pct": 232.8,
+        "vs_baseline_pct": 399.2
+      }
+    ],
+    "honest_baseline": [
+      "global_lgb",
+      "gradient boosting on the same predictors without regime information"
+    ],
+    "regime_open_question": {
+      "regime_conditioning_gain_over_regime_agnostic_csi": -0.0194,
+      "gain_significant_95": true,
+      "gain_over_raw_nwp_csi": 0.0332,
+      "experts_alone_gain_over_raw_nwp_csi": 0.0271,
+      "crossover_accuracy": 0.85
+    }
+  },
+  "warning_product": {
+    "available": true,
+    "observed_quantity": "district maximum of IMD 0.25 deg cells (obs_rain_max)",
+    "product_rule": "AdvisoryGenerator.determine_alert_level (same rule as console / bulletin / CAP)",
+    "event_forecast": {
+      "64.5": "category >= yellow",
+      "115.6": "category >= orange",
+      "204.5": "red"
+    },
+    "leads": {
+      "day_1": {
+        "category_counts": {
+          "green": 5591,
+          "yellow": 610,
+          "orange": 207,
+          "red": 5
+        },
+        "64.5": {
+          "warning_product": {
+            "pod": 0.5703,
+            "far": 0.5657,
+            "csi": 0.3272,
+            "ets": 0.2738,
+            "frequency_bias": 1.313,
+            "event_count": 626,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.2902,
+              0.3664
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0527,
+            "far": 0.34,
+            "csi": 0.0513,
+            "ets": 0.0441,
+            "frequency_bias": 0.08,
+            "csi_ci95": [
+              0.0258,
+              0.081
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.2759,
+            "ci95": [
+              0.2386,
+              0.3131
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 626,
+            "b_events": 626
+          }
+        },
+        "115.6": {
+          "warning_product": {
+            "pod": 0.3892,
+            "far": 0.6934,
+            "csi": 0.207,
+            "ets": 0.1928,
+            "frequency_bias": 1.269,
+            "event_count": 167,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.148,
+              0.2688
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.018,
+            "far": 0.25,
+            "csi": 0.0179,
+            "ets": 0.0172,
+            "frequency_bias": 0.024,
+            "csi_ci95": [
+              0.0,
+              0.0429
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.1891,
+            "ci95": [
+              0.1358,
+              0.2443
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 167,
+            "b_events": 167
+          }
+        },
+        "204.5": {
+          "warning_product": {
+            "pod": 0.0556,
+            "far": 0.8,
+            "csi": 0.0455,
+            "ets": 0.0448,
+            "frequency_bias": 0.278,
+            "event_count": 18,
+            "reliability": "indicative",
+            "csi_ci95": [
+              0.0,
+              0.1739
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0001,
+            "frequency_bias": 0.056,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.0455,
+            "ci95": [
+              0.0,
+              0.1739
+            ],
+            "p_positive": 0.632,
+            "significant_95": false,
+            "favours": "A",
+            "a_events": 18,
+            "b_events": 18
+          }
+        }
+      },
+      "day_2": {
+        "category_counts": {
+          "green": 5531,
+          "yellow": 745,
+          "orange": 125,
+          "red": 12
+        },
+        "64.5": {
+          "warning_product": {
+            "pod": 0.5543,
+            "far": 0.6066,
+            "csi": 0.2989,
+            "ets": 0.2427,
+            "frequency_bias": 1.409,
+            "event_count": 626,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.258,
+              0.3398
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0495,
+            "far": 0.4038,
+            "csi": 0.0479,
+            "ets": 0.0404,
+            "frequency_bias": 0.083,
+            "csi_ci95": [
+              0.0236,
+              0.0736
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.251,
+            "ci95": [
+              0.2164,
+              0.2878
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 626,
+            "b_events": 626
+          }
+        },
+        "115.6": {
+          "warning_product": {
+            "pod": 0.2335,
+            "far": 0.7153,
+            "csi": 0.1472,
+            "ets": 0.1355,
+            "frequency_bias": 0.82,
+            "event_count": 167,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.0929,
+              0.2022
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.012,
+            "far": 0.5,
+            "csi": 0.0118,
+            "ets": 0.0112,
+            "frequency_bias": 0.024,
+            "csi_ci95": [
+              0.0,
+              0.0357
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.1354,
+            "ci95": [
+              0.0876,
+              0.1815
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 167,
+            "b_events": 167
+          }
+        },
+        "204.5": {
+          "warning_product": {
+            "pod": 0.1111,
+            "far": 0.8333,
+            "csi": 0.0714,
+            "ets": 0.0703,
+            "frequency_bias": 0.667,
+            "event_count": 18,
+            "reliability": "indicative",
+            "csi_ci95": [
+              0.0,
+              0.1878
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 0.0,
+            "csi": 0.0,
+            "ets": 0.0,
+            "frequency_bias": 0.0,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.0714,
+            "ci95": [
+              0.0,
+              0.1878
+            ],
+            "p_positive": 0.84,
+            "significant_95": false,
+            "favours": "A",
+            "a_events": 18,
+            "b_events": 18
+          }
+        }
+      },
+      "day_3": {
+        "category_counts": {
+          "green": 5755,
+          "yellow": 519,
+          "orange": 137,
+          "red": 2
+        },
+        "64.5": {
+          "warning_product": {
+            "pod": 0.4601,
+            "far": 0.5623,
+            "csi": 0.2892,
+            "ets": 0.2402,
+            "frequency_bias": 1.051,
+            "event_count": 626,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.2448,
+              0.3321
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0527,
+            "far": 0.3889,
+            "csi": 0.051,
+            "ets": 0.0432,
+            "frequency_bias": 0.086,
+            "csi_ci95": [
+              0.0265,
+              0.0791
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.2382,
+            "ci95": [
+              0.2008,
+              0.2777
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 626,
+            "b_events": 626
+          }
+        },
+        "115.6": {
+          "warning_product": {
+            "pod": 0.2335,
+            "far": 0.7194,
+            "csi": 0.1461,
+            "ets": 0.1343,
+            "frequency_bias": 0.832,
+            "event_count": 167,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.1008,
+              0.1911
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 0.0,
+            "csi": 0.0,
+            "ets": 0.0,
+            "frequency_bias": 0.0,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.1461,
+            "ci95": [
+              0.1008,
+              0.1911
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 167,
+            "b_events": 167
+          }
+        },
+        "204.5": {
+          "warning_product": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0003,
+            "frequency_bias": 0.111,
+            "event_count": 18,
+            "reliability": "indicative",
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 0.0,
+            "csi": 0.0,
+            "ets": 0.0,
+            "frequency_bias": 0.0,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "p_positive": 0.0,
+            "significant_95": false,
+            "favours": "tie",
+            "a_events": 18,
+            "b_events": 18
+          }
+        }
+      },
+      "day_4": {
+        "category_counts": {
+          "green": 5751,
+          "yellow": 466,
+          "orange": 186,
+          "red": 10
+        },
+        "64.5": {
+          "warning_product": {
+            "pod": 0.4441,
+            "far": 0.5801,
+            "csi": 0.2752,
+            "ets": 0.2257,
+            "frequency_bias": 1.058,
+            "event_count": 626,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.2308,
+              0.3208
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0447,
+            "far": 0.5254,
+            "csi": 0.0426,
+            "ets": 0.0342,
+            "frequency_bias": 0.094,
+            "csi_ci95": [
+              0.0171,
+              0.0712
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.2326,
+            "ci95": [
+              0.1974,
+              0.2708
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 626,
+            "b_events": 626
+          }
+        },
+        "115.6": {
+          "warning_product": {
+            "pod": 0.3174,
+            "far": 0.7296,
+            "csi": 0.171,
+            "ets": 0.1571,
+            "frequency_bias": 1.174,
+            "event_count": 167,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.1179,
+              0.2249
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0009,
+            "frequency_bias": 0.036,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.171,
+            "ci95": [
+              0.1179,
+              0.2249
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 167,
+            "b_events": 167
+          }
+        },
+        "204.5": {
+          "warning_product": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.001,
+            "frequency_bias": 0.556,
+            "event_count": 18,
+            "reliability": "indicative",
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 0.0,
+            "csi": 0.0,
+            "ets": 0.0,
+            "frequency_bias": 0.0,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "p_positive": 0.0,
+            "significant_95": false,
+            "favours": "tie",
+            "a_events": 18,
+            "b_events": 18
+          }
+        }
+      },
+      "day_5": {
+        "category_counts": {
+          "green": 5799,
+          "yellow": 507,
+          "orange": 104,
+          "red": 3
+        },
+        "64.5": {
+          "warning_product": {
+            "pod": 0.4281,
+            "far": 0.5635,
+            "csi": 0.2757,
+            "ets": 0.2281,
+            "frequency_bias": 0.981,
+            "event_count": 626,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.2311,
+              0.3189
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0288,
+            "far": 0.64,
+            "csi": 0.0274,
+            "ets": 0.0201,
+            "frequency_bias": 0.08,
+            "csi_ci95": [
+              0.0099,
+              0.0484
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.2483,
+            "ci95": [
+              0.2062,
+              0.2872
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 626,
+            "b_events": 626
+          }
+        },
+        "115.6": {
+          "warning_product": {
+            "pod": 0.2036,
+            "far": 0.6822,
+            "csi": 0.1417,
+            "ets": 0.1316,
+            "frequency_bias": 0.641,
+            "event_count": 167,
+            "reliability": "reliable",
+            "csi_ci95": [
+              0.086,
+              0.1986
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0005,
+            "frequency_bias": 0.018,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.1417,
+            "ci95": [
+              0.086,
+              0.1986
+            ],
+            "p_positive": 1.0,
+            "significant_95": true,
+            "favours": "A",
+            "a_events": 167,
+            "b_events": 167
+          }
+        },
+        "204.5": {
+          "warning_product": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0004,
+            "frequency_bias": 0.167,
+            "event_count": 18,
+            "reliability": "indicative",
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "raw_nwp": {
+            "pod": 0.0,
+            "far": 1.0,
+            "csi": 0.0,
+            "ets": -0.0001,
+            "frequency_bias": 0.056,
+            "csi_ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "delta_vs_raw": {
+            "metric": "csi",
+            "delta": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "p_positive": 0.0,
+            "significant_95": false,
+            "favours": "tie",
+            "a_events": 18,
+            "b_events": 18
+          }
+        }
+      }
+    }
+  }
+}

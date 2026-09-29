@@ -198,3 +198,38 @@ def test_explain_endpoint(client, sample_date):
     listing = client.get(f"/console?date={sample_date}&lead=1").json()["districts"]
     data = client.get(f"/explain/{listing[0]['district_id']}/{sample_date}").json()
     assert "top_feature_attributions" in data
+
+
+def test_all_india_district_layer(client):
+    res = client.get("/districts/geojson", params={"scope": "all"})
+    assert res.status_code == 200
+    feats = res.json()["features"]
+    assert len(feats) == 641                          # Census 2011
+    study = client.get("/districts/geojson").json()["features"]
+    assert all(f["properties"].get("census_code") for f in study)   # real polygons, not boxes
+
+
+def test_data_sources_catalogue(client):
+    d = client.get("/data-sources").json()
+    ids = {s["id"] for s in d["sources"]}
+    assert {"imd_gridded", "ncum", "openmeteo_prev", "era5", "census_districts"} <= ids
+    assert d["active_profile"] in ("synthetic", "real")
+    assert set(d["split"]) == {"train", "val", "test"}
+
+
+@pytest.mark.parametrize("q,intent", [
+    ("what regime is driving today", "regime"),
+    ("how much rain in Mumbai", "detail"),
+    ("where did the correction add most rain on the west coast", "adjustment"),
+    ("red warnings day 3", "list"),
+])
+def test_ask_monsooniq(client, sample_date, q, intent):
+    r = client.get("/ask", params={"q": q, "date": sample_date})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["intent"] == intent
+    assert body["answer"] and isinstance(body["districts"], list)
+    if "day 3" in q:
+        assert body["lead"] == 3
+    if "Mumbai" in q:
+        assert body["districts"] and all(d.startswith("MH_") for d in body["districts"])

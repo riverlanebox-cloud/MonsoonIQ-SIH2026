@@ -23,6 +23,36 @@ service → operations console → documentation. One command reproduces every n
 
 ---
 
+## What's new for SIH 2026 (v3)
+
+| Area | Change |
+|---|---|
+| **Real, citable datasets** | A complete real-data path. **IMD 0.25° gridded rainfall** is the observed truth. **Archived NWP Day 1–5 forecasts** come from GFS, ECMWF IFS or UK Met Office UM (Open-Meteo Previous Runs, no key), or from **NCMRWF NCUM-G / NEPS-G NetCDF** through a gridded adapter. **ERA5** or Open-Meteo supplies the dynamics, **NOAA OLR** the convection signal, and the **Copernicus DEM** the terrain. One command builds it: `make real-data`. See [docs/DATASETS.md](docs/DATASETS.md). |
+| **Physically defined regime labels** | On real data the regimes are *derived* from observations and analysis, never from the forecast. Active and break spells use IMD's Rajeevan et al. (2010) core-monsoon-zone index; depressions, orographic, coastal and western-disturbance regimes use pressure, vorticity, terrain and coast criteria. This answers the audit's "latent-label" critique. |
+| **Operationally honest predictors** | Regime predictors are the 00 UTC analysis of D−1, the information available at issue time. A test enforces this. |
+| **Real district geometry** | Census-2011 district polygons (DataMeet), 641 districts, replace the hand-drawn boxes, with area-weighted IMD-grid aggregation and distance to the Natural Earth coastline. |
+| **Two run profiles** | `MONSOONIQ_PROFILE=synthetic` (the committed, bit-reproducible benchmark) or `real` (your IMD archive, with artifacts in `artifacts/real/`). The API, UI and PDF all label which profile is in use. |
+| **New interface** | A SAGAR-style UI, modelled on SIH 2025 winner SAGAR's dark marine layout. It has an animated dotted-India landing page lit by live warnings and monsoon-branch flow lines, a **Mission Control** dashboard with one card per expected outcome, a full-screen **Forecast Map** with floating control and analysis panels, and a **Data Sources** page. |
+| **Ask MonsoonIQ** | A plain-language query bar (`/ask`) over the live forecast, for questions like "heavy rain in Kerala tomorrow", "red warnings day 3" or "what regime is driving today?". It is deterministic and needs no LLM or API key; every answer traces to the numbers on the map. |
+| **Fully offline maps** | A custom SVG map of India replaces Leaflet and web tiles, so the demo works on a venue network with no internet. |
+| **Robustness** | Regimes absent from training (e.g. western disturbances in a JJAS-only archive) fall back cleanly. The code works on scikit-learn 1.4 through 1.8, and a pure-numpy geometry fallback removes the hard dependency on shapely and GEOS. |
+
+---
+
+### Results on real data (IMD 0.25° observations, held-out JJAS 2025)
+
+The real archive covers JJAS 2021–2025: 32,065 district-days of IMD rainfall paired with
+archived JMA GSM Day 1–5 forecasts. The model is trained on 2021–23, validated on 2024 and tested
+on 2025. On the test season, **district heavy-rain warnings (≥ 64.5 mm) reach CSI 0.33
+[0.29–0.37] at Day 1 and 0.28 at Day 5, against 0.05 for the raw model** (POD 57 % vs 5 %).
+Very-heavy-rain warnings reach CSI 0.21 against 0.02. The heavy-rain probabilities have a Brier
+skill score of 0.25 and a ROC AUC of 0.87. Regime-specific biases shrink: orographic from −2.7 to
+−0.4 mm/day, depression from −5.2 to −2.2. Regime conditioning does **not** beat a regime-agnostic
+learner on real data, and the product says so.
+Full account: [docs/REAL_DATA_REPORT.md](docs/REAL_DATA_REPORT.md).
+
+---
+
 ## Table of contents
 
 1. [The problem](#1-the-problem)
@@ -167,7 +197,22 @@ can score a future system without modification.
 
 ---
 
-## 5. User flow (the operations console)
+## 5. User flow
+
+The v3 shell wraps the operations console described below in a navigation layer built for a
+jury and a first-time user:
+
+```
+Landing (animated dotted India, live warning dots, monsoon flow lines, live stat strip)
+  ├─ Enter Dashboard ─▶ Mission Control: 6 module cards = the 5 expected outcomes + data
+  │                      KPI row · warning map · regime posterior · 5-day outlook · significant days
+  ├─ Live Forecast Map ─▶ full-screen offline map · left: date / lead / layer / legend / posterior
+  │                        right: exposure list → district rail · bottom: Ask MonsoonIQ
+  └─ Verification Report ─▶ Skill lab (claims, CSI/ETS/POD/FAR, FSS, reliability, PDF)
+Header: Dashboard · Forecast Map · Operations · Verification · Data Sources · Method · API · About
+```
+
+### The operations console
 
 The console is designed for a duty officer with a deadline, not for a data scientist exploring.
 Every screen is a fixed layout; every state change is one round trip.
@@ -233,8 +278,10 @@ next to the passing ones, and (d) runs the entire demo path offline from local a
 
 | Step | Do | Say |
 |---|---|---|
-| 0 | Open the app | "Before you click anything: this is the country on the most warning-heavy day of the season, every district coloured on IMD's own scale, and the numbers underneath are the corrected forecast against the raw one." |
-| 1 | Click **Enter operations console**, point at the map | "Green to red is IMD's own warning scale. The number in each box is the corrected value; the raw model value is one layer switch away, so we are never hiding the adjustment." |
+| 0 | Open the app | "Before you click anything: every dot is a real Census-2011 district, lit by today's warning on IMD's own scale, and those two moving lines are the Arabian Sea and Bay of Bengal branches of the monsoon." |
+| 0a | Click **Enter Dashboard** | "Five cards, five expected outcomes of the problem statement, each with a live number: regime, corrected rainfall, heavy-rain probability, district product, verification. The sixth card is the data." |
+| 0b | Open **Forecast Map**, type *heavy rain in Kerala tomorrow* | "Plain-language questions over the live forecast. No chatbot and no API key: the answer is computed from the same numbers the map shows, and the matching districts light up." |
+| 1 | Open **Operations**, point at the map | "Green to red is IMD's own warning scale. The number in each box is the corrected value; the raw model value is one layer switch away, so we are never hiding the adjustment." |
 | 2 | Click the top district (**click 1**) | "This is the rail: the P10–P90 band, the raw model tick inside it, the regime posteriors that actually fed the correction, the advisory in English and Hindi, and the CAP fields." |
 | 3 | Press **5** for Day 5 | "Same district, five days out. Per-lead models, so the correction is refitted, not reused." |
 | 4 | Open **Bulletin** (**click 2**) and copy | "This is what the SDMA files. Machine-generated, rule-based, bilingual, with the basis and the provenance printed on it." |
@@ -311,21 +358,29 @@ categorical, per-lead, stratified, probabilistic, grid FSS, scorecard, significa
 
 ```
 ├── configs/regime_rules.yaml        # published criteria for the 7 regimes
+├── configs/data_sources.yaml        # real-data sources, seasons, split, label thresholds
 ├── data/synthetic/                  # generated archive + geo metadata (not committed if large)
+├── data/geojson/                    # Census-2011 districts (641 + 53 study), coastline
+├── data/real/                       # built by scripts/fetch_real_data.py (raw/, interim/, archive)
+├── docs/DATASETS.md                 # every dataset: what, why, citation, access, format
 ├── src/
-│   ├── data/                        # generator and metadata
-│   ├── regime/                      # rules + ML classifier
+│   ├── data/                        # generator, io, numpy geometry
+│   │   └── real/                    # IMD reader, Open-Meteo, ERA5, OLR, NCUM adapter, builder
+│   ├── regime/                      # rules + ML classifier + real-data labeller (Rajeevan CMZ)
 │   ├── correction/                  # QM, experts, MoE, quantiles, per-lead, grid
 │   ├── heavy_rain/                  # exceedance classifiers
 │   ├── verification/                # metrics, CIs, stratification, FSS, report
 │   ├── console/                     # precomputed timeline + ranked days
-│   ├── api/                         # FastAPI service, schemas, advisories
+│   ├── api/                         # FastAPI service, schemas, advisories, /ask, /data-sources
+│   ├── config.py                    # run profile (synthetic | real) and path routing
 │   ├── train.py                     # 6-stage training pipeline
 │   └── evaluate.py                  # verification entry point
-├── frontend/                        # React 19 + Vite console (Today / Skill lab / Method)
+├── frontend/                        # React 19 + Vite: Landing, Dashboard, Forecast Map, Operations,
+│                                    # Verification, Data Sources, Method, API (offline SVG maps)
 │   ├── scripts/smoke.mjs            # jsdom render test against recorded fixtures
 │   └── fixtures/                    # recorded API responses for the smoke test
-├── scripts/                         # grid sample builder, API fixture recorder
+├── scripts/                         # fetch_real_data.py, build_district_boundaries.py, grid sample
+│                                    # builder, API fixture recorder, *.ps1 for Windows
 ├── tests/                           # pytest suite
 ├── artifacts/                       # models, metrics, reports, console payloads
 ├── AUDIT.md                         # phase-1 adversarial audit of this project's own claims
@@ -357,6 +412,27 @@ npm run smoke                                 # headless render test of the whol
 
 Docker: `docker compose up --build` starts the API and the console on port 8000.
 
+**scikit-learn version.** The committed synthetic-profile models were pickled with scikit-learn
+1.4.2. The real-profile models in `artifacts/real/` were pickled with 1.8. If your installed version
+differs from the profile you serve (for example on Python 3.13, where 1.4.2 cannot be installed),
+retrain that profile first with `make train evaluate console`, adding `MONSOONIQ_PROFILE=real` for
+the real profile. It takes about a minute. The code runs on scikit-learn 1.4 through 1.8
+(`src/compat.py`).
+
+**Real data (IMD observations + archived NWP).** No keys needed for the default sources:
+
+```bash
+make real-data                      # = python scripts/fetch_real_data.py all  (cached, resumable)
+make real                           # train + evaluate + console on the real archive
+MONSOONIQ_PROFILE=real make serve   # serve it; the UI header shows "IMD observed data"
+```
+
+On Windows PowerShell, run `.\scripts\real_data.ps1` and then
+`$env:MONSOONIQ_PROFILE="real"; .\scripts\api.ps1`. The seasons, district scope (53 study
+districts or all 641), model (`gfs_seamless`, `ecmwf_ifs025` or `ukmo_global_deterministic_10km`)
+and split are set in `configs/data_sources.yaml`. For operational NCUM-G files, run
+`python scripts/fetch_real_data.py forecast build --gridded "data/real/raw/ncum/*.nc"`.
+
 ---
 
 ## 9. Data provenance and honesty
@@ -381,11 +457,13 @@ matters in a defence: `artifacts/metrics/verification_summary.json` is generated
 real contribution is the *method and the harness*; the harness is exactly what survives when real
 data replaces synthetic data.
 
-**What changes with real data.** Fitting: replace the parquet with IMD 0.25° gridded daily
-rainfall (Pai et al. 2014, public via IMD Pune) aggregated to districts, and archived NWP fields
-(GFS/ECMWF/IMD's own model) for the same days. Everything else — features, classifier interface,
-mixture of experts, per-lead bundle, exceedance modules, verification harness, API and console —
-is unchanged. Real data is expected to be *harder*: the synthetic classifier's 97% accuracy is a
+**What changes with real data — now implemented.** `scripts/fetch_real_data.py` builds the same
+schema from IMD 0.25° gridded daily rainfall (Pai et al. 2014), aggregated to Census-2011 districts,
+plus archived operational NWP forecasts, ERA5 or Open-Meteo dynamics, NOAA OLR and the Copernicus
+DEM. Regime labels come from published physical criteria (`src/regime/real_labeller.py`).
+`MONSOONIQ_PROFILE=real` runs the unchanged chain: features, classifier interface, mixture of
+experts, per-lead bundle, exceedance modules, verification harness, API and console. The full list
+of sources, licences and formats is in [docs/DATASETS.md](docs/DATASETS.md). Real data is expected to be *harder*: the synthetic classifier's 97% accuracy is a
 property of the generator, and the audit shows that below ~100% classifier accuracy the
 categorical advantage over the agnostic baseline disappears.
 
@@ -547,8 +625,9 @@ transferable: the harness, not the synthetic numbers, is the deliverable.
 3. **Thin strata.** Five of seven regimes have too few events in the held-out period to support
    a claim. Operationally this is expected (most heavy events are Western Disturbance linked) and
    is why the evaluation suppresses rather than averages.
-4. **Coarse spatial resolution.** 0.5° grid; districts are simplified boxes; sub-kilometre
-   orographic extremes are unresolved. Real deployment needs IMD 0.25°/0.125° data.
+4. **Coarse spatial resolution.** The synthetic grid is 0.5°, and sub-kilometre orographic
+   extremes are unresolved. District geometry is now the real Census-2011 polygons, and the real
+   profile uses the IMD 0.25° grid; the 0.125° product would sharpen it further.
 5. **No real-time ingestion.** The architecture supports it (an ingestion adapter writes the same
    feature frame), but no live scheduler, no GTS/MOSDAC feed, no QC for missing or physically implausible fields in this
    prototype.
@@ -579,7 +658,7 @@ transferable: the harness, not the synthetic numbers, is the deliverable.
 | Phase | Work | Success test |
 |---|---|---|
 | 1 (this repo) | Full pipeline + harness + console on a synthetic archive | `make data && make train && make evaluate` reproduces every figure |
-| 2 | IMD 0.25° gridded rainfall + archived NWP for 2016–2023 | Same harness, no code change; skill table recomputed against observations |
+| 2 (**pipeline shipped in v3**) | IMD 0.25° gridded rainfall + archived NWP (Open-Meteo GFS/IFS/UKMO now; NCUM-G via the gridded adapter) | `make real-data real` → skill table recomputed against observations, no code change |
 | 3 | Regime-specific exceedance heads; more seasons for thin strata | ΔCSI vs agnostic significant at 95% on ≥3 regimes |
 | 3b | Nested exceedance head: P(≥115.6 \| ≥64.5) instead of independently calibrated heads reconciled by a clamp (see §14.9) | `p_very_heavy` stops equalling `p_heavy`, and no red warning is issued without a rainfall value or a genuinely distinct probability behind it |
 | 4 | Operational ingest (GTS/MOSDAC), scheduler, missing-data QC | Fresh forecast visible in the console within 15 minutes of model availability |

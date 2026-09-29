@@ -25,16 +25,18 @@ from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
 from src.correction.quantile_regressor import QuantileRegressor
 from src.verification.evaluator import VerificationEvaluator
 from src.verification.report_generator import VerificationReportGenerator
+from src.config import P
+from src.data.io import read_table
 
 logger = logging.getLogger("MonsoonIQ_Evaluate")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-TEST_YEARS = [2022, 2023]
+from src.config import TEST_YEARS  # profile-aware split
 
 
-def run_evaluation_pipeline(data_path: str = "data/synthetic/district_daily.parquet"):
+def run_evaluation_pipeline(data_path: str = P("data/synthetic/district_daily.parquet")):
     logger.info("=== MonsoonIQ evaluation ===")
-    df = pd.read_parquet(data_path)
+    df = read_table(data_path)
     test_df = df[df["year"].isin(TEST_YEARS)].copy().reset_index(drop=True)
     logger.info("Held-out partition: %d records (%s), %d calendar days",
                 len(test_df), TEST_YEARS, test_df["date"].nunique())
@@ -46,7 +48,7 @@ def run_evaluation_pipeline(data_path: str = "data/synthetic/district_daily.parq
     qr = QuantileRegressor.load()
 
     lead_bundle = None
-    if os.path.exists("artifacts/models/lead_time_bundle.joblib"):
+    if os.path.exists(P("artifacts/models/lead_time_bundle.joblib")):
         try:
             lead_bundle = LeadTimeCorrectionBundle.load()
             logger.info("Loaded per-lead bundle for leads %s", lead_bundle.available_leads())
@@ -65,9 +67,27 @@ def run_evaluation_pipeline(data_path: str = "data/synthetic/district_daily.parq
         test_df, predictions, probabilities=probabilities, moe=moe,
         lead_bundle=lead_bundle, regime_posteriors=posteriors)
 
+    # The product a district receives (IMD-coloured warning) scored against the district maximum.
+    from src.verification.warning_product import verify_warning_product
+    summary["warning_product"] = verify_warning_product(test_df, lead_bundle, posteriors)
+    wp = summary["warning_product"]
+    if wp.get("available"):
+        d1 = wp["leads"]["day_1"]["64.5"]
+        summary["scorecard"]["cards"].insert(0, {
+            "label": "Heavy-rain warning CSI (≥64.5 mm, Day 1)",
+            "raw": d1["raw_nwp"]["csi"], "baseline": d1["raw_nwp"]["csi"],
+            "corrected": d1["warning_product"]["csi"], "unit": "", "lower_is_better": False,
+            "vs_raw_pct": round(100 * (d1["warning_product"]["csi"] - d1["raw_nwp"]["csi"])
+                                / max(d1["raw_nwp"]["csi"], 1e-6), 1),
+            "vs_baseline_pct": None,
+            "note": "warning product (probabilities + P90 + corrected amount) vs observed district maximum",
+        })
+        with open(P("artifacts/metrics/verification_summary.json"), "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2, default=float)
+
     # Regime-value ablation gets its own artifact (and its own figure).
     if summary.get("regime_value", {}).get("available"):
-        with open("artifacts/metrics/regime_value_audit.json", "w", encoding="utf-8") as f:
+        with open(P("artifacts/metrics/regime_value_audit.json"), "w", encoding="utf-8") as f:
             json.dump(summary["regime_value"], f, indent=2)
         _plot_regime_value(summary["regime_value"])
 
@@ -103,14 +123,16 @@ def _plot_regime_value(regime_value):
                    label=f"Raw NWP (CSI {raw_csi:.3f})")
         ax.set_xlabel("Regime-classifier accuracy")
         ax.set_ylabel("CSI, rainfall ≥ 64.5 mm/day")
-        ax.set_title("Where regime conditioning stops paying\n"
-                     "Synthetic held-out period 2022–2023", fontsize=11)
+        from src.config import PROFILE
+        period = (str(TEST_YEARS[0]) if len(TEST_YEARS) == 1 else f"{TEST_YEARS[0]}–{TEST_YEARS[-1]}")
+        kind = "Synthetic held-out period" if PROFILE == "synthetic" else "IMD-verified held-out season"
+        ax.set_title(f"Where regime conditioning stops paying\n{kind} {period}", fontsize=11)
         ax.invert_xaxis()
         ax.grid(alpha=0.3)
         ax.legend(fontsize=8, loc="lower left")
         fig.tight_layout()
-        os.makedirs("artifacts/plots", exist_ok=True)
-        fig.savefig("artifacts/plots/regime_value_curve.png")
+        os.makedirs(P("artifacts/plots"), exist_ok=True)
+        fig.savefig(P("artifacts/plots/regime_value_curve.png"))
         plt.close(fig)
     except Exception as exc:  # pragma: no cover
         logger.warning("Regime-value figure skipped: %s", exc)

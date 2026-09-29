@@ -1,0 +1,4 @@
+# Optional extras for the real-data pipeline (scripts/fetch_real_data.py)
+-r requirements.txt
+cdsapi>=0.7.0          # ERA5 dynamics via Copernicus CDS (only with --era5)
+netCDF4>=1.6.0         # ERA5 / NCUM-G NetCDF reading through xarray

@@ -7,9 +7,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATA_MODE=synthetic
-      - CDSAPI_URL=https://cds.climate.copernicus.eu/api/v2
-      - CDSAPI_KEY=YOUR_CDS_API_KEY_HERE
+      # synthetic = committed benchmark; real = data/real/ built by `make real-data real`
+      - MONSOONIQ_PROFILE=${MONSOONIQ_PROFILE:-synthetic}
     volumes:
       - ./data:/app/data
       - ./artifacts:/app/artifacts

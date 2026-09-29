@@ -39,7 +39,12 @@ class RegimeResidualExpert:
             X_val: Optional[pd.DataFrame] = None, y_residual_val: Optional[np.ndarray] = None):
         """Fit residual regression tree on training data."""
         if len(X_train) < 30:
-            logger.warning(f"Regime {self.regime_id} has very few training samples ({len(X_train)}).")
+            # Too few days of this regime (e.g. no western disturbances in a JJAS-only archive):
+            # leave the expert unfitted, so it contributes the regime quantile mapping alone.
+            logger.warning(f"Regime {self.regime_id} has {len(X_train)} training samples; "
+                           "expert falls back to regime quantile mapping.")
+            self.is_fitted = False
+            return self
 
         callbacks = []
         eval_set = None

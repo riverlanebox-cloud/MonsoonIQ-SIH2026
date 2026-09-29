@@ -1,0 +1,204 @@
+{
+  "built_utc": "2026-09-25 13:49 UTC",
+  "build_seconds": 5.0,
+  "provenance": "REAL_OBSERVED_IMD_NWP",
+  "dates": 605,
+  "date_range": [
+    "2021-06-02",
+    "2025-09-30"
+  ],
+  "default_date": "2022-07-06",
+  "featured_monsoon_days": [
+    "2022-07-06",
+    "2022-07-14",
+    "2022-07-15",
+    "2022-07-13",
+    "2024-07-24",
+    "2024-07-25",
+    "2025-07-27",
+    "2022-08-09",
+    "2024-07-21",
+    "2025-07-26"
+  ],
+  "leads": [
+    "d1",
+    "d2",
+    "d3",
+    "d4",
+    "d5"
+  ],
+  "districts": 53,
+  "alert_categories": {
+    "green": "no warning",
+    "yellow": "64.5-115.5 mm",
+    "orange": "115.6-204.4 mm",
+    "red": ">=204.5 mm"
+  },
+  "year_summary": [
+    {
+      "year": 2021,
+      "days": 121,
+      "warning_district_days": 141,
+      "red": 25,
+      "orange": 101,
+      "yellow": 15,
+      "observed_heavy_districts": 547,
+      "regimes": {
+        "Weak/Normal": 109,
+        "Active Monsoon": 12
+      }
+    },
+    {
+      "year": 2022,
+      "days": 121,
+      "warning_district_days": 224,
+      "red": 45,
+      "orange": 166,
+      "yellow": 13,
+      "observed_heavy_districts": 595,
+      "regimes": {
+        "Weak/Normal": 109,
+        "Active Monsoon": 11,
+        "Monsoon Low/Depression": 1
+      }
+    },
+    {
+      "year": 2023,
+      "days": 121,
+      "warning_district_days": 193,
+      "red": 32,
+      "orange": 146,
+      "yellow": 15,
+      "observed_heavy_districts": 572,
+      "regimes": {
+        "Weak/Normal": 116,
+        "Active Monsoon": 5
+      }
+    },
+    {
+      "year": 2024,
+      "days": 121,
+      "warning_district_days": 240,
+      "red": 42,
+      "orange": 175,
+      "yellow": 23,
+      "observed_heavy_districts": 718,
+      "regimes": {
+        "Weak/Normal": 119,
+        "Active Monsoon": 2
+      }
+    },
+    {
+      "year": 2025,
+      "days": 121,
+      "warning_district_days": 200,
+      "red": 27,
+      "orange": 161,
+      "yellow": 12,
+      "observed_heavy_districts": 626,
+      "regimes": {
+        "Weak/Normal": 116,
+        "Active Monsoon": 5
+      }
+    }
+  ],
+  "spells": [
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2021-06-20",
+      "end": "2021-09-13",
+      "days": 86,
+      "observed_heavy_districts": 378
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2025-07-09",
+      "end": "2025-09-30",
+      "days": 84,
+      "observed_heavy_districts": 423
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2023-09-18",
+      "end": "2024-08-04",
+      "days": 77,
+      "observed_heavy_districts": 528
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2023-06-29",
+      "end": "2023-09-08",
+      "days": 72,
+      "observed_heavy_districts": 420
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2022-09-16",
+      "end": "2023-06-27",
+      "days": 41,
+      "observed_heavy_districts": 106
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2024-09-12",
+      "end": "2025-06-19",
+      "days": 37,
+      "observed_heavy_districts": 133
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2024-08-06",
+      "end": "2024-09-10",
+      "days": 36,
+      "observed_heavy_districts": 156
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2022-07-16",
+      "end": "2022-08-08",
+      "days": 24,
+      "observed_heavy_districts": 122
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2022-08-23",
+      "end": "2022-09-14",
+      "days": 23,
+      "observed_heavy_districts": 83
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2022-06-02",
+      "end": "2022-06-20",
+      "days": 19,
+      "observed_heavy_districts": 33
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2022-06-22",
+      "end": "2022-07-10",
+      "days": 19,
+      "observed_heavy_districts": 141
+    },
+    {
+      "regime_id": 7,
+      "regime_name": "Weak/Normal",
+      "start": "2021-09-17",
+      "end": "2021-09-29",
+      "days": 13,
+      "observed_heavy_districts": 47
+    }
+  ],
+  "note": "Timeline is model output over archived NWP forecasts verified against IMD gridded rainfall; observed columns are shown only as reference and are never used as forecast input."
+}

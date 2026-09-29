@@ -29,11 +29,12 @@ import numpy as np
 import pandas as pd
 import joblib
 import lightgbm as lgb
+from src.config import P
 
 logger = logging.getLogger(__name__)
 
-GRID_NPZ = "data/synthetic/grid_feature_samples.npz"
-DEFAULT_PATH = "artifacts/models/grid_correction.joblib"
+GRID_NPZ = P("data/synthetic/grid_feature_samples.npz")
+DEFAULT_PATH = P("artifacts/models/grid_correction.joblib")
 
 PREDICTORS = [
     "u850", "v850", "wind_speed_850", "vorticity_850", "mslp_anomaly", "q500",

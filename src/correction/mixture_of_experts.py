@@ -19,6 +19,7 @@ from typing import Dict, Any, List, Optional, Tuple
 
 from src.correction.quantile_mapping import EmpiricalQuantileMapper, RegimeQuantileMapper
 from src.correction.residual_expert import RegimeResidualExpert
+from src.config import P
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -44,7 +45,7 @@ class MonsoonIQMixtureOfExperts:
     ]
     FEATURE_COLS = ["raw_nwp"] + PREDICTOR_COLS
 
-    def __init__(self, model_save_path: str = "artifacts/models/mixture_of_experts.joblib"):
+    def __init__(self, model_save_path: str = P("artifacts/models/mixture_of_experts.joblib")):
         self.model_save_path = model_save_path
 
         # MoE components
@@ -191,7 +192,7 @@ class MonsoonIQMixtureOfExperts:
         }
 
     @classmethod
-    def load(cls, path: str = "artifacts/models/mixture_of_experts.joblib") -> "MonsoonIQMixtureOfExperts":
+    def load(cls, path: str = P("artifacts/models/mixture_of_experts.joblib")) -> "MonsoonIQMixtureOfExperts":
         """Load trained MoE instance."""
         if not os.path.exists(path):
             raise FileNotFoundError(f"MoE artifact not found at {path}")

@@ -30,3 +30,9 @@ frontend/.smoke-build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Real-data pipeline: raw downloads and interim tables are rebuilt by scripts/fetch_real_data.py
+data/real/raw/
+data/real/interim/
+# CSV twin written only when no parquet engine is installed (src/data/io.py)
+data/synthetic/*.csv.gz

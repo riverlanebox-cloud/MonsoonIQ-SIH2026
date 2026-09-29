@@ -31,9 +31,11 @@ import numpy as np
 
 from src.verification.metrics import compute_fractions_skill_score_2d
 from src.verification.stratified import reliability_class
+from src.config import P
+from src.data.io import read_table
 
-GRID_NPZ = "data/synthetic/grid_feature_samples.npz"
-DISTRICT_GEOJSON = "data/geojson/india_districts.geojson"
+GRID_NPZ = P("data/synthetic/grid_feature_samples.npz")
+DISTRICT_GEOJSON = "data/geojson/synthetic_study_districts.geojson"  # the grid archive is synthetic
 THRESHOLDS = (15.6, 64.5)
 WINDOWS = (1, 3, 5, 9)
 RATIO_CLIP = (0.25, 4.0)
@@ -45,7 +47,11 @@ logger = logging.getLogger(__name__)
 def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], Dict[str, Any]]:
     """District index for every land cell: containment first, else nearest centroid."""
     import json as _json
-    from shapely.geometry import shape, Point
+    try:
+        from shapely.geometry import shape, Point
+    except ImportError:  # numpy fallback
+        shape = None
+    from src.data import geometry as _geom
 
     with open(geojson_path, "r", encoding="utf-8") as f:
         geo = _json.load(f)
@@ -53,11 +59,11 @@ def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], D
     ids, geoms, centroids, bounds = [], [], [], []
     for feat in geo["features"]:
         props = feat["properties"]
-        geom = shape(feat["geometry"])
+        geom = shape(feat["geometry"]) if shape is not None else feat["geometry"]
         ids.append(props["district_id"])
         geoms.append(geom)
         centroids.append((float(props["centroid_lon"]), float(props["centroid_lat"])))
-        bounds.append(geom.bounds)
+        bounds.append(geom.bounds if shape is not None else _geom.bounds(geom))
 
     lats = npz["lats"].astype(float)
     lons = npz["lons"].astype(float)
@@ -74,6 +80,9 @@ def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], D
         cand = ((cell_lon >= minx) & (cell_lon <= maxx)
                 & (cell_lat >= miny) & (cell_lat <= maxy))
         if not cand.any():
+            continue
+        if shape is None:
+            assign[np.flatnonzero(cand)[_geom.contains(geom, cell_lon[cand], cell_lat[cand])]] = i
             continue
         try:
             from shapely import contains_xy
@@ -269,7 +278,7 @@ if __name__ == "__main__":
     import pandas as pd
     from src.correction.mixture_of_experts import MonsoonIQMixtureOfExperts
 
-    df = pd.read_parquet("data/synthetic/district_daily.parquet")
-    test_df = df[df["year"].isin([2022, 2023])].reset_index(drop=True)
+    df = read_table(P("data/synthetic/district_daily.parquet"))
+    test_df = df[df["year"].isin(__import__("src.config", fromlist=["TEST_YEARS"]).TEST_YEARS)].reset_index(drop=True)
     print(json.dumps(run_grid_verification(MonsoonIQMixtureOfExperts.load(), df, test_df),
                      indent=2, default=float)[:5000])

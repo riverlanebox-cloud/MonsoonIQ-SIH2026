@@ -23,6 +23,8 @@ Run:  PYTHONPATH=. python scripts/regime_value_audit.py
 
 import json
 import os
+from src.config import P
+from src.data.io import read_table
 
 import numpy as np
 import pandas as pd
@@ -35,10 +37,10 @@ from src.verification.metrics import (
     compute_dichotomous_metrics,
 )
 
-DATA = "data/synthetic/district_daily.parquet"
-METRICS_OUT = "artifacts/metrics/regime_value_audit.json"
-PLOT_OUT = "artifacts/plots/regime_value_curve.png"
-TEST_YEARS = [2022, 2023]
+DATA = P("data/synthetic/district_daily.parquet")
+METRICS_OUT = P("artifacts/metrics/regime_value_audit.json")
+PLOT_OUT = P("artifacts/plots/regime_value_curve.png")
+from src.config import TEST_YEARS  # profile-aware split
 HEAVY = 64.5
 VERY_HEAVY = 115.6
 BOOT = 400
@@ -76,7 +78,7 @@ def main():
     os.makedirs(os.path.dirname(METRICS_OUT), exist_ok=True)
     os.makedirs(os.path.dirname(PLOT_OUT), exist_ok=True)
 
-    df = pd.read_parquet(DATA)
+    df = read_table(DATA)
     test = df[df["year"].isin(TEST_YEARS)].reset_index(drop=True)
     y = test["obs_rain_mean"].to_numpy(float)
     y_max = test["obs_rain_max"].to_numpy(float)
@@ -264,7 +266,7 @@ def main():
 
     # ------------------------------------------------------------------ print
     print(f"\nHeld-out test: {n} district-days over {test['date'].nunique()} days "
-          f"({TEST_YEARS[0]}–{TEST_YEARS[1]})")
+          f"({TEST_YEARS[0]}–{TEST_YEARS[-1]})")
     print(f"Heavy (>= {HEAVY} mm) events: {int((y_max >= HEAVY).sum())} "
           f"({100 * (y_max >= HEAVY).mean():.2f}% of district-days)")
 

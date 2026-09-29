@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react';
-import { GeoJSON, MapContainer, TileLayer, CircleMarker, Tooltip, Rectangle } from 'react-leaflet';
+import React, { useEffect, useState } from 'react';
+import { api } from '../api';
+import IndiaMap from './IndiaMap';
 import {
   CATEGORY_META, CATEGORY_FILL, REGIME_COLOR, RAIN_LEGEND, rainColor, adjustmentColor,
   probabilityColor, categoryBasis, fmt,
@@ -24,35 +25,9 @@ export default function MapPanel({
 }) {
   const [hovered, setHovered] = useState(null);
 
-  const styleFor = (featureId) => {
-    const d = districts?.find((x) => x.district_id === featureId);
-    if (!d) return { color: '#12293c', weight: 1, fillColor: '#0e1f2e', fillOpacity: 0.55 };
-    const selected = d.district_id === selectedId;
-    let fill = '#16324a';
-    if (layer === 'category') fill = CATEGORY_FILL[d.category];
-    else if (layer === 'corrected') fill = rainColor(d.corrected_mm);
-    else if (layer === 'raw') fill = rainColor(d.raw_mm);
-    else if (layer === 'adjustment') fill = adjustmentColor(d.adjustment_mm);
-    else if (layer === 'p_heavy') fill = probabilityColor(d.p_heavy);
-    else if (layer === 'regime') fill = REGIME_COLOR[d.regime] || '#9aa7b4';
-    return {
-      color: selected ? '#00d4ff' : (d.category === 'green' ? '#12293c' : '#061019'),
-      weight: selected ? 2.6 : (d.category === 'red' ? 1.3 : 0.7),
-      fillColor: fill,
-      fillOpacity: d.category === 'green' ? 0.8 : 0.94,
-    };
-  };
-
-  const onEach = (feature, lyr) => {
-    const d = districts?.find((x) => x.district_id === feature.properties.district_id);
-    lyr.on({
-      click: () => onSelect(feature.properties.district_id),
-      mouseover: () => { lyr.setStyle({ weight: 2.4, color: '#00d4ff' }); setHovered(d); },
-      mouseout: () => { lyr.setStyle(styleFor(feature.properties.district_id)); setHovered(null); },
-    });
-  };
-
-  const center = useMemo(() => [22.5, 79.5], []);
+  // Offline SVG map (no tile server): the 641 Census-2011 districts as the base layer.
+  const [base, setBase] = useState(null);
+  useEffect(() => { api.geojsonAll().then(setBase).catch(() => setBase(null)); }, []);
 
   return (
     <div className="panel">
@@ -101,43 +76,18 @@ export default function MapPanel({
           </div>
         </div>
 
-        <MapContainer center={center} zoom={5} scrollWheelZoom preferCanvas>
-          <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-            attribution='&copy; OpenStreetMap, &copy; CARTO'
-          />
-
-          {view === 'district' && geojson && (
-            <GeoJSON
-              key={`${layer}-${selectedId}-${districts?.length || 0}`}
-              data={geojson}
-              style={(f) => styleFor(f.properties.district_id)}
-              onEachFeature={onEach}
-            />
-          )}
-
-          {view === 'grid' && grid?.cells?.map((c, i) => (
-            <Rectangle
-              key={`${c.lat}-${c.lon}-${i}`}
-              bounds={[[c.lat - 0.25, c.lon - 0.25], [c.lat + 0.25, c.lon + 0.25]]}
-              pathOptions={{
-                stroke: false,
-                fillColor: rainColor(layer === 'raw' ? c.raw_mm : (c.corrected_mm ?? c.observed_mm)),
-                fillOpacity: 0.9,
-              }}
-            >
-              <Tooltip className="district-tip">
-                <b>{fmt(c.corrected_mm ?? c.observed_mm)} mm</b> corrected<br />
-                raw {fmt(c.raw_mm)} mm · observed {fmt(c.observed_mm)} mm<br />
-                <span className="muted">{c.lat.toFixed(2)}°N {c.lon.toFixed(2)}°E</span>
-              </Tooltip>
-            </Rectangle>
-          ))}
-
-          {view === 'grid' && grid && !grid.cells?.some((c) => c.corrected_mm !== undefined) && (
-            <CircleMarker center={center} radius={1} opacity={0} fillOpacity={0} />
-          )}
-        </MapContainer>
+        <IndiaMap
+          baseGeo={base}
+          studyGeo={view === 'district' ? geojson : null}
+          districts={districts}
+          layer={layer}
+          selectedId={selectedId}
+          onSelect={onSelect}
+          cells={view === 'grid' ? grid?.cells : null}
+          showPulses={view === 'district'}
+          onHover={setHovered}
+          style={{ height: '100%' }}
+        />
 
         <div className="map-meta tiny muted mono">
           {date ? `${date} · Day ${lead}` : 'spatial view'}

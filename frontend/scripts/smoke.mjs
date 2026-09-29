@@ -39,10 +39,6 @@ const outDir = join(root, '.smoke-build');
 await build({
   root,
   logLevel: 'error',
-  resolve: {
-    // Leaflet needs layout + canvas, which jsdom does not provide.
-    alias: { 'react-leaflet': join(root, 'scripts', 'leaflet-stub.jsx') },
-  },
   mode: 'development',
   build: {
     ssr: true,
@@ -109,25 +105,46 @@ const clickText = (text, selector = 'button') => {
   b?.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
   return !!b;
 };
+const clickTab = (label) => clickText(label, 'button.nav-item');
 const enterConsole = async () => {
-  clickText('Enter operations console');
+  clickText('Enter Dashboard');
+  await wait(900);
+  clickTab('Operations');
   await wait(900);
 };
 const check = (label, condition) => checks.push({ label, ok: !!condition });
 
 // ---------------------------------------------------------------- landing screen
-check('landing title + kicker', html().includes('MonsoonIQ') && html().includes('SIH26080'));
-check('landing CTAs', html().includes('Enter operations console') && html().includes('Verification'));
+check('landing title + kicker', html().includes('Monsoon') && html().includes('PS 26080'));
+check('landing CTAs', html().includes('Enter Dashboard') && html().includes('Live Forecast Map')
+  && html().includes('Verification Report'));
 check('landing live stat strip', html().includes('Districts warned') && html().includes('Peak corrected'));
 check('landing provenance disclaimer', html().toLowerCase().includes('synthetic')
   && html().includes('not an official'.replace(' an ', ' ')) === false || html().includes('official IMD'));
-check('landing shortcut hints', html().includes('keyboard-first'));
+check('landing dotted India map', (html().match(/<circle/g) || []).length > 1000);
 
 // ---------------------------------------------------------------- enter the console
-check('enter console button present', !!buttonByText('Enter operations console', 'button.cta'));
-await enterConsole();
+check('enter dashboard button present', !!buttonByText('Enter Dashboard', 'button.cta'));
+clickText('Enter Dashboard');
+await wait(1100);
+check('dashboard: mission control', html().includes('Mission Control'));
+check('dashboard: one card per expected outcome', ['Weather Regime Classifier', 'Bias-Corrected Forecast',
+  'Heavy Rainfall Probability', 'District Rainfall Product', 'Verification Report'].every((t) => html().includes(t)));
+check('dashboard: offline district map', html().includes('india-map'));
 
-check('masthead + provenance chip', html().includes('MonsoonIQ') && html().includes('Provenance'));
+check('switched to Forecast Map', clickTab('Forecast Map'));
+await wait(900);
+check('forecast map: ask bar', html().includes('Ask MonsoonIQ'));
+check('forecast map: layer controls', html().includes('Correction applied') && html().includes('Regime posterior'));
+
+check('switched to Data Sources', clickTab('Data Sources'));
+await wait(700);
+check('data sources: IMD gridded rainfall listed', html().includes('IMD 0.25° daily gridded rainfall'));
+check('data sources: NCUM listed', html().includes('NCUM-G'));
+
+clickTab('Operations');
+await wait(1100);
+check('header + provenance pill', html().includes('Monsoon') && (html().includes('Synthetic benchmark') || html().includes('IMD observed data')));
 check('command bar with lead selector', html().includes('Lead') && html().includes('D5'));
 check('warning summary strip', html().includes('Districts warned'));
 check('regime timeline rendered', html().includes('Regime and warning timeline'));
@@ -159,21 +176,19 @@ check('band is annotated with its parts', html().includes('P10\u2013P90') && htm
 check('console fetched once per screen', calls.filter((c) => c.startsWith('/console')).length >= 1);
 
 // --- tab navigation
-const clickTab = (label) => clickText(label, 'button.tab');
-
-check('overview button returns to landing', clickText('Overview'));
+check('home button returns to landing', clickTab('Home'));
 await wait(400);
-check('returned to landing', html().includes('Enter operations console'));
+check('returned to landing', html().includes('Enter Dashboard'));
 await enterConsole();
 
-check('switched to Skill lab', clickTab('Skill lab'));
+check('switched to Verification', clickTab('Verification'));
 await wait(500);
 check('skill lab honesty note', html().includes('Read this first'));
 check('skill lab claim table', html().includes('Claims and their verdicts'));
 check('skill lab categorical table', html().includes('Raw NWP'));
 
 // Documented cases: one click from the map to a named event.
-check('switched back to Today', clickTab('Today'));
+check('switched back to Operations', clickTab('Operations'));
 await wait(1100);
 check('case strip lists documented events', html().includes('Kerala orographic surge'));
 check('case click loads that day', (() => {
@@ -191,7 +206,7 @@ check('method user flow section', html().includes('Operational user flow'));
 check('method model card', html().includes('Model card') || html().includes('Stated limits'));
 
 // --- keyboard navigation back on the console
-clickTab('Today');
+clickTab('Operations');
 await wait(300);
 const before = calls.filter((c) => c.startsWith('/console')).length;
 window.dispatchEvent(new window.KeyboardEvent('keydown', { key: '2', bubbles: true }));
@@ -219,7 +234,7 @@ check('api probe reports an outcome', /\d+ ms · [\d.]+ kB|network error/.test(h
 
 // --- failure path: an unreachable engine must say so, keep the last good load
 //     visible, mark it stale, and recover on retry
-clickTab('Today');
+clickTab('Operations');
 await wait(1100);
 failConsoleEndpoint = true;
 window.dispatchEvent(new window.KeyboardEvent('keydown', { key: '3', bubbles: true }));
@@ -236,7 +251,7 @@ window.dispatchEvent(new window.KeyboardEvent('keydown', { key: '?', bubbles: tr
 await wait(100);
 check('shortcut help toast', html().includes('Shortcuts:'));
 
-const realErrors = failures.filter((f) => !/Leaflet|jest|act\(|Warning: ReactDOM/.test(f));
+const realErrors = failures.filter((f) => !/jest|act\(|Warning: ReactDOM/.test(f));
 const failed = checks.filter((c) => !c.ok);
 
 console.log('\nFrontend smoke test');

@@ -13,11 +13,11 @@ if sys.platform == 'win32':
 print("=== MonsoonIQ Self-Verification Checklist ===")
 
 # 1. Regime Classifier Outputs
-assert os.path.exists("artifacts/models/regime_classifier.joblib"), "Regime classifier model missing"
+assert os.path.exists(P("artifacts/models/regime_classifier.joblib")), "Regime classifier model missing"
 print("[✓] 1. Regime classifier trained and saved.")
 
 # 2. Corrected Forecast Beats Raw NWP
-with open("artifacts/metrics/verification_summary.json") as f:
+with open(P("artifacts/metrics/verification_summary.json")) as f:
     verif = json.load(f)
 
 raw_rmse = verif["continuous_metrics"]["raw_nwp"]["rmse"]
@@ -35,13 +35,13 @@ assert miq_pod > raw_pod, f"MonsoonIQ POD ({miq_pod}) does not beat Raw ({raw_po
 print(f"[✓] 2. MonsoonIQ beats Raw NWP on RMSE ({raw_rmse} -> {miq_rmse}), CSI ({raw_csi} -> {miq_csi}), POD ({raw_pod} -> {miq_pod}).")
 
 # 3. Heavy-Rain Probabilities Calibrated (Reliability Plot)
-assert os.path.exists("artifacts/plots/report_prob_curves.png"), "Reliability plot missing"
+assert os.path.exists(P("artifacts/plots/report_prob_curves.png")), "Reliability plot missing"
 brier = verif["probabilistic_verification"]["heavy_64_5"]["reliability"]["brier_score"]
 print(f"[✓] 3. Calibrated heavy-rain probabilities generated (Brier score: {brier:.4f}, Reliability plot verified).")
 
 # 4. District Product Renders
 assert os.path.exists("data/geojson/india_districts.geojson"), "District GeoJSON missing"
-assert os.path.exists("data/synthetic/district_daily.parquet"), "District daily dataset missing"
+assert os.path.exists(P("data/synthetic/district_daily.parquet")), "District daily dataset missing"
 print("[✓] 4. District products renderable with 53 districts across all Indian zones.")
 
 # 5. All Listed Metrics Computed
@@ -54,7 +54,7 @@ for tk in thresh_keys:
 print("[✓] 5. All continuous, dichotomous, and contingency metrics computed.")
 
 # 6. Heavy / Very Heavy Section Populated
-with open("artifacts/metrics/heavy_events_summary.json") as f:
+with open(P("artifacts/metrics/heavy_events_summary.json")) as f:
     heavy_summary = json.load(f)
 assert heavy_summary["heavy_64_5"]["total_events"] > 0, "Heavy events count is 0"
 assert heavy_summary["very_heavy_115_6"]["total_events"] > 0, "Very heavy events count is 0"
@@ -63,7 +63,7 @@ count_vh = heavy_summary["very_heavy_115_6"]["total_events"]
 print(f"[✓] 6. Dedicated heavy & very heavy section populated (Heavy: {count_h} events, V.Heavy: {count_vh} events).")
 
 # 7. PDF Report Generated
-pdf_path = "artifacts/reports/MonsoonIQ_Official_Verification_Report.pdf"
+pdf_path = P("artifacts/reports/MonsoonIQ_Official_Verification_Report.pdf")
 assert os.path.exists(pdf_path), "PDF report missing"
 pdf_size = os.path.getsize(pdf_path)
 assert pdf_size > 50000, f"PDF size too small: {pdf_size}"
@@ -72,6 +72,7 @@ print(f"[✓] 7. Official PDF verification report generated ({pdf_size} bytes)."
 # 8. All API Endpoints Return Valid Responses
 from fastapi.testclient import TestClient
 from src.api.main import app, load_artifacts
+from src.config import P
 load_artifacts()
 client = TestClient(app)
 endpoints = [

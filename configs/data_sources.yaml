@@ -1,0 +1,89 @@
+# MonsoonIQ - real-data sources (profile: MONSOONIQ_PROFILE=real)
+#
+# Every source below is public and citable. See docs/DATASETS.md for licences, why each
+# was chosen, and how it maps onto what NCMRWF runs operationally.
+
+seasons:
+  years: [2021, 2022, 2023, 2024, 2025]   # JJAS of each year - the seasons JMA GSM has archived Day 1-5 rain for
+  months: [6, 7, 8, 9]                    # add 10-12 / 1-5 for western disturbances
+
+# Chronological split. Written into data/real/dataset_metadata.json by the builder
+# (the builder drops years it could not fetch and re-derives the split).
+split:
+  train: [2021, 2022, 2023]
+  val: [2024]
+  test: [2025]
+
+districts: study        # "study" = the 53-district study set, "all" = 641 Census-2011 districts
+
+observations:
+  # IMD 0.25 deg daily gridded rainfall (Pai et al. 2014, Mausam 65:1-18), binary .grd,
+  # 129 lat (6.5-38.5N) x 135 lon (66.5-100E), float32, -999 = missing.
+  source: imd_gridded_025
+  download_url: https://imdpune.gov.in/cmpg/Griddata/rainfall.php     # POST rain=<year>
+  realtime_url: https://imdpune.gov.in/cmpg/Realtimedata/Rainfall/rain.php
+  # IMD labels a day's rain by the 0830 IST (03 UTC) reading that ENDS the 24 h period, i.e. date D
+  # = (D-1 03 UTC, D 03 UTC]. Forecast/label windows are therefore shifted by day_offset=1.
+  # Verified on 2024-25 data: corr(obs, Day-1 GFS) = 0.48 unshifted vs 0.59 with the shift.
+  # The builder re-checks this every run (dataset_metadata.json -> day_alignment_check).
+  day_window_start_utc_hour: 3
+  day_offset: 1
+
+forecast:
+  # Raw NWP rainfall at lead Day 1..5. Default: Open-Meteo Previous Runs API (no key),
+  # which archives what each model actually predicted N days before the valid time.
+  source: openmeteo_previous_runs
+  url: https://previous-runs-api.open-meteo.com/v1/forecast
+  # ukmo_global_deterministic_10km = UK Met Office Unified Model (the model NCMRWF's NCUM-G is
+  # built on). gfs_seamless = NCEP GFS (the model IMD's GFS T1534 derives from).
+  # ecmwf_ifs025 = ECMWF IFS. Archive depth differs per model (most from 2024; GFS from 2021).
+  # Archive depth, probed 2026-09 (scripts/probe_forecast_archive.py -> data/real/model_coverage.json):
+  #   jma_gsm 2021-2025 (Day 1-5) | gfs_seamless, ecmwf_ifs025, icon_global, gem_global, cma 2024-2025 only
+  #   ukmo_global_deterministic_10km: no precipitation archive
+  # JMA GSM is the only open archive with >= 3 monsoon seasons, so it is the default raw model.
+  models: [jma_gsm]
+  leads: [1, 2, 3, 4, 5]
+  points_per_district: 1        # 1 = representative point; 5 = centre + 4 interior points
+  # Operational NCMRWF data (NCUM-G / NEPS-G, from the NCMRWF data portal) plugs in through
+  # src/data/real/gridded_nwp.py: any NetCDF of daily accumulated rain with an init time and a
+  # lead dimension. Point `gridded_glob` at the files and set source: gridded_netcdf.
+  gridded_glob: data/real/raw/ncum/*.nc
+  gridded_var: precipitation_amount
+
+dynamics:
+  # Regime predictors: 850 hPa wind + vorticity, 500 hPa geopotential/humidity, MSLP, CAPE.
+  # era5: Copernicus CDS (needs a free key in ~/.cdsapirc) - the reference reanalysis.
+  # openmeteo: Historical Forecast API (analysis-like, no key) - vorticity from a +/-0.5 deg stencil.
+  source: openmeteo
+  openmeteo_url: https://historical-forecast-api.open-meteo.com/v1/forecast
+  openmeteo_model: gfs_seamless
+  stencil_deg: 0.5
+  stencil: forward        # forward = 2 extra points/district (fits the free daily quota); cross = 4
+
+olr:
+  # NOAA Interpolated OLR (Liebmann & Smith 1996), daily 2.5 deg, via THREDDS NetCDF Subset.
+  # NOTE: the PSL daily series ends in 2022; for longer records the builder neutralises OLR
+  # (a predictor present for one season only would encode the season, not the weather).
+  url: https://psl.noaa.gov/thredds/ncss/grid/Datasets/interp_OLR/olr.day.mean.nc
+  ltm_url: https://psl.noaa.gov/thredds/ncss/grid/Datasets/interp_OLR/olr.day.ltm.1991-2020.nc
+
+terrain:
+  # Copernicus GLO-90 DEM via Open-Meteo Elevation API (no key); slope from a +/-0.1 deg stencil.
+  url: https://api.open-meteo.com/v1/elevation
+  stencil_deg: 0.1
+
+regime_labels:
+  # Physically defined labels computed from observations/analysis - never from the forecast.
+  # Active/break: Rajeevan, Bhate & Jaswal (2010, J. Earth Syst. Sci. 119:229-247) - standardised
+  # daily rainfall anomaly over the core monsoon zone >= +1 (active) or <= -1 (break) on at
+  # least 3 consecutive days.
+  cmz_threshold_sd: 1.0
+  cmz_min_run_days: 3
+  depression_mslp_anom_max_hpa: -3.0
+  depression_vorticity_min: 3.0e-5
+  orographic_elevation_min_m: 350
+  orographic_upslope_wind_min: 6.0
+  coastal_distance_max_km: 65
+  coastal_onshore_wind_min: 5.0
+  wd_months: [1, 2, 3, 4, 5, 10, 11, 12]
+  wd_z500_anom_max_gpm: -35

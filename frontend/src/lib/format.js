@@ -174,3 +174,24 @@ export function categoryBasis(d) {
   if (mean >= 35) return at('yellow', 'amount', `district mean ${mm(mean)} ≥ 35 mm`);
   return at('green', 'none', 'no warning criterion met');
 }
+
+/** Map fill for a district row under a given layer (shared by every map in the app). */
+export function layerFill(d, layer) {
+  if (!d) return null;
+  if (layer === 'category') return CATEGORY_FILL[d.category];
+  if (layer === 'corrected') return rainColor(d.corrected_mm);
+  if (layer === 'raw') return rainColor(d.raw_mm);
+  if (layer === 'adjustment') return adjustmentColor(d.adjustment_mm);
+  if (layer === 'p_heavy') return probabilityColor(d.p_heavy);
+  if (layer === 'regime') return REGIME_COLOR[d.regime] || '#7c8fa3';
+  return '#16324a';
+}
+
+export const MAP_LAYERS = [
+  { id: 'category', label: 'Warning category' },
+  { id: 'corrected', label: 'Corrected rainfall' },
+  { id: 'raw', label: 'Raw NWP' },
+  { id: 'adjustment', label: 'Correction applied' },
+  { id: 'p_heavy', label: 'P(≥ 64.5 mm)' },
+  { id: 'regime', label: 'Regime' },
+];

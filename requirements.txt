@@ -2,7 +2,7 @@
 numpy>=1.24.1,<3.0.0
 scipy>=1.10.0,<2.0.0
 pandas>=2.2.0,<4.0.0
-scikit-learn==1.4.2
+scikit-learn>=1.4.2,<1.9   # committed synthetic pickles: 1.4.2; real-data models: 1.8
 lightgbm>=4.3.0
 xgboost>=2.0.0
 fastapi>=0.110.0
@@ -21,3 +21,4 @@ requests>=2.31.0
 pytest>=8.0.0
 httpx>=0.27.0
 xarray>=2024.0.0
+pyshp>=2.3.0          # district boundary builder (scripts/build_district_boundaries.py)

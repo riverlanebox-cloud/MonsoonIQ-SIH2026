@@ -12,7 +12,8 @@
     "/case-replays": "cases",
     "/console?date=2020-08-05&lead=1": "console",
     "/district/OD_BBS?date=2020-08-05&lead=1": "district",
-    "/bulletin?date=2020-08-05&lead=1": "bulletin"
+    "/bulletin?date=2020-08-05&lead=1": "bulletin",
+    "/data-sources": "data_sources"
   },
   "date": "2020-08-05",
   "lead": 1,

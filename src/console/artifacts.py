@@ -22,11 +22,13 @@ from typing import Dict, Any, List, Optional
 
 import numpy as np
 import pandas as pd
+from src.config import P
+from src.data.io import read_table
 
 logger = logging.getLogger(__name__)
 
-DATA = "data/synthetic/district_daily.parquet"
-OUT_DIR = "artifacts/console"
+DATA = P("data/synthetic/district_daily.parquet")
+OUT_DIR = P("artifacts/console")
 LEADS = (1, 2, 3, 4, 5)
 IMD_CATEGORIES = {"green": 0, "yellow": 1, "orange": 2, "red": 3}
 
@@ -62,7 +64,7 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
     from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
 
     t0 = time.time()
-    df = pd.read_parquet(data_path).reset_index(drop=True)
+    df = read_table(data_path).reset_index(drop=True)
     clf = MLRegimeClassifier(); clf.load()
     moe = MonsoonIQMixtureOfExperts.load()
     qr = QuantileRegressor.load()
@@ -179,7 +181,7 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
     meta = {
         "built_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "build_seconds": round(time.time() - t0, 1),
-        "provenance": "SYNTHETIC_PHYSICALLY_PLAUSIBLE",
+        "provenance": __import__("src.config", fromlist=["provenance_label"]).provenance_label(),
         "dates": len(timeline),
         "date_range": [unique_dates[0], unique_dates[-1]],
         "default_date": default_date,
@@ -190,8 +192,11 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
                              "orange": "115.6-204.4 mm", "red": ">=204.5 mm"},
         "year_summary": _year_summary(per_day, unique_dates),
         "spells": spells[:12],
-        "note": ("Timeline is model output over a synthetic archive; observed columns are "
-                 "shown only as reference for demos and are never used as forecast input."),
+        "note": (("Timeline is model output over a synthetic archive; " if
+                  __import__("src.config", fromlist=["PROFILE"]).PROFILE == "synthetic" else
+                  "Timeline is model output over archived NWP forecasts verified against IMD "
+                  "gridded rainfall; ") + "observed columns are shown only as reference and are "
+                 "never used as forecast input."),
     }
 
     with open(timeline_path, "w", encoding="utf-8") as f:

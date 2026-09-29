@@ -1,4 +1,4 @@
-.PHONY: setup data grid train evaluate console build-ui smoke serve api ui test all clean reset
+.PHONY: setup data grid train evaluate console build-ui smoke serve api ui test all clean reset boundaries real-data real
 
 PYTHON := .venv/bin/python
 PIP := .venv/bin/pip
@@ -63,6 +63,24 @@ smoke:
 
 test:
 	PYTHONPATH=. $(PYTEST) tests/ -q
+
+# District layers from Census-2011 polygons (DataMeet) + Natural Earth coastline.
+# Output is committed; re-run only to rebuild the geometry.
+boundaries:
+	PYTHONPATH=. $(PYTHON) scripts/build_district_boundaries.py
+
+# REAL DATA: IMD 0.25 deg observed rainfall + archived NWP forecasts (Open-Meteo, no key),
+# dynamics, OLR, terrain -> data/real/district_daily.*  (configs/data_sources.yaml).
+# Cached and resumable; the first full fetch for the 53 study districts takes ~20-40 min.
+real-data:
+	PYTHONPATH=. $(PYTHON) scripts/fetch_real_data.py all
+
+# Train, verify and build the console on the real archive (writes artifacts/real/...),
+# then serve it:  MONSOONIQ_PROFILE=real make serve
+real:
+	MONSOONIQ_PROFILE=real PYTHONPATH=. $(PYTHON) src/train.py
+	MONSOONIQ_PROFILE=real PYTHONPATH=. $(PYTHON) src/evaluate.py
+	MONSOONIQ_PROFILE=real PYTHONPATH=. $(PYTHON) -m src.console.artifacts
 
 # Everything needed before a demo, cheapest ordering.
 all: data grid train evaluate console build-ui test

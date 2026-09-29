@@ -21,6 +21,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from typing import Dict, Any, List, Tuple
 from src.data.geo_utils import DistrictAggregator
+from src.config import SYNTHETIC_GEOJSON
+from src.data.io import write_table
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -56,7 +58,7 @@ class SyntheticMonsoonGenerator:
 
         # Geospatial district aggregator
         self.aggregator = DistrictAggregator(
-            geojson_path="data/geojson/india_districts.geojson",
+            geojson_path=SYNTHETIC_GEOJSON,  # legacy study polygons: keeps the benchmark reproducible
             lats=self.lats,
             lons=self.lons
         )
@@ -433,7 +435,7 @@ class SyntheticMonsoonGenerator:
 
         df_districts = pd.DataFrame(district_rows)
         parquet_path = os.path.join(self.output_dir, "district_daily.parquet")
-        df_districts.to_parquet(parquet_path, index=False)
+        parquet_path = write_table(df_districts, parquet_path)
         logger.info(f"Saved district dataset ({len(df_districts)} rows) to {parquet_path}")
 
         # Save grid samples

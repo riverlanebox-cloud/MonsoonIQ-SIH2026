@@ -33,14 +33,14 @@ from src.correction.quantile_regressor import QuantileRegressor
 from src.correction.lead_time_models import LeadTimeCorrectionBundle
 from src.correction.grid_correction import GridCorrectionModel
 from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
+from src.config import P
+from src.data.io import read_table
 
 logger = logging.getLogger("MonsoonIQ_Train")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-TRAIN_YEARS = [2016, 2017, 2018, 2019, 2020]
-VAL_YEARS = [2021]
-TEST_YEARS = [2022, 2023]
-MANIFEST = "artifacts/models/training_manifest.json"
+from src.config import TRAIN_YEARS, VAL_YEARS, TEST_YEARS  # profile-aware split
+MANIFEST = P("artifacts/models/training_manifest.json")
 
 
 def _sha256(path: str, limit: int = 2_000_000) -> str:
@@ -50,7 +50,7 @@ def _sha256(path: str, limit: int = 2_000_000) -> str:
     return h.hexdigest()[:16]
 
 
-def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parquet",
+def run_training_pipeline(data_path: str = P("data/synthetic/district_daily.parquet"),
                           fit_lead_bundle: bool = True):
     start = time.time()
     logger.info("=== MonsoonIQ training pipeline ===")
@@ -58,7 +58,7 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
     if not os.path.exists(data_path):
         raise FileNotFoundError(f"Dataset not found at {data_path}. Run the generator first.")
 
-    df = pd.read_parquet(data_path)
+    df = read_table(data_path)
     logger.info("Loaded %d records across years %s", len(df), sorted(df["year"].unique()))
 
     train_df = df[df["year"].isin(TRAIN_YEARS)].copy().reset_index(drop=True)
@@ -79,7 +79,9 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
     summary["regime_classifier"] = {
         "validation_accuracy": regime_metrics["validation_accuracy"],
         "macro_f1": regime_metrics["macro_f1"],
-        "labels": "generator latent regime (synthetic)",
+        "labels": ("generator latent regime (synthetic)" if __import__("src.config", fromlist=["PROFILE"]).PROFILE == "synthetic"
+                   else "physically defined from IMD obs + analysis (src/regime/real_labeller.py)"),
+        "features": regime_clf.FEATURE_COLS,
     }
 
     # 2. Day-1 correction + baselines
@@ -129,11 +131,11 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
     summary["dataset"] = {"path": data_path, "rows": int(len(df)),
                           "sha256_16": _sha256(data_path)}
     summary["artifacts"] = {
-        name: {"sha256_16": _sha256(os.path.join("artifacts/models", f"{name}.joblib")),
-               "bytes": os.path.getsize(os.path.join("artifacts/models", f"{name}.joblib"))}
+        name: {"sha256_16": _sha256(os.path.join(P("artifacts/models"), f"{name}.joblib")),
+               "bytes": os.path.getsize(os.path.join(P("artifacts/models"), f"{name}.joblib"))}
         for name in ("regime_classifier", "mixture_of_experts", "quantile_regressor",
                      "heavy_rain_module", "lead_time_bundle", "grid_correction")
-        if os.path.exists(os.path.join("artifacts/models", f"{name}.joblib"))
+        if os.path.exists(os.path.join(P("artifacts/models"), f"{name}.joblib"))
     }
     os.makedirs(os.path.dirname(MANIFEST), exist_ok=True)
     with open(MANIFEST, "w", encoding="utf-8") as f:

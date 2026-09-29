@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import lightgbm as lgb
 from typing import Dict, Any, List, Tuple
+from src.config import P
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class QuantileRegressor:
     FEATURE_COLS = ["raw_nwp"] + PREDICTOR_COLS
 
     def __init__(self, quantiles: List[float] = [0.10, 0.50, 0.90],
-                 model_save_path: str = "artifacts/models/quantile_regressor.joblib"):
+                 model_save_path: str = P("artifacts/models/quantile_regressor.joblib")):
         self.quantiles = quantiles
         self.model_save_path = model_save_path
         self.models = {}
@@ -86,6 +87,6 @@ class QuantileRegressor:
         }
 
     @classmethod
-    def load(cls, path: str = "artifacts/models/quantile_regressor.joblib") -> "QuantileRegressor":
+    def load(cls, path: str = P("artifacts/models/quantile_regressor.joblib")) -> "QuantileRegressor":
         """Load fitted quantile regressor."""
         return joblib.load(path)

@@ -15,7 +15,12 @@ import lightgbm as lgb
 from typing import Dict, Any, List, Tuple
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 from sklearn.calibration import CalibratedClassifierCV
-import shap
+from src.compat import prefit_calibrator
+try:
+    import shap  # optional: per-sample attributions in /explain
+except ImportError:  # pragma: no cover
+    shap = None
+from src.config import P
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -30,6 +35,8 @@ class MLRegimeClassifier:
         "elevation", "slope", "dist_coast", "latitude", "longitude"
     ]
 
+    OPTIONAL_COLS = ["cmz_index_lag2", "cmz_spell_lag2"]
+
     REGIME_NAMES = {
         1: "Active Monsoon",
         2: "Break Monsoon",
@@ -40,7 +47,7 @@ class MLRegimeClassifier:
         7: "Weak/Normal"
     }
 
-    def __init__(self, model_save_path: str = "artifacts/models/regime_classifier.joblib"):
+    def __init__(self, model_save_path: str = P("artifacts/models/regime_classifier.joblib")):
         self.model_save_path = model_save_path
         self.model = None
         self.calibrated_model = None
@@ -52,6 +59,12 @@ class MLRegimeClassifier:
         Train multiclass LightGBM with probability calibration.
         Labels (1-7) mapped to 0-6 for LightGBM, then restored.
         """
+        # Optional observed-persistence predictors (real archive only): the core-monsoon-zone
+        # rainfall index observed two days before the target day, which IMD has published by the
+        # time a Day-1 forecast is issued. Active/break spells last 3-7 days, so this is the
+        # operational signal a forecaster uses to recognise the large-scale regime.
+        self.FEATURE_COLS = list(type(self).FEATURE_COLS) + [
+            c for c in self.OPTIONAL_COLS if c in train_df.columns and c in val_df.columns]
         X_train = train_df[self.FEATURE_COLS].copy()
         y_train = (train_df[target_col].astype(int) - 1).values # 0-6 index
 
@@ -82,7 +95,7 @@ class MLRegimeClassifier:
 
         # Calibrate probabilities with sigmoid / isotonic on validation set
         try:
-            calibrator = CalibratedClassifierCV(estimator=base_clf, method="sigmoid", cv="prefit")
+            calibrator = prefit_calibrator(base_clf, "sigmoid")
             calibrator.fit(X_val, y_val)
             self.calibrated_model = calibrator
         except Exception as e:
@@ -104,7 +117,7 @@ class MLRegimeClassifier:
         # Initialize SHAP TreeExplainer on a sample background
         bg_sample = X_train.sample(min(200, len(X_train)), random_state=42)
         try:
-            self.explainer = shap.TreeExplainer(base_clf)
+            self.explainer = shap.TreeExplainer(base_clf) if shap is not None else None
         except Exception as e:
             logger.warning(f"TreeExplainer initialization note: {e}")
 
@@ -133,8 +146,9 @@ class MLRegimeClassifier:
         self.model = bundle["model"]
         self.calibrated_model = bundle.get("calibrated_model", self.model)
         self.classes_ = bundle.get("classes", list(range(1, 8)))
+        self.FEATURE_COLS = list(bundle.get("feature_cols", type(self).FEATURE_COLS))
         try:
-            self.explainer = shap.TreeExplainer(self.model)
+            self.explainer = shap.TreeExplainer(self.model) if shap is not None else None
         except Exception:
             pass
 
@@ -144,6 +158,14 @@ class MLRegimeClassifier:
             self.load()
         feat_df = X[self.FEATURE_COLS]
         probs = self.calibrated_model.predict_proba(feat_df)
+        # A regime absent from training (e.g. western disturbances in a JJAS-only archive) has
+        # no column; re-expand to the fixed 7-regime layout the experts are indexed by.
+        seen = getattr(self.calibrated_model, "classes_", None)
+        if seen is not None and probs.shape[1] != len(self.classes_):
+            full = np.zeros((probs.shape[0], len(self.classes_)))
+            for k, c in enumerate(np.asarray(seen, dtype=int)):
+                full[:, c] = probs[:, k]
+            probs = full
         return probs
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:

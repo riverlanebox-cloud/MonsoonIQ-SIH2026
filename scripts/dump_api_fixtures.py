@@ -45,6 +45,7 @@ ROUTES = [
     ("regime_value", "/verification/regime-value"),
     ("model_card", "/model-card"),
     ("cases", "/case-replays"),
+    ("data_sources", "/data-sources"),
 ]
 
 

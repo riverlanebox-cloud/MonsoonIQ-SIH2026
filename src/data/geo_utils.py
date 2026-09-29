@@ -10,7 +10,12 @@ import logging
 import numpy as np
 import pandas as pd
 from typing import Dict, Any, List, Tuple
-from shapely.geometry import shape, Point, Polygon
+try:  # shapely gives exact intersection areas; the numpy fallback samples 5x5 points per cell
+    from shapely.geometry import shape, Point, Polygon
+    HAVE_SHAPELY = True
+except ImportError:  # pragma: no cover - exercised on machines without GEOS
+    HAVE_SHAPELY = False
+from src.data import geometry as _geom
 
 logger = logging.getLogger(__name__)
 
@@ -36,16 +41,22 @@ class DistrictAggregator:
         districts = []
         for feat in data.get("features", []):
             props = feat.get("properties", {})
-            geom = shape(feat.get("geometry"))
+            raw = feat.get("geometry")
+            geom = shape(raw) if HAVE_SHAPELY else None
+            if geom is not None:
+                c_lon, c_lat = geom.centroid.x, geom.centroid.y
+            else:
+                c_lon, c_lat = _geom.centroid(raw)
             districts.append({
                 "district_id": props.get("district_id", props.get("id")),
                 "district_name": props.get("district_name", props.get("name")),
                 "state_name": props.get("state_name", props.get("state")),
                 "zone": props.get("zone", "Central India"),
-                "centroid_lat": props.get("centroid_lat", geom.centroid.y),
-                "centroid_lon": props.get("centroid_lon", geom.centroid.x),
+                "centroid_lat": props.get("centroid_lat", c_lat),
+                "centroid_lon": props.get("centroid_lon", c_lon),
                 "elevation_m": props.get("elevation_m", 100),
-                "geometry": geom
+                "geometry": geom,
+                "geojson": raw,
             })
         logger.info(f"Loaded {len(districts)} districts from {self.geojson_path}")
         return districts
@@ -58,6 +69,10 @@ class DistrictAggregator:
         for dist in self.districts:
             did = dist["district_id"]
             geom = dist["geometry"]
+            if geom is None:
+                idx, w = _geom.cell_weights(dist["geojson"], np.asarray(lats), np.asarray(lons), cell_size)
+                self.weights_cache[did] = {"indices": idx, "weights": w}
+                continue
             minx, miny, maxx, maxy = geom.bounds
 
             # Filter candidates

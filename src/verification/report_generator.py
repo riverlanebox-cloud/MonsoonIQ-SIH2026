@@ -10,6 +10,7 @@ Also produced: the three figures used by the console's verification view.
 """
 
 import os
+from src.config import P
 import json
 import logging
 from datetime import datetime
@@ -39,9 +40,9 @@ GOOD = colors.HexColor("#1a6b3c")
 
 
 class VerificationReportGenerator:
-    def __init__(self, metrics_dir: str = "artifacts/metrics",
-                 plots_dir: str = "artifacts/plots",
-                 reports_dir: str = "artifacts/reports"):
+    def __init__(self, metrics_dir: str = P("artifacts/metrics"),
+                 plots_dir: str = P("artifacts/plots"),
+                 reports_dir: str = P("artifacts/reports")):
         self.metrics_dir = metrics_dir
         self.plots_dir = plots_dir
         self.reports_dir = reports_dir
@@ -265,6 +266,35 @@ class VerificationReportGenerator:
             "The regime-agnostic column is a gradient-boosted model fitted on the same "
             "predictors without regime information. It is the baseline that decides whether "
             "regime conditioning earns its complexity; the raw model alone does not.", small))
+
+        # ---- 1b the warning product itself, against the observed district maximum
+        wp = summary.get("warning_product", {})
+        if wp.get("available"):
+            elements.append(Paragraph("1b · District warning product vs observed district maximum", h2))
+            rows = [["Lead", "Threshold", "Events", "Raw POD", "Raw CSI", "Warning POD",
+                     "Warning FAR", "Warning CSI [95% CI]", "Freq. bias"]]
+            for lead_key, entry in wp["leads"].items():
+                for thr in ("64.5", "115.6"):
+                    e = entry[thr]
+                    w, r = e["warning_product"], e["raw_nwp"]
+                    rows.append([lead_key.replace("day_", "Day "), f"≥{thr}", f"{w['event_count']}",
+                                 f"{r['pod']:.3f}", f"{r['csi']:.3f}", f"{w['pod']:.3f}", f"{w['far']:.3f}",
+                                 f"{w['csi']:.3f} [{w['csi_ci95'][0]:.3f}, {w['csi_ci95'][1]:.3f}]",
+                                 f"{w['frequency_bias']:.2f}"])
+            t2 = Table(rows, colWidths=[14 * mm, 18 * mm, 15 * mm, 18 * mm, 18 * mm, 20 * mm, 20 * mm,
+                                        40 * mm, 18 * mm])
+            t2.setStyle(TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), INK), ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTSIZE", (0, 0), (-1, -1), 7), ("GRID", (0, 0), (-1, -1), 0.4, RULE),
+                ("ALIGN", (1, 0), (-1, -1), "CENTER"),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f6f8fa")]),
+            ]))
+            elements.append(t2)
+            elements.append(Paragraph(
+                "IMD heavy-rain warnings concern the heaviest rain in a district, so the product "
+                "(calibrated exceedance probabilities, P90 and corrected amount, combined by the same rule "
+                "the console and bulletin use) is scored against the district maximum of the 0.25° cells. "
+                "The raw model is read the same way (district forecast ≥ threshold).", small))
 
         # ---- 2 heavy events + regime stratification
         elements.append(Paragraph("2 · Heavy and very heavy rainfall, by regime", h2))

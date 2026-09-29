@@ -1,0 +1,76 @@
+{
+  "dataset_type": "REAL_OBSERVED_IMD_NWP",
+  "created_utc": "2026-09-25 13:48 UTC",
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "split": {
+    "train": [
+      2021,
+      2022,
+      2023
+    ],
+    "val": [
+      2024
+    ],
+    "test": [
+      2025
+    ]
+  },
+  "total_district_records": 32065,
+  "dropped_incomplete_rows": 0,
+  "districts_count": 53,
+  "total_days": 605,
+  "sources": {
+    "dynamics": "Open-Meteo Historical Forecast (gfs_seamless)",
+    "olr": "partial",
+    "terrain": "Copernicus GLO-90 via Open-Meteo",
+    "observations": "IMD 0.25 deg daily gridded rainfall (Pai et al. 2014), imdpune.gov.in",
+    "forecast": "Open-Meteo Previous Runs API, model=jma_gsm",
+    "boundaries": "Census 2011 districts (DataMeet, CC BY 2.5 IN)",
+    "coastline": "Natural Earth 1:10m"
+  },
+  "nwp_model": "jma_gsm",
+  "predictor_timing": "issue-time: 00 UTC analysis of D-1 (available when the Day-1 forecast is issued)",
+  "imd_day_convention": {
+    "window": "24 h ending 03 UTC (0830 IST) on the labelled day",
+    "day_offset": 1
+  },
+  "regime_labels": "physically defined from IMD obs + analysis (src/regime/real_labeller.py)",
+  "regime_counts": {
+    "Active Monsoon": 2357,
+    "Break Monsoon": 1983,
+    "Monsoon Low/Depression": 1078,
+    "Orographic": 3324,
+    "Coastal": 5147,
+    "Weak/Normal": 18176
+  },
+  "predictor_missing_fraction": {
+    "olr_neutralised": 0.6,
+    "olr_anomaly_neutralised": 0.6,
+    "u850": 0.0017,
+    "v850": 0.0017,
+    "wind_speed_850": 0.0017,
+    "vorticity_850": 0.0017,
+    "mslp_anomaly": 0.0017,
+    "q500": 0.0017,
+    "cape": 0.0017,
+    "olr": 0.0,
+    "olr_anomaly": 0.0,
+    "moisture_flux": 0.0017,
+    "trough_latitude": 0.0017,
+    "elevation": 0.0,
+    "slope": 0.0,
+    "dist_coast": 0.0
+  },
+  "day_alignment_check": {
+    "shift_-1": 0.4707,
+    "shift_+0": 0.5754,
+    "shift_+1": 0.4504
+  },
+  "provenance_note": "Observed IMD 0.25 deg gridded rainfall aggregated to Census-2011 district polygons; raw forecasts are archived operational NWP runs. Skill figures on this archive are genuine out-of-sample verification."
+}

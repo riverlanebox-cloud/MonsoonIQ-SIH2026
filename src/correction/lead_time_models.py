@@ -28,18 +28,19 @@ from typing import Dict, Any, List, Optional
 from src.correction.mixture_of_experts import MonsoonIQMixtureOfExperts
 from src.correction.quantile_regressor import QuantileRegressor
 from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
+from src.config import P
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_LEADS = (1, 2, 3, 4, 5)
-CACHE_DIR = "artifacts/models/_lead_cache"
+CACHE_DIR = P("artifacts/models/_lead_cache")
 
 
 class LeadTimeCorrectionBundle:
     """Five independently fitted regime-aware correction systems, one per lead."""
 
     def __init__(self, leads: tuple = DEFAULT_LEADS,
-                 save_path: str = "artifacts/models/lead_time_bundle.joblib",
+                 save_path: str = P("artifacts/models/lead_time_bundle.joblib"),
                  cache_dir: str = CACHE_DIR):
         self.leads = tuple(leads)
         self.save_path = save_path
@@ -96,7 +97,7 @@ class LeadTimeCorrectionBundle:
         return self.save_path
 
     @classmethod
-    def load(cls, path: str = "artifacts/models/lead_time_bundle.joblib") -> "LeadTimeCorrectionBundle":
+    def load(cls, path: str = P("artifacts/models/lead_time_bundle.joblib")) -> "LeadTimeCorrectionBundle":
         if not os.path.exists(path):
             raise FileNotFoundError(f"Lead-time bundle not found at {path}")
         return joblib.load(path)
