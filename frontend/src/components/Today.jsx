@@ -130,7 +130,7 @@ export default function Today({ session, onSession, onToast, onTab }) {
         onJumpEvent={(d) => onSession({ date: d, source: 'significant_day' })}
         query={filter}
         onQuery={setFilter}
-        onExport={() => window.open(api.exportCsvUrl(date, lead), '_blank')}
+        onExport={() => api.exportCsv(date, lead).catch(() => {})}
         onBulletin={() => setBulletin(true)}
         onRefresh={() => load(date, lead)}
         dates={(timeline || []).map((t) => t.date)}

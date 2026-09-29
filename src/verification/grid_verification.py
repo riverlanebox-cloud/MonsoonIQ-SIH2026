@@ -17,8 +17,10 @@ Method, stated precisely so it can be attacked:
      truth, for the raw model, a regime-agnostic quantile mapping and the
      regime-aware correction, over 1x1 / 3x3 / 5x5 / 9x9 cell neighbourhoods.
 
-Both the grid truth and the raw grid forecast are synthetic. These numbers
-validate the spatial pipeline; they are not operational skill.
+On the synthetic archive both the grid truth and the raw grid forecast are
+simulated and these numbers only validate the spatial pipeline. On the real
+archive the truth is IMD 0.25 deg rainfall regridded to 0.5 deg and the raw grid
+forecast is GFS.
 """
 
 import json
@@ -32,8 +34,10 @@ import numpy as np
 from src.verification.metrics import compute_fractions_skill_score_2d
 from src.verification.stratified import reliability_class
 
-GRID_NPZ = "data/synthetic/grid_feature_samples.npz"
-DISTRICT_GEOJSON = "data/geojson/india_districts.geojson"
+from src.config import GRID_NPZ  # noqa: E402  (mode-dependent path)
+DISTRICT_GEOJSON = ("data/geojson/india_districts_census2011.geojson"
+                    if os.path.exists("data/geojson/india_districts_census2011.geojson")
+                    else "data/geojson/india_districts.geojson")
 THRESHOLDS = (15.6, 64.5)
 WINDOWS = (1, 3, 5, 9)
 RATIO_CLIP = (0.25, 4.0)
@@ -42,10 +46,16 @@ BOOTSTRAP_ITERS = 400
 logger = logging.getLogger(__name__)
 
 
+def _grid_provenance() -> str:
+    from src import config
+    return ("Grid truth is IMD 0.25 deg rainfall regridded to 0.5 deg; the raw grid forecast is GFS."
+            if config.MODE == "real" else "Grid truth and raw grid forecast are synthetic.")
+
+
 def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], Dict[str, Any]]:
     """District index for every land cell: containment first, else nearest centroid."""
     import json as _json
-    from shapely.geometry import shape, Point
+    from src.compat import points_in_polygon
 
     with open(geojson_path, "r", encoding="utf-8") as f:
         geo = _json.load(f)
@@ -53,11 +63,14 @@ def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], D
     ids, geoms, centroids, bounds = [], [], [], []
     for feat in geo["features"]:
         props = feat["properties"]
-        geom = shape(feat["geometry"])
+        g = feat["geometry"]
+        polys = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
+        rings = [np.asarray(r, dtype=float) for poly in polys for r in poly]
+        allp = np.vstack(rings)
         ids.append(props["district_id"])
-        geoms.append(geom)
+        geoms.append(rings)
         centroids.append((float(props["centroid_lon"]), float(props["centroid_lat"])))
-        bounds.append(geom.bounds)
+        bounds.append((allp[:, 0].min(), allp[:, 1].min(), allp[:, 0].max(), allp[:, 1].max()))
 
     lats = npz["lats"].astype(float)
     lons = npz["lons"].astype(float)
@@ -75,14 +88,8 @@ def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], D
                 & (cell_lat >= miny) & (cell_lat <= maxy))
         if not cand.any():
             continue
-        try:
-            from shapely import contains_xy
-            inside = contains_xy(geom, cell_lon[cand], cell_lat[cand])
-            idx = np.flatnonzero(cand)[inside]
-        except Exception:  # pragma: no cover
-            idx = np.array([j for j in np.flatnonzero(cand)
-                            if geom.covers(Point(cell_lon[j], cell_lat[j]))])
-        assign[idx] = i
+        inside = points_in_polygon(geom, cell_lon[cand], cell_lat[cand])
+        assign[np.flatnonzero(cand)[inside]] = i
 
     contained = int((assign >= 0).sum())
     if contained < n:
@@ -96,8 +103,10 @@ def _cell_district_map(npz, geojson_path: str) -> Tuple[np.ndarray, List[str], D
         "land_cells": int(n),
         "cells_inside_district_polygons": contained,
         "cells_assigned_to_nearest_district": int(n - contained),
-        "note": ("District boundaries in this archive are simplified boxes, so most cells "
-                 "are assigned by nearest-centroid rather than containment."),
+        "note": (("Census-2011 district boundaries; cells outside all 53 districts are assigned "
+                  "to the nearest district centroid.") if "census2011" in geojson_path else
+                 ("District boundaries in this archive are simplified boxes, so most cells "
+                  "are assigned by nearest-centroid rather than containment.")),
     }
     return assign, ids, meta
 
@@ -254,7 +263,7 @@ def run_grid_verification(moe, df, test_df, thresholds=THRESHOLDS, windows=WINDO
         "method": ("Two grid paths are scored. `*_district_transfer` extends district-scale "
                    "multiplicative adjustments to cells by nearest-district assignment; "
                    "`regime_aware_grid_native` is a correction fitted on grid cells. "
-                   "Grid truth and raw grid forecast are synthetic."),
+                   + _grid_provenance()),
         "systems": system_names,
         "grid": {**cell_meta, "grid_shape": [int(x) for x in grid_shape],
                  "dates_scored": int(len(per_date)),
@@ -269,7 +278,9 @@ if __name__ == "__main__":
     import pandas as pd
     from src.correction.mixture_of_experts import MonsoonIQMixtureOfExperts
 
-    df = pd.read_parquet("data/synthetic/district_daily.parquet")
-    test_df = df[df["year"].isin([2022, 2023])].reset_index(drop=True)
+    from src import config
+    from src.compat import read_table
+    df = read_table(config.ARCHIVE)
+    test_df = df[df["year"].isin(config.TEST_YEARS)].reset_index(drop=True)
     print(json.dumps(run_grid_verification(MonsoonIQMixtureOfExperts.load(), df, test_df),
                      indent=2, default=float)[:5000])

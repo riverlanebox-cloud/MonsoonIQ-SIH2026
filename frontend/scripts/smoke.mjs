@@ -127,7 +127,8 @@ check('landing shortcut hints', html().includes('keyboard-first'));
 check('enter console button present', !!buttonByText('Enter operations console', 'button.cta'));
 await enterConsole();
 
-check('masthead + provenance chip', html().includes('MonsoonIQ') && html().includes('Provenance'));
+check('masthead + provenance chip', html().includes('MonsoonIQ')
+  && (html().includes('Provenance') || html().includes('IMD observations')));
 check('command bar with lead selector', html().includes('Lead') && html().includes('D5'));
 check('warning summary strip', html().includes('Districts warned'));
 check('regime timeline rendered', html().includes('Regime and warning timeline'));
@@ -175,14 +176,19 @@ check('skill lab categorical table', html().includes('Raw NWP'));
 // Documented cases: one click from the map to a named event.
 check('switched back to Today', clickTab('Today'));
 await wait(1100);
-check('case strip lists documented events', html().includes('Kerala orographic surge'));
+// The case list is data-driven (real archive: chosen from observed extremes), so
+// the expectation is read from the recorded fixture rather than hard-coded.
+const firstCase = fixtures.cases?.cases?.[0] || {};
+const caseLabel = (firstCase.name || '').split(' (')[0];
+check('case strip lists documented events', !!caseLabel && html().includes(caseLabel));
 check('case click loads that day', (() => {
-  const b = buttonByText('Kerala orographic surge');
+  const b = buttonByText(caseLabel);
   b?.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
   return !!b;
 })());
 await wait(900);
-check('case date applied to the console', calls.some((c) => c.startsWith('/console?date=2018-08-14')));
+check('case date applied to the console',
+  (firstCase.dates || []).some((d) => calls.some((c) => c.startsWith(`/console?date=${d}`))));
 
 check('switched to Method', clickTab('Method'));
 await wait(400);

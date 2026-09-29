@@ -16,14 +16,16 @@ from src.correction.mixture_of_experts import MonsoonIQMixtureOfExperts
 
 
 def test_strict_temporal_split():
-    data_path = "data/synthetic/district_daily.parquet"
-    if not os.path.exists(data_path):
+    from src import config
+    from src.compat import read_table, table_exists
+    data_path = config.ARCHIVE
+    if not table_exists(data_path):
         pytest.skip("Dataset not yet generated.")
 
-    df = pd.read_parquet(data_path)
-    train_years = set([2016, 2017, 2018, 2019, 2020])
-    val_years = set([2021])
-    test_years = set([2022, 2023])
+    df = read_table(data_path)
+    train_years = set(config.TRAIN_YEARS)
+    val_years = set(config.VAL_YEARS)
+    test_years = set(config.TEST_YEARS)
 
     # Assert mutual exclusivity
     assert len(train_years.intersection(val_years)) == 0, "Train and Val years overlap!"
@@ -62,7 +64,7 @@ def test_quantile_mapping_no_test_leakage():
 
 
 def test_moe_artifact_leakage_check():
-    """Verify loaded MoE model was trained only on 2016-2020."""
+    """Verify the loaded MoE model is fitted with one expert per regime."""
     moe_path = "artifacts/models/mixture_of_experts.joblib"
     if not os.path.exists(moe_path):
         pytest.skip("MoE artifact not found.")

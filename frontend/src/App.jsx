@@ -7,6 +7,7 @@ import Landing from './components/Landing';
 import ApiView from './components/ApiView';
 import AboutModal from './components/AboutModal';
 import Icon from './components/Icon';
+import { provenanceChip, provenanceFooter } from './lib/provenance';
 
 const TABS = [
   { id: 'today', label: 'Today', icon: 'today' },
@@ -133,10 +134,8 @@ export default function App() {
               <span className="dot" />
               {health?.status === 'healthy' ? 'Live · engine ready' : 'Engine degraded'}
             </span>
-            <span className="chip" title="data provenance — synthetic archive, not live IMD data">
-              {health?.provenance === 'SYNTHETIC_PHYSICALLY_PLAUSIBLE'
-                ? 'Provenance: synthetic research archive'
-                : `Provenance: ${health?.provenance || 'unknown'}`}
+            <span className="chip" title={`data provenance: ${health?.provenance || 'unknown'}`}>
+              {provenanceChip(health?.provenance)}
             </span>
             {freshness && freshness !== '<volatile>' && <span className="chip">Models loaded {freshness}</span>}
             <button className="btn back" onClick={() => setTab('landing')} title="Overview screen (h)">
@@ -162,13 +161,11 @@ export default function App() {
       {tab === 'api' && <ApiView />}
 
       <footer className="footer">
-        Research prototype. Forecast fields are produced by a synthetic physically-plausible archive
-        generated inside this repository and are <b>not</b> official IMD/NCMRWF products; do not use for
-        public warnings. Verification figures are internal comparisons on that archive.
+        {provenanceFooter(health?.provenance)}
         {' '}Press <span className="mono">?</span> for shortcuts.
       </footer>
 
-      {about && <AboutModal onClose={() => setAbout(false)} />}
+      {about && <AboutModal provenance={health?.provenance} onClose={() => setAbout(false)} />}
 
       {toast && (
         <div style={{

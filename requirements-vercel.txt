@@ -1,0 +1,10 @@
+# Minimal set for the Vercel build step (scripts/vercel_build.sh): enough to load the
+# committed models and run the API handlers once to export the static snapshot.
+numpy>=2.0,<3.0
+scipy>=1.10,<2.0
+pandas>=2.2,<4.0
+scikit-learn>=1.8,<1.9   # committed models were fitted with 1.8
+joblib>=1.3
+fastapi>=0.110
+pydantic>=2.7
+pyyaml>=6.0

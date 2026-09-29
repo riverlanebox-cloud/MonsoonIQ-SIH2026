@@ -72,9 +72,27 @@ def _archive_fingerprint(path: str) -> Optional[str]:
     return digest.hexdigest()[:16]
 
 
-def detect_provenance(metadata_path: str = "data/synthetic/dataset_metadata.json",
-                      archive_path: str = "data/synthetic/district_daily.parquet") -> Dict[str, Any]:
+def _provenance_text(meta: Dict[str, Any]) -> Dict[str, str]:
+    """Plain-language provenance shown on the Method page and in the PDF."""
+    if "REAL" in str(meta.get("dataset_type", "")).upper():
+        return {
+            "disclaimer": ("Real data: IMD 0.25 deg gridded rainfall observations and NOAA GFS "
+                           "forecasts. Research prototype - not an official IMD/NCMRWF product."),
+            "what_is_real": ("Observed rainfall (IMD Pune, Pai et al. 2014), raw Day 1-5 forecasts "
+                             "and dynamical predictors (NOAA GFS 00 UTC via AWS Open Data), district "
+                             "boundaries (Census 2011, DataMeet), every metric and interval."),
+            "what_is_synthetic": ("Nothing in the data. Regime labels are derived by objective rules "
+                                  "(configs/regime_labels_real.yaml); GFS stands in for NCMRWF NCUM."),
+        }
+    return {"disclaimer": "Synthetic archive generated inside this repository; not observed IMD data."}
+
+
+def detect_provenance(metadata_path: str = None, archive_path: str = None) -> Dict[str, Any]:
     """Read provenance from the dataset's own metadata instead of hard-coding it."""
+    from src import config
+    from src.compat import table_path_for_hash
+    metadata_path = metadata_path or config.METADATA
+    archive_path = table_path_for_hash(archive_path or config.ARCHIVE)
     fingerprint = _archive_fingerprint(archive_path)
     if os.path.exists(metadata_path):
         try:
@@ -84,11 +102,13 @@ def detect_provenance(metadata_path: str = "data/synthetic/dataset_metadata.json
                 "provenance": meta.get("dataset_type", "UNKNOWN_DATASET"),
                 "is_synthetic": "SYNTHETIC" in str(meta.get("dataset_type", "")).upper(),
                 "seed": meta.get("seed"),
+                "years": meta.get("years"),
                 "domain": meta.get("domain"),
                 "districts": meta.get("districts_count"),
                 "total_days": meta.get("total_days"),
                 "archive_sha256_16": fingerprint,
                 "note": meta.get("provenance_note", ""),
+                **_provenance_text(meta),
             }
         except Exception as exc:  # pragma: no cover
             logger.warning("Could not read dataset metadata: %s", exc)
@@ -119,8 +139,10 @@ class VerificationEvaluator:
                           moe=None,
                           lead_bundle=None,
                           regime_posteriors: Optional[np.ndarray] = None,
-                          grid_npz_path: str = "data/synthetic/grid_feature_samples.npz",
+                          grid_npz_path: str = None,
                           interval_iters: int = 300) -> Dict[str, Any]:
+        if grid_npz_path is None:
+            from src.config import GRID_NPZ as grid_npz_path
         y = test_df["obs_rain_mean"].to_numpy(float)
         y_max = test_df["obs_rain_max"].to_numpy(float)
         regimes = test_df["regime"].to_numpy(int)
@@ -343,6 +365,17 @@ class VerificationEvaluator:
         vs_raw_csi = comparisons["heavy_csi_vs_raw_nwp"]
         vs_lgb_csi = comparisons["heavy_csi_vs_global_lgb"]
         vs_lgb_rmse = comparisons["rmse_vs_global_lgb"]
+        from src import config
+        period = config.period_label()
+        if config.MODE == "real":
+            caveat = ("Intervals resample whole calendar days. Observations are IMD 0.25 deg gridded "
+                      "rainfall and the raw model is NOAA GFS (a public stand-in for NCMRWF NCUM), "
+                      f"so these are real verification results for {min(config.TEST_YEARS)}-"
+                      f"{max(config.TEST_YEARS)} over 53 districts - not an operational IMD evaluation.")
+        else:
+            caveat = ("Intervals resample whole calendar days. All comparisons are against a "
+                      "synthetic archive, so supported claims demonstrate that the pipeline "
+                      "is internally consistent - not operational skill.")
 
         claims = [
             {
@@ -350,7 +383,7 @@ class VerificationEvaluator:
                 "supported": bool(vs_raw_rmse["significant_95"]),
                 "evidence": f"ΔRMSE {vs_raw_rmse['delta']:+.3f} mm/day, 95% CI "
                             f"[{vs_raw_rmse['ci95'][0]:+.3f}, {vs_raw_rmse['ci95'][1]:+.3f}]",
-                "verified_on": "synthetic held-out period",
+                "verified_on": period,
             },
             {
                 "claim": "Post-processing improves the heavy-rainfall categorical score "
@@ -358,7 +391,7 @@ class VerificationEvaluator:
                 "supported": bool(vs_raw_csi["significant_95"] and vs_raw_csi["delta"] > 0),
                 "evidence": f"ΔCSI {vs_raw_csi['delta']:+.4f}, 95% CI "
                             f"[{vs_raw_csi['ci95'][0]:+.4f}, {vs_raw_csi['ci95'][1]:+.4f}]",
-                "verified_on": "synthetic held-out period",
+                "verified_on": period,
             },
             {
                 "claim": "Regime conditioning beats a regime-agnostic model fitted on the "
@@ -366,25 +399,23 @@ class VerificationEvaluator:
                 "supported": bool(vs_lgb_csi["significant_95"] and vs_lgb_csi["delta"] > 0),
                 "evidence": f"ΔCSI {vs_lgb_csi['delta']:+.4f}, 95% CI "
                             f"[{vs_lgb_csi['ci95'][0]:+.4f}, {vs_lgb_csi['ci95'][1]:+.4f}]",
-                "verified_on": "synthetic held-out period",
+                "verified_on": period,
             },
             {
                 "claim": "Regime conditioning beats a regime-agnostic model on RMSE",
                 "supported": bool(vs_lgb_rmse["significant_95"] and vs_lgb_rmse["favours"] == "monsooniq"),
                 "evidence": f"ΔRMSE {vs_lgb_rmse['delta']:+.3f} mm/day, 95% CI "
                             f"[{vs_lgb_rmse['ci95'][0]:+.3f}, {vs_lgb_rmse['ci95'][1]:+.3f}]",
-                "verified_on": "synthetic held-out period",
+                "verified_on": period,
             },
         ]
         unsupported = [c["claim"] for c in claims if not c["supported"]]
         return {
             "claims": claims,
-            "headline": ("All evaluated claims are supported on the synthetic held-out period."
+            "headline": (f"All evaluated claims are supported on the {period}."
                          if not unsupported else
                          "Not all claims are supported: " + "; ".join(unsupported)),
-            "caveat": ("Intervals resample whole calendar days. All comparisons are against a "
-                       "synthetic archive, so supported claims demonstrate that the pipeline "
-                       "is internally consistent - not operational skill."),
+            "caveat": caveat,
         }
 
     @staticmethod

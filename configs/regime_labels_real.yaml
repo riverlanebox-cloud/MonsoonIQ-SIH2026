@@ -1,0 +1,60 @@
+# Regime labels for the REAL archive (IMD + GFS, JJAS 2021-2025).
+#
+# Real data carries no "true" regime, so one label per day is assigned from
+# published or conventional objective criteria. Labels use observations where the
+# literature defines the regime by observed rainfall (active/break, rainfall
+# spells), and GFS Day-1 dynamics where it is defined by circulation (lows,
+# western disturbances). The ML regime classifier is then trained to recover
+# these labels from GFS dynamics alone, so its accuracy is a real test.
+#
+# Priority when several criteria hold (highest wins):
+#   Depression > Break > Active > Orographic > Coastal > Western Disturbance > Weak/Normal
+
+regimes:
+  1: {name: "Active Monsoon",         short_code: "ACT"}
+  2: {name: "Break Monsoon",          short_code: "BRK"}
+  3: {name: "Monsoon Low/Depression", short_code: "DEP"}
+  4: {name: "Orographic",             short_code: "ORO"}
+  5: {name: "Coastal",                short_code: "CST"}
+  6: {name: "Western Disturbance",    short_code: "WD"}
+  7: {name: "Weak/Normal",            short_code: "NRM"}
+
+# Rajeevan, Gadgil & Bhate (2010, J. Earth Syst. Sci. 119, 229-247):
+# standardised daily rainfall anomaly over the core monsoon zone, >= +1 SD
+# (active) or <= -1 SD (break) for at least 3 consecutive days, July-August.
+# Box approximates the CMZ (18-28N, 65-88E) on IMD land cells. The seasonal
+# cycle and SD come from the training seasons only (2021-2022, 31-day window),
+# not the 1951-2007 climatology of the paper - a documented limitation. The same
+# training-only baseline is used for the zone-rainfall and dynamical anomalies.
+active_break:
+  box: [18.0, 28.0, 65.0, 88.0]     # lat_min, lat_max, lon_min, lon_max
+  threshold_sd: 1.0
+  min_days: 3
+  months: [7, 8]
+
+# Monsoon low / depression proxy from GFS Day-1 fields (12 UTC): minimum MSLP in
+# the head-Bay / central-India genesis-and-track box at least 4 hPa below its
+# seasonal cycle, with a 3x3-smoothed 850 hPa relative-vorticity maximum of
+# 4e-5 s^-1 or more in the same box (IMD depressions: closed isobars, winds
+# 17-33 kt; lows: one closed isobar).
+depression:
+  box: [15.0, 26.0, 78.0, 92.0]
+  mslp_anomaly_max_hpa: -4.0
+  vorticity_min: 4.0e-5
+
+# Offshore-trough / orographic spell: strong 850 hPa westerlies onto the Western
+# Ghats (mean u850 over 12-20N, 70-74E >= 12 m/s) with West Coast district
+# rainfall at least 1 SD above its seasonal cycle.
+orographic:
+  u850_min: 12.0
+  west_coast_rain_z_min: 1.0
+
+# East-coast spell: East Coast district rainfall >= 1 SD above its seasonal cycle
+# without a low (a low outranks it).
+coastal:
+  east_coast_rain_z_min: 1.0
+
+# Western disturbance interacting with the monsoon: 500 hPa geopotential over
+# 30-37N, 68-78E at least 35 gpm below its seasonal cycle (rare in JJAS).
+western_disturbance:
+  z500_anomaly_max_gpm: -35.0

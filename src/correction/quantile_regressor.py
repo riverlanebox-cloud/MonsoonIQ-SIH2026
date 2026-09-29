@@ -9,7 +9,7 @@ import joblib
 import logging
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
+from src.compat import lgb
 from typing import Dict, Any, List, Tuple
 
 logger = logging.getLogger(__name__)

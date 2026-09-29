@@ -1,7 +1,7 @@
 """
 MonsoonIQ evaluation pipeline.
 
-Runs the full verification suite on the held-out years (2022-2023) and writes:
+Runs the full verification suite on the held-out years (src/config.py) and writes:
 
     artifacts/metrics/verification_summary.json   everything the UI reads
     artifacts/metrics/heavy_events_summary.json   heavy-rain skill, by regime/lead
@@ -29,12 +29,15 @@ from src.verification.report_generator import VerificationReportGenerator
 logger = logging.getLogger("MonsoonIQ_Evaluate")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-TEST_YEARS = [2022, 2023]
+from src import config
+from src.compat import read_table
+
+TEST_YEARS = config.TEST_YEARS
 
 
-def run_evaluation_pipeline(data_path: str = "data/synthetic/district_daily.parquet"):
-    logger.info("=== MonsoonIQ evaluation ===")
-    df = pd.read_parquet(data_path)
+def run_evaluation_pipeline(data_path: str = config.ARCHIVE):
+    logger.info("=== MonsoonIQ evaluation (%s archive) ===", config.MODE)
+    df = read_table(data_path)
     test_df = df[df["year"].isin(TEST_YEARS)].copy().reset_index(drop=True)
     logger.info("Held-out partition: %d records (%s), %d calendar days",
                 len(test_df), TEST_YEARS, test_df["date"].nunique())
@@ -104,7 +107,7 @@ def _plot_regime_value(regime_value):
         ax.set_xlabel("Regime-classifier accuracy")
         ax.set_ylabel("CSI, rainfall ≥ 64.5 mm/day")
         ax.set_title("Where regime conditioning stops paying\n"
-                     "Synthetic held-out period 2022–2023", fontsize=11)
+                     + config.period_label().capitalize(), fontsize=11)
         ax.invert_xaxis()
         ax.grid(alpha=0.3)
         ax.legend(fontsize=8, loc="lower left")

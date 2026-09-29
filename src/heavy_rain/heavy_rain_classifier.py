@@ -13,12 +13,24 @@ import joblib
 import logging
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
+from src.compat import lgb
 from typing import Dict, Any, List, Tuple
 from sklearn.calibration import CalibratedClassifierCV
 from sklearn.metrics import brier_score_loss, roc_auc_score
 
 logger = logging.getLogger(__name__)
+
+
+class _BaseRate:
+    """Constant-probability classifier used when a threshold has too few events."""
+
+    def __init__(self, p: float):
+        self.p = float(p)
+        self.classes_ = np.array([0, 1])
+
+    def predict_proba(self, X) -> np.ndarray:
+        n = len(X)
+        return np.column_stack([np.full(n, 1 - self.p), np.full(n, self.p)])
 
 
 class HeavyRainProbabilityModule:
@@ -65,6 +77,19 @@ class HeavyRainProbabilityModule:
 
             logger.info(f"Training threshold {key} (>={threshold} mm): {pos_count} positives ({pos_count/len(y_bin_train)*100:.2f}%), scale_pos_weight={scale_pos:.2f}")
 
+            if pos_count < 3:
+                # Too few events to fit (possible for >=204.5 mm on a short real
+                # record): fall back to the training base rate, and say so.
+                logger.warning(f"{key}: only {pos_count} training events; using base-rate probability")
+                const = _BaseRate(pos_count / max(1, len(y_bin_train)))
+                self.classifiers[key] = const
+                self.calibrators[key] = const
+                p_val = const.predict_proba(X_val)[:, 1]
+                metrics[key] = {"threshold_mm": threshold, "train_positives": int(pos_count),
+                                "val_brier_score": round(float(brier_score_loss(y_bin_val, p_val)), 4),
+                                "val_auc": 0.5, "note": "base-rate fallback (too few training events)"}
+                continue
+
             clf = lgb.LGBMClassifier(
                 n_estimators=120,
                 learning_rate=0.05,
@@ -86,7 +111,12 @@ class HeavyRainProbabilityModule:
             # Isotonic probability calibration on validation partition
             if np.sum(y_bin_val) >= 5:
                 try:
-                    cal = CalibratedClassifierCV(estimator=clf, method="isotonic", cv="prefit")
+                    try:  # scikit-learn >= 1.6
+                        from sklearn.frozen import FrozenEstimator
+                        cal = CalibratedClassifierCV(estimator=FrozenEstimator(getattr(clf, "_est", clf)),
+                                                     method="isotonic")
+                    except ImportError:
+                        cal = CalibratedClassifierCV(estimator=clf, method="isotonic", cv="prefit")
                     cal.fit(X_val, y_bin_val)
                     self.calibrators[key] = cal
                 except Exception as e:

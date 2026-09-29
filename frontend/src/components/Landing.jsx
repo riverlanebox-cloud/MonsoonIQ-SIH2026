@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
 import { fmt } from '../lib/format';
 import DottedIndia from './DottedIndia';
+import { isReal, provenanceFooter } from '../lib/provenance';
 
 /**
  * Opening screen.
@@ -73,7 +74,7 @@ export default function Landing({ onEnter, onMethod }) {
           <div className="landing-stat">
             <div className="k">Valid for</div>
             <div className="v" style={{ fontSize: 15 }}>{console_?.date || '—'}</div>
-            <div className="tiny muted">most warning-heavy monsoon day</div>
+            <div className="tiny muted">{isReal(console_?.provenance) ? 'most warning-heavy held-out day' : 'most warning-heavy monsoon day'}</div>
           </div>
           <div className="landing-stat">
             <div className="k">Districts warned</div>
@@ -111,7 +112,7 @@ export default function Landing({ onEnter, onMethod }) {
         <div className="landing-hint anim-up d3">
           <span className="badge cyan" style={{ marginRight: 8 }}>3 screens</span>
           <span className="badge green" style={{ marginRight: 8 }}>keyboard-first</span>
-          <span className="badge">runs offline</span>
+          <span className="badge">{isReal(console_?.provenance) ? 'real IMD + GFS data' : 'runs offline'}</span>
           <div style={{ marginTop: 10 }}>
             Console shortcuts: <kbd>←</kbd> <kbd>→</kbd> days · <kbd>1</kbd>–<kbd>5</kbd> lead ·
             <kbd>n</kbd>/<kbd>p</kbd> significant days · <kbd>l</kbd> map layer · <kbd>b</kbd> bulletin ·
@@ -121,9 +122,7 @@ export default function Landing({ onEnter, onMethod }) {
       </div>
 
       <div className="landing-foot">
-        Research prototype · forecast fields come from a synthetic physically-plausible archive
-        generated in this repository ({console_?.provenance || 'SYNTHETIC_PHYSICALLY_PLAUSIBLE'}) and are
-        <b> not</b> official IMD/NCMRWF products. Do not use for public warnings.
+        {provenanceFooter(console_?.provenance)}
       </div>
     </div>
   );

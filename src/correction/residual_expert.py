@@ -8,7 +8,7 @@ The expert output is: y_expert = max(0, y_qm + predicted_residual).
 import logging
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
+from src.compat import lgb
 from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,14 @@ class RegimeResidualExpert:
             X_val: Optional[pd.DataFrame] = None, y_residual_val: Optional[np.ndarray] = None):
         """Fit residual regression tree on training data."""
         if len(X_train) < 30:
-            logger.warning(f"Regime {self.regime_id} has very few training samples ({len(X_train)}).")
+            # Too few days of this regime to learn a residual (possible on the real
+            # archive, e.g. no western disturbance in the training seasons): the
+            # expert contributes no adjustment and the regime QM carries the day.
+            logger.warning(f"Regime {self.regime_id} has very few training samples ({len(X_train)}); "
+                           "expert left unfitted (zero residual).")
+            self.is_fitted = False
+            self.n_train = int(len(X_train))
+            return self
 
         callbacks = []
         eval_set = None

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { apiBase } from '../api';
+import { apiBase, STATIC } from '../api';
 
 /** Read-only endpoints, with a plain-language line each. Used when the spec is
  *  unreachable (offline build, static file server) so the reference never renders
@@ -32,13 +32,15 @@ const GROUPS = [
 const groupOf = (path) => GROUPS.find(([, re]) => re.test(path))?.[0] || 'service';
 
 /** Query strings used by the probe buttons — a real archived date. */
+const PROBE_DATE = '2024-07-19';
+const PROBE_DISTRICT = 'GA_NGA';
 const PROBE_QUERY = {
-  '/console': 'date=2020-08-05&lead=1',
-  '/district/OD_BBS': 'date=2020-08-05&lead=1',
-  '/bulletin': 'date=2020-08-05&lead=1',
-  '/grid': 'date=2020-08-05',
+  '/console': `date=${PROBE_DATE}&lead=1`,
+  [`/district/${PROBE_DISTRICT}`]: `date=${PROBE_DATE}&lead=1`,
+  '/bulletin': `date=${PROBE_DATE}&lead=1`,
+  '/grid': `date=${PROBE_DATE}`,
   '/events': 'limit=5',
-  '/export/districts.csv': 'date=2020-08-05&lead=1',
+  '/export/districts.csv': `date=${PROBE_DATE}&lead=1`,
 };
 
 /** Issue one GET and report what came back, timed. Kept outside the component so
@@ -84,7 +86,7 @@ export default function ApiView() {
   const send = async (path) => {
     // Probe each route with a date that exists in the archive, so a probe that
     // returns 200 means the endpoint genuinely works end to end.
-    const probe = path.replace('{district_id}', 'OD_BBS').replace('{date}', '2020-08-05');
+    const probe = path.replace('{district_id}', PROBE_DISTRICT).replace('{date}', PROBE_DATE);
     const query = PROBE_QUERY[probe];
     const url = `${apiBase()}${probe}${query ? `?${query}` : ''}`;
     setBusy(path);
@@ -107,8 +109,10 @@ export default function ApiView() {
         <div className="panel-body small muted">
           The console reads forecast state over HTTP; the same endpoints are open, so a state
           emergency operations centre can pull corrected warnings into its own dashboard instead of
-          retyping them. Every number on screen is traceable to one of these responses. Send a probe
-          to see the status and response time from this browser.
+          retyping them. Every number on screen is traceable to one of these responses.
+          {STATIC
+            ? ' This deployment is a static snapshot: every response was computed at build time from the trained models, so the endpoints below describe the live service (run it with make serve) and cannot be probed from here.'
+            : ' Send a probe to see the status and response time from this browser.'}
         </div>
       </div>
 
@@ -151,9 +155,10 @@ export default function ApiView() {
                           )}
                         </td>
                         <td style={{ textAlign: 'right' }}>
+                          {STATIC ? <span className="tiny muted">live API only</span> : (
                           <button className="btn" disabled={busy === r.path} onClick={() => send(r.path)}>
                             {busy === r.path ? 'sending…' : 'Send'}
-                          </button>
+                          </button>)}
                           {res && (
                             <span className="tiny mono" style={{ marginLeft: 8, color: res.status === 200 ? 'var(--green)' : 'var(--red)' }}>
                               {res.status} · {res.ms.toFixed(0)} ms · {(res.bytes / 1024).toFixed(1)} kB

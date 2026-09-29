@@ -1,4 +1,4 @@
-.PHONY: setup data grid train evaluate console build-ui smoke serve api ui test all clean reset
+.PHONY: setup data grid fetch-real real-data real train evaluate console build-ui smoke serve api ui test all synthetic clean reset
 
 PYTHON := .venv/bin/python
 PIP := .venv/bin/pip
@@ -31,7 +31,30 @@ setup:
 	$(PIP) install -r requirements.txt
 	cd frontend && npm install
 
-# District-scale archive. Deterministic: same seed, same parquet.
+# ---------------------------------------------------------------------------
+# REAL DATA (default mode once built): IMD 0.25 deg observations + NOAA GFS
+# forecasts, June-September 2021-2025. See docs/REAL_DATA.md.
+#
+#   fetch-real  ~1-3 h, ~3.5 GB transferred (network-bound), writes ~200 MB of bundles
+#   real-data   ~3 min, builds data/real/ from the bundles
+#   real        the whole real-data chain: archive -> train -> evaluate -> console
+# ---------------------------------------------------------------------------
+BUNDLES ?= data/raw/bundles
+
+fetch-real:
+	PYTHONPATH=. $(PYTHON) scripts/fetch_real_data.py --out $(BUNDLES)
+
+real-data:
+	PYTHONPATH=. $(PYTHON) scripts/build_real_archive.py --bundles $(BUNDLES)
+
+real: real-data
+	MONSOONIQ_DATA=real $(MAKE) train evaluate console
+
+# The original seeded simulator, kept for method demos: `make synthetic`.
+synthetic:
+	MONSOONIQ_DATA=synthetic $(MAKE) data grid train evaluate console
+
+# District-scale synthetic archive. Deterministic: same seed, same parquet.
 data:
 	PYTHONPATH=. $(PYTHON) -m src.data.synthetic_generator
 
@@ -82,7 +105,7 @@ ui:
 
 # Re-record the API fixtures the console smoke test renders against.
 fixtures:
-	PYTHONPATH=. $(PYTHON) scripts/dump_api_fixtures.py --date 2020-08-05 --lead 1
+	PYTHONPATH=. $(PYTHON) scripts/dump_api_fixtures.py --lead 1
 
 clean:
 	rm -rf __pycache__ .pytest_cache src/**/__pycache__ tests/__pycache__

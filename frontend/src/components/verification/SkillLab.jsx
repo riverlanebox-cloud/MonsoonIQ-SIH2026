@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { api } from '../../api';
 import { fmt, pct, signed } from '../../lib/format';
+import { isReal } from '../../lib/provenance';
 
 const ORDER = ['raw_nwp', 'global_qm', 'global_lgb', 'monsooniq'];
 const SHORT = {
@@ -107,9 +108,13 @@ export default function SkillLab() {
   return (
     <div className="workspace">
       <div className="note">
-        <b>Read this first.</b> Every number below is an internal comparison computed on the archive in
-        this repository (provenance <span className="mono">{summary.data_provenance}</span>), not IMD
-        verification. Held-out years <span className="mono">{(period.test_years || []).join(', ')}</span>
+        <b>Read this first.</b> {isReal(summary.data_provenance)
+          ? <>Every number below scores forecasts against IMD 0.25° gridded observations
+            (provenance <span className="mono">{summary.data_provenance}</span>). The raw model is NOAA GFS,
+            a public stand-in for NCMRWF NCUM; models were fitted on earlier seasons only. Held-out years</>
+          : <>Every number below is an internal comparison computed on the archive in
+            this repository (provenance <span className="mono">{summary.data_provenance}</span>), not IMD
+            verification. Held-out years</>} <span className="mono">{(period.test_years || []).join(', ')}</span>
         {' '}· <span className="mono">{period.calendar_days}</span> calendar days ·
         {' '}<span className="mono">{period.district_days?.toLocaleString()}</span> district-days ·
         {' '}<span className="mono">{period.districts}</span> districts. What makes the comparison worth
@@ -481,7 +486,9 @@ export default function SkillLab() {
           </div>
           <div className="panel-body">
             <div className="mono small term">
-              make data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# deterministic synthetic archive<br />
+              {isReal(summary.data_provenance)
+                ? <>make fetch-real&nbsp;# IMD + GFS bundles (network)<br />make real-data&nbsp;&nbsp;# real archive from the bundles<br /></>
+                : <>make data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# deterministic synthetic archive<br /></>}
               make train&nbsp;&nbsp;&nbsp;&nbsp;# classifier, per-lead correction, exceedance, grid model<br />
               make evaluate&nbsp;# writes the artifacts this page reads<br />
               python -m pytest tests/ -q

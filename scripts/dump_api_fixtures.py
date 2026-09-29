@@ -5,7 +5,7 @@ The frontend smoke test (`frontend/scripts/smoke.mjs`) renders the console in
 jsdom against recorded API responses, so it can run in CI and on a laptop with
 no backend process. Record the fixtures with:
 
-    PYTHONPATH=. python scripts/dump_api_fixtures.py --date 2019-07-26 --lead 1
+    PYTHONPATH=. python scripts/dump_api_fixtures.py --lead 1   # date defaults to the console's opening day
 
 The fixtures are development aids and are written to `frontend/fixtures/`.
 """
@@ -58,6 +58,12 @@ def main():
 
     logging.basicConfig(level=logging.WARNING)
     load_artifacts()
+    if args.date is None:  # default: the day the console opens on
+        try:
+            with open("artifacts/console/meta.json", encoding="utf-8") as f:
+                args.date = json.load(f).get("default_date")
+        except OSError:
+            pass
     client = TestClient(app)
     os.makedirs(args.out, exist_ok=True)
 

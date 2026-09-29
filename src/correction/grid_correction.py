@@ -28,11 +28,11 @@ from typing import Dict, Any, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 import joblib
-import lightgbm as lgb
+from src.compat import lgb
 
 logger = logging.getLogger(__name__)
 
-GRID_NPZ = "data/synthetic/grid_feature_samples.npz"
+from src.config import GRID_NPZ, TRAIN_YEARS, VAL_YEARS, TEST_YEARS  # noqa: E402
 DEFAULT_PATH = "artifacts/models/grid_correction.joblib"
 
 PREDICTORS = [
@@ -61,8 +61,8 @@ class GridCorrectionModel:
                     "western_disturbance", "weak_normal"]
 
     def __init__(self, save_path: str = DEFAULT_PATH, npz_path: str = GRID_NPZ,
-                 train_years: Tuple[int, ...] = (2016, 2017, 2018, 2019, 2020, 2021),
-                 test_years: Tuple[int, ...] = (2022, 2023)):
+                 train_years: Tuple[int, ...] = tuple(TRAIN_YEARS + VAL_YEARS),
+                 test_years: Tuple[int, ...] = tuple(TEST_YEARS)):
         self.save_path = save_path
         self.npz_path = npz_path
         self.train_years = train_years
@@ -147,7 +147,7 @@ class GridCorrectionModel:
             raise FileNotFoundError(path)
         return joblib.load(path)
 
-    def verification_fields(self, clf, years: Tuple[int, ...] = (2022, 2023)
+    def verification_fields(self, clf, years: Tuple[int, ...] = tuple(TEST_YEARS)
                             ) -> Dict[str, Dict[str, np.ndarray]]:
         """{date: {'truth':…, 'raw_nwp':…, 'grid_correction':…}} on land cells."""
         npz, keys = self._load()

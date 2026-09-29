@@ -11,11 +11,11 @@ import joblib
 import logging
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
+from src.compat import lgb
 from typing import Dict, Any, List, Tuple
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 from sklearn.calibration import CalibratedClassifierCV
-import shap
+from src.compat import shap
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -29,6 +29,9 @@ class MLRegimeClassifier:
         "q500", "cape", "olr", "olr_anomaly", "moisture_flux", "trough_latitude",
         "elevation", "slope", "dist_coast", "latitude", "longitude"
     ]
+
+    BASE_FEATURE_COLS = list(FEATURE_COLS)
+    OPTIONAL_COLS = ["vort_max_box", "u850_westcoast", "z500_anomaly_nw"]
 
     REGIME_NAMES = {
         1: "Active Monsoon",
@@ -52,6 +55,10 @@ class MLRegimeClassifier:
         Train multiclass LightGBM with probability calibration.
         Labels (1-7) mapped to 0-6 for LightGBM, then restored.
         """
+        # Day-level synoptic indices, when the archive has them (real archive):
+        # the regimes are domain-scale, so the classifier sees domain-scale inputs.
+        extra = [c for c in self.OPTIONAL_COLS if c in train_df.columns and c in val_df.columns]
+        self.FEATURE_COLS = list(self.BASE_FEATURE_COLS) + extra
         X_train = train_df[self.FEATURE_COLS].copy()
         y_train = (train_df[target_col].astype(int) - 1).values # 0-6 index
 
@@ -82,7 +89,12 @@ class MLRegimeClassifier:
 
         # Calibrate probabilities with sigmoid / isotonic on validation set
         try:
-            calibrator = CalibratedClassifierCV(estimator=base_clf, method="sigmoid", cv="prefit")
+            try:  # scikit-learn >= 1.6
+                from sklearn.frozen import FrozenEstimator
+                est = getattr(base_clf, "_est", base_clf)
+                calibrator = CalibratedClassifierCV(estimator=FrozenEstimator(est), method="sigmoid")
+            except ImportError:
+                calibrator = CalibratedClassifierCV(estimator=base_clf, method="sigmoid", cv="prefit")
             calibrator.fit(X_val, y_val)
             self.calibrated_model = calibrator
         except Exception as e:
@@ -132,6 +144,7 @@ class MLRegimeClassifier:
         bundle = joblib.load(self.model_save_path)
         self.model = bundle["model"]
         self.calibrated_model = bundle.get("calibrated_model", self.model)
+        self.FEATURE_COLS = bundle.get("feature_cols", self.FEATURE_COLS)
         self.classes_ = bundle.get("classes", list(range(1, 8)))
         try:
             self.explainer = shap.TreeExplainer(self.model)
@@ -144,6 +157,14 @@ class MLRegimeClassifier:
             self.load()
         feat_df = X[self.FEATURE_COLS]
         probs = self.calibrated_model.predict_proba(feat_df)
+        # Real labels can leave a regime unseen in training (e.g. no western
+        # disturbance in a season); always return all 7 columns in regime order.
+        fitted = getattr(self.calibrated_model, "classes_", None)
+        if fitted is not None and len(fitted) != len(self.classes_):
+            full = np.zeros((probs.shape[0], len(self.classes_)))
+            for j, c in enumerate(fitted):
+                full[:, int(c)] = probs[:, j]  # fitted labels are 0-based regime indices
+            probs = full
         return probs
 
     def predict(self, X: pd.DataFrame) -> np.ndarray:

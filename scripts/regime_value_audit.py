@@ -35,10 +35,13 @@ from src.verification.metrics import (
     compute_dichotomous_metrics,
 )
 
-DATA = "data/synthetic/district_daily.parquet"
+from src import config
+from src.compat import read_table
+
+DATA = config.ARCHIVE
 METRICS_OUT = "artifacts/metrics/regime_value_audit.json"
 PLOT_OUT = "artifacts/plots/regime_value_curve.png"
-TEST_YEARS = [2022, 2023]
+TEST_YEARS = config.TEST_YEARS
 HEAVY = 64.5
 VERY_HEAVY = 115.6
 BOOT = 400
@@ -76,7 +79,7 @@ def main():
     os.makedirs(os.path.dirname(METRICS_OUT), exist_ok=True)
     os.makedirs(os.path.dirname(PLOT_OUT), exist_ok=True)
 
-    df = pd.read_parquet(DATA)
+    df = read_table(DATA)
     test = df[df["year"].isin(TEST_YEARS)].reset_index(drop=True)
     y = test["obs_rain_mean"].to_numpy(float)
     y_max = test["obs_rain_max"].to_numpy(float)
@@ -214,10 +217,12 @@ def main():
 
     # ------------------------------------------------------------------ write
     result = {
-        "provenance": "SYNTHETIC_DATASET",
-        "warning": ("All numbers are computed on the repository's seeded synthetic "
-                    "dataset. They measure internal consistency of the pipeline, "
-                    "not skill against real NWP or real IMD observations."),
+        "provenance": "REAL_IMD_GFS" if config.MODE == "real" else "SYNTHETIC_DATASET",
+        "warning": (("Computed on IMD 0.25 deg observations and NOAA GFS forecasts (real data); "
+                     "GFS stands in for NCMRWF NCUM.") if config.MODE == "real" else
+                    ("All numbers are computed on the repository's seeded synthetic "
+                     "dataset. They measure internal consistency of the pipeline, "
+                     "not skill against real NWP or real IMD observations.")),
         "test_years": TEST_YEARS,
         "district_days": n,
         "calendar_days": int(test["date"].nunique()),
@@ -252,7 +257,7 @@ def main():
         ax.set_xlabel("Regime-classifier accuracy")
         ax.set_ylabel("CSI, rainfall ≥ 64.5 mm/day")
         ax.set_title("When does regime conditioning stop paying?\n"
-                     "Synthetic held-out years 2022–2023", fontsize=11)
+                     + config.period_label().capitalize(), fontsize=11)
         ax.invert_xaxis()
         ax.grid(alpha=0.3)
         ax.legend(fontsize=8, loc="lower left")
@@ -269,9 +274,13 @@ def main():
           f"({100 * (y_max >= HEAVY).mean():.2f}% of district-days)")
 
     print(f"\n1. Regime classifier accuracy on held-out years: {100 * accuracy:.1f}%")
-    print("   (synthetic regimes are drawn from the same latent parameters that")
-    print("    generate the predictors, so this accuracy is an artefact of the")
-    print("    generator, not evidence about real regime classification)")
+    if config.MODE == "real":
+        print("   (labels are objective day-level criteria on IMD rainfall and GFS fields;")
+        print("    the classifier recovers them from GFS dynamics alone)")
+    else:
+        print("   (synthetic regimes are drawn from the same latent parameters that")
+        print("    generate the predictors, so this accuracy is an artefact of the")
+        print("    generator, not evidence about real regime classification)")
 
     print("\n2. Where the skill comes from")
     print(f"   {'system':<28} {'RMSE':>7} {'CSI':>7} {'ETS':>7} {'POD':>7} {'FAR':>7}")

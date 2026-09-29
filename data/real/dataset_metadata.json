@@ -1,0 +1,74 @@
+{
+  "day_alignment": {
+    "definition": "GFS window 03-03 UTC starting on run date D; IMD value for date D+lag",
+    "correlation_by_lag": {
+      "-1": 0.6129777452375422,
+      "0": 0.7941999434247544,
+      "1": 0.9275305531988473
+    },
+    "chosen_lag_days": 1,
+    "note": "all-India land-mean Day-1 GFS vs IMD, all seasons"
+  },
+  "nearest_land_cell_fallback": [
+    "TN_CHN"
+  ],
+  "climatology": {
+    "years": [
+      2021,
+      2022
+    ],
+    "window_days": 31,
+    "note": "anomalies use a training-years-only seasonal cycle"
+  },
+  "regime_labels": {
+    "source": "configs/regime_labels_real.yaml",
+    "day_counts": {
+      "Weak/Normal": 388,
+      "Orographic": 57,
+      "Monsoon Low/Depression": 43,
+      "Break Monsoon": 32,
+      "Coastal": 24,
+      "Active Monsoon": 22,
+      "Western Disturbance": 19
+    }
+  },
+  "dataset_type": "REAL_IMD_GFS",
+  "provenance_note": "Observations: IMD 0.25 deg daily gridded rainfall (Pai et al. 2014, IMD Pune). Forecasts: NOAA GFS 00 UTC runs (AWS Open Data noaa-gfs-bdp-pds), Day 1-5. District boundaries: DataMeet Census-2011 (CC BY 2.5 IN). GFS stands in for NCMRWF NCUM, which is not publicly downloadable.",
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "season": "1 Jun - 30 Sep",
+  "total_days": 585,
+  "total_district_records": 31005,
+  "districts_count": 53,
+  "grid_dates": 351,
+  "domain": {
+    "lat_min": 8.0,
+    "lat_max": 36.0,
+    "lon_min": 68.0,
+    "lon_max": 96.0,
+    "resolution_deg": 0.5
+  },
+  "imd_endian": "<f4",
+  "gfs_missing_fields": {
+    "2021": 0,
+    "2022": 0,
+    "2023": 0,
+    "2024": 0,
+    "2025": 0
+  },
+  "archive_file": "district_daily.csv.gz",
+  "regimes_modeled": [
+    "Active Monsoon",
+    "Break Monsoon",
+    "Monsoon Low/Depression",
+    "Orographic",
+    "Coastal",
+    "Western Disturbance",
+    "Weak/Normal"
+  ]
+}

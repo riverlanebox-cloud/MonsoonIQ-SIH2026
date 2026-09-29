@@ -41,7 +41,9 @@ print(f"[✓] 3. Calibrated heavy-rain probabilities generated (Brier score: {br
 
 # 4. District Product Renders
 assert os.path.exists("data/geojson/india_districts.geojson"), "District GeoJSON missing"
-assert os.path.exists("data/synthetic/district_daily.parquet"), "District daily dataset missing"
+from src import config
+from src.compat import table_exists
+assert table_exists(config.ARCHIVE), f"District daily dataset missing ({config.ARCHIVE})"
 print("[✓] 4. District products renderable with 53 districts across all Indian zones.")
 
 # 5. All Listed Metrics Computed

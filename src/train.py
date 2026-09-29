@@ -3,7 +3,9 @@ MonsoonIQ end-to-end training pipeline.
 
 Strict time-based split throughout (no shuffling, no random splits, no leakage):
 
-    train 2016-2020 | validation 2021 | held-out test 2022-2023
+    real archive:      train 2021-2022 | validation 2023 | held-out test 2024-2025
+    synthetic archive: train 2016-2020 | validation 2021 | held-out test 2022-2023
+    (both defined once, in src/config.py)
 
 Fits, in order:
   1. Calibrated regime classifier            (soft regime probabilities)
@@ -33,13 +35,16 @@ from src.correction.quantile_regressor import QuantileRegressor
 from src.correction.lead_time_models import LeadTimeCorrectionBundle
 from src.correction.grid_correction import GridCorrectionModel
 from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
+from src import config
+from src.compat import GBM_BACKEND, read_table, table_exists, table_path_for_hash
+from typing import Any, Dict
 
 logger = logging.getLogger("MonsoonIQ_Train")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-TRAIN_YEARS = [2016, 2017, 2018, 2019, 2020]
-VAL_YEARS = [2021]
-TEST_YEARS = [2022, 2023]
+TRAIN_YEARS = config.TRAIN_YEARS
+VAL_YEARS = config.VAL_YEARS
+TEST_YEARS = config.TEST_YEARS
 MANIFEST = "artifacts/models/training_manifest.json"
 
 
@@ -50,15 +55,15 @@ def _sha256(path: str, limit: int = 2_000_000) -> str:
     return h.hexdigest()[:16]
 
 
-def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parquet",
+def run_training_pipeline(data_path: str = config.ARCHIVE,
                           fit_lead_bundle: bool = True):
     start = time.time()
     logger.info("=== MonsoonIQ training pipeline ===")
 
-    if not os.path.exists(data_path):
-        raise FileNotFoundError(f"Dataset not found at {data_path}. Run the generator first.")
+    if not table_exists(data_path):
+        raise FileNotFoundError(f"Dataset not found at {data_path}. Build it first (see Makefile).")
 
-    df = pd.read_parquet(data_path)
+    df = read_table(data_path)
     logger.info("Loaded %d records across years %s", len(df), sorted(df["year"].unique()))
 
     train_df = df[df["year"].isin(TRAIN_YEARS)].copy().reset_index(drop=True)
@@ -79,7 +84,8 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
     summary["regime_classifier"] = {
         "validation_accuracy": regime_metrics["validation_accuracy"],
         "macro_f1": regime_metrics["macro_f1"],
-        "labels": "generator latent regime (synthetic)",
+        "labels": ("objective day-level labels, configs/regime_labels_real.yaml"
+                   if config.MODE == "real" else "generator latent regime (synthetic)"),
     }
 
     # 2. Day-1 correction + baselines
@@ -114,7 +120,8 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
         from src.correction.grid_correction import GRID_NPZ
         if os.path.exists(GRID_NPZ):
             logger.info("--- 6/6 grid-native correction ---")
-            grid_model = GridCorrectionModel().fit(regime_clf)
+            grid_model = GridCorrectionModel(train_years=tuple(TRAIN_YEARS + VAL_YEARS),
+                                             test_years=tuple(TEST_YEARS)).fit(regime_clf)
             grid_info = dict(grid_model.training_meta)
             grid_info["skipped"] = False
         else:
@@ -126,8 +133,9 @@ def run_training_pipeline(data_path: str = "data/synthetic/district_daily.parque
 
     elapsed = round(time.time() - start, 2)
     summary["elapsed_seconds"] = elapsed
-    summary["dataset"] = {"path": data_path, "rows": int(len(df)),
-                          "sha256_16": _sha256(data_path)}
+    summary["dataset"] = {"path": table_path_for_hash(data_path), "rows": int(len(df)),
+                          "mode": config.MODE, "sha256_16": _sha256(table_path_for_hash(data_path))}
+    summary["gbm_backend"] = GBM_BACKEND
     summary["artifacts"] = {
         name: {"sha256_16": _sha256(os.path.join("artifacts/models", f"{name}.joblib")),
                "bytes": os.path.getsize(os.path.join("artifacts/models", f"{name}.joblib"))}

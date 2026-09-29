@@ -1,36 +1,55 @@
 import React, { useEffect } from 'react';
 import Icon from './Icon';
+import { isReal } from '../lib/provenance';
 
 /**
  * "About MonsoonIQ" — the platform overview and data-source acknowledgements,
- * laid out the way SAGAR's About dialog is. Source status is stated plainly:
- * this build runs on the synthetic archive; the real-data loaders exist in
- * src/data/downloader.py but are not what the numbers on screen come from.
+ * laid out the way SAGAR's About dialog is. Source status follows the archive the
+ * API is serving (real IMD + GFS by default; the synthetic simulator on request).
  */
-const SOURCES = [
+const REAL_SOURCES = [
+  {
+    name: 'IMD gridded rainfall', tag: 'Observations', tone: 'green',
+    org: 'India Meteorological Department, Pune (Pai et al. 2014)',
+    text: '0.25° daily gridded rainfall, June–September 2021–2025 — the truth every forecast is scored against.',
+  },
+  {
+    name: 'NOAA GFS', tag: 'Raw forecast', tone: 'green',
+    org: 'NOAA / NCEP via AWS Open Data',
+    text: '00 UTC runs, Day 1–5 rainfall at 0.5° plus nine dynamical predictors at 1°. Public stand-in for NCMRWF NCUM.',
+  },
+  {
+    name: 'Census 2011 districts', tag: 'Boundaries', tone: 'blue',
+    org: 'DataMeet India maps (CC BY 2.5 IN)',
+    text: 'Real district boundaries used to aggregate grid rainfall to the 53 modelled districts.',
+  },
+  {
+    name: 'Synthetic simulator', tag: 'Optional', tone: 'blue',
+    org: 'Physically-parameterised monsoon generator (src/data)',
+    text: 'Kept for method demos: `make synthetic` switches every screen to the seeded archive.',
+  },
+];
+
+const SYN_SOURCES = [
   {
     name: 'Synthetic archive', tag: 'In use', tone: 'green',
     org: 'Physically-parameterised monsoon simulator (src/data)',
     text: 'Generates the forecast/observation pairs every screen and every skill figure in this build is computed from.',
   },
   {
-    name: 'IMD gridded rainfall', tag: 'Loader', tone: 'blue',
+    name: 'IMD gridded rainfall', tag: 'Available', tone: 'blue',
     org: 'India Meteorological Department, Pune',
-    text: '0.25° daily gridded rainfall — the verifying observations once real data is loaded.',
+    text: '0.25° daily gridded rainfall — `make real` builds the real archive from it.',
   },
   {
-    name: 'NOAA GFS', tag: 'Loader', tone: 'blue',
-    org: 'National Oceanic and Atmospheric Administration',
-    text: 'Global NWP rainfall forecasts at Day 1–5 leads, standing in for the raw dynamical field.',
-  },
-  {
-    name: 'ERA5', tag: 'Loader', tone: 'blue',
-    org: 'Copernicus Climate Data Store (ECMWF)',
-    text: 'Reanalysis predictors — winds, humidity, pressure — for the regime classifier.',
+    name: 'NOAA GFS', tag: 'Available', tone: 'blue',
+    org: 'NOAA / NCEP via AWS Open Data',
+    text: 'Day 1–5 forecasts and dynamical predictors used by the real archive.',
   },
 ];
 
-export default function AboutModal({ onClose }) {
+export default function AboutModal({ onClose, provenance }) {
+  const SOURCES = isReal(provenance) ? REAL_SOURCES : SYN_SOURCES;
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
@@ -87,6 +106,7 @@ export default function AboutModal({ onClose }) {
 
           <div className="modal-foot">
             Research prototype for Smart India Hackathon 2026 — not an official IMD/NCMRWF product.
+            {isReal(provenance) && ' Boundaries © DataMeet contributors, CC BY 2.5 IN.'}
           </div>
         </div>
       </div>

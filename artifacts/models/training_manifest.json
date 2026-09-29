@@ -1,46 +1,43 @@
 {
-  "train_samples": 69165,
-  "val_samples": 13833,
-  "test_samples": 27666,
+  "train_samples": 12402,
+  "val_samples": 6201,
+  "test_samples": 12402,
   "split": {
     "train": [
-      2016,
-      2017,
-      2018,
-      2019,
-      2020
+      2021,
+      2022
     ],
     "val": [
-      2021
+      2023
     ],
     "test": [
-      2022,
-      2023
+      2024,
+      2025
     ]
   },
   "regime_classifier": {
-    "validation_accuracy": 0.9727,
-    "macro_f1": 0.972,
-    "labels": "generator latent regime (synthetic)"
+    "validation_accuracy": 0.641,
+    "macro_f1": 0.3458,
+    "labels": "objective day-level labels, configs/regime_labels_real.yaml"
   },
   "exceedance_models": {
     "heavy": {
       "threshold_mm": 64.5,
-      "train_positives": 1341,
-      "val_brier_score": 0.0041,
-      "val_auc": 0.9972
+      "train_positives": 1076,
+      "val_brier_score": 0.0506,
+      "val_auc": 0.8916
     },
     "very_heavy": {
       "threshold_mm": 115.6,
-      "train_positives": 302,
-      "val_brier_score": 0.0016,
-      "val_auc": 0.9961
+      "train_positives": 315,
+      "val_brier_score": 0.017,
+      "val_auc": 0.9358
     },
     "extremely_heavy": {
       "threshold_mm": 204.5,
-      "train_positives": 10,
-      "val_brier_score": 0.0003,
-      "val_auc": 0.6001
+      "train_positives": 43,
+      "val_brier_score": 0.003,
+      "val_auc": 0.9563
     }
   },
   "lead_bundle": {
@@ -55,235 +52,201 @@
       "day_1": {
         "nwp_column": "raw_nwp_d1",
         "expert_training_samples": {
-          "Active Monsoon": 11713,
-          "Break Monsoon": 5512,
-          "Monsoon Low/Depression": 10176,
-          "Orographic": 8321,
-          "Coastal": 9699,
-          "Western Disturbance": 11819,
-          "Weak/Normal": 11925
+          "Active Monsoon": 583,
+          "Break Monsoon": 424,
+          "Monsoon Low/Depression": 1007,
+          "Orographic": 1007,
+          "Coastal": 477,
+          "Western Disturbance": 636,
+          "Weak/Normal": 8268
         },
         "probability_models": {
           "heavy": {
             "threshold_mm": 64.5,
-            "train_positives": 1341,
-            "val_brier_score": 0.0041,
-            "val_auc": 0.9972
+            "train_positives": 1076,
+            "val_brier_score": 0.0506,
+            "val_auc": 0.8916
           },
           "very_heavy": {
             "threshold_mm": 115.6,
-            "train_positives": 302,
-            "val_brier_score": 0.0016,
-            "val_auc": 0.9961
+            "train_positives": 315,
+            "val_brier_score": 0.017,
+            "val_auc": 0.9358
           },
           "extremely_heavy": {
             "threshold_mm": 204.5,
-            "train_positives": 10,
-            "val_brier_score": 0.0003,
-            "val_auc": 0.6001
+            "train_positives": 43,
+            "val_brier_score": 0.003,
+            "val_auc": 0.9563
           }
         }
       },
       "day_2": {
         "nwp_column": "raw_nwp_d2",
         "expert_training_samples": {
-          "Active Monsoon": 11713,
-          "Break Monsoon": 5512,
-          "Monsoon Low/Depression": 10176,
-          "Orographic": 8321,
-          "Coastal": 9699,
-          "Western Disturbance": 11819,
-          "Weak/Normal": 11925
+          "Active Monsoon": 583,
+          "Break Monsoon": 424,
+          "Monsoon Low/Depression": 1007,
+          "Orographic": 1007,
+          "Coastal": 477,
+          "Western Disturbance": 636,
+          "Weak/Normal": 8268
         },
         "probability_models": {
           "heavy": {
             "threshold_mm": 64.5,
-            "train_positives": 1341,
-            "val_brier_score": 0.0049,
-            "val_auc": 0.9966
+            "train_positives": 1076,
+            "val_brier_score": 0.0543,
+            "val_auc": 0.8807
           },
           "very_heavy": {
             "threshold_mm": 115.6,
-            "train_positives": 302,
-            "val_brier_score": 0.0016,
-            "val_auc": 0.9941
+            "train_positives": 315,
+            "val_brier_score": 0.0178,
+            "val_auc": 0.9197
           },
           "extremely_heavy": {
             "threshold_mm": 204.5,
-            "train_positives": 10,
-            "val_brier_score": 0.0004,
-            "val_auc": 0.699
+            "train_positives": 43,
+            "val_brier_score": 0.003,
+            "val_auc": 0.9515
           }
         }
       },
       "day_3": {
         "nwp_column": "raw_nwp_d3",
         "expert_training_samples": {
-          "Active Monsoon": 11713,
-          "Break Monsoon": 5512,
-          "Monsoon Low/Depression": 10176,
-          "Orographic": 8321,
-          "Coastal": 9699,
-          "Western Disturbance": 11819,
-          "Weak/Normal": 11925
+          "Active Monsoon": 583,
+          "Break Monsoon": 424,
+          "Monsoon Low/Depression": 1007,
+          "Orographic": 1007,
+          "Coastal": 477,
+          "Western Disturbance": 636,
+          "Weak/Normal": 8268
         },
         "probability_models": {
           "heavy": {
             "threshold_mm": 64.5,
-            "train_positives": 1341,
-            "val_brier_score": 0.005,
-            "val_auc": 0.9941
+            "train_positives": 1076,
+            "val_brier_score": 0.0577,
+            "val_auc": 0.8528
           },
           "very_heavy": {
             "threshold_mm": 115.6,
-            "train_positives": 302,
-            "val_brier_score": 0.0018,
-            "val_auc": 0.9833
+            "train_positives": 315,
+            "val_brier_score": 0.0189,
+            "val_auc": 0.8987
           },
           "extremely_heavy": {
             "threshold_mm": 204.5,
-            "train_positives": 10,
-            "val_brier_score": 0.0003,
-            "val_auc": 0.7966
+            "train_positives": 43,
+            "val_brier_score": 0.0031,
+            "val_auc": 0.9458
           }
         }
       },
       "day_4": {
         "nwp_column": "raw_nwp_d4",
         "expert_training_samples": {
-          "Active Monsoon": 11713,
-          "Break Monsoon": 5512,
-          "Monsoon Low/Depression": 10176,
-          "Orographic": 8321,
-          "Coastal": 9699,
-          "Western Disturbance": 11819,
-          "Weak/Normal": 11925
+          "Active Monsoon": 583,
+          "Break Monsoon": 424,
+          "Monsoon Low/Depression": 1007,
+          "Orographic": 1007,
+          "Coastal": 477,
+          "Western Disturbance": 636,
+          "Weak/Normal": 8268
         },
         "probability_models": {
           "heavy": {
             "threshold_mm": 64.5,
-            "train_positives": 1341,
-            "val_brier_score": 0.0055,
-            "val_auc": 0.9921
+            "train_positives": 1076,
+            "val_brier_score": 0.0592,
+            "val_auc": 0.8398
           },
           "very_heavy": {
             "threshold_mm": 115.6,
-            "train_positives": 302,
-            "val_brier_score": 0.0018,
-            "val_auc": 0.9942
+            "train_positives": 315,
+            "val_brier_score": 0.0192,
+            "val_auc": 0.885
           },
           "extremely_heavy": {
             "threshold_mm": 204.5,
-            "train_positives": 10,
-            "val_brier_score": 0.0004,
-            "val_auc": 0.594
+            "train_positives": 43,
+            "val_brier_score": 0.0031,
+            "val_auc": 0.9618
           }
         }
       },
       "day_5": {
         "nwp_column": "raw_nwp_d5",
         "expert_training_samples": {
-          "Active Monsoon": 11713,
-          "Break Monsoon": 5512,
-          "Monsoon Low/Depression": 10176,
-          "Orographic": 8321,
-          "Coastal": 9699,
-          "Western Disturbance": 11819,
-          "Weak/Normal": 11925
+          "Active Monsoon": 583,
+          "Break Monsoon": 424,
+          "Monsoon Low/Depression": 1007,
+          "Orographic": 1007,
+          "Coastal": 477,
+          "Western Disturbance": 636,
+          "Weak/Normal": 8268
         },
         "probability_models": {
           "heavy": {
             "threshold_mm": 64.5,
-            "train_positives": 1341,
-            "val_brier_score": 0.0057,
-            "val_auc": 0.9945
+            "train_positives": 1076,
+            "val_brier_score": 0.0608,
+            "val_auc": 0.8259
           },
           "very_heavy": {
             "threshold_mm": 115.6,
-            "train_positives": 302,
-            "val_brier_score": 0.0019,
-            "val_auc": 0.9885
+            "train_positives": 315,
+            "val_brier_score": 0.0195,
+            "val_auc": 0.8882
           },
           "extremely_heavy": {
             "threshold_mm": 204.5,
-            "train_positives": 10,
-            "val_brier_score": 0.0003,
-            "val_auc": 0.6006
+            "train_positives": 43,
+            "val_brier_score": 0.0031,
+            "val_auc": 0.9511
           }
         }
       }
     }
   },
   "grid_correction": {
-    "cell_days": 164232,
-    "dates": 72,
-    "train_years": [
-      2016,
-      2017,
-      2018,
-      2019,
-      2020,
-      2021
-    ],
-    "features": [
-      "u850",
-      "v850",
-      "wind_speed_850",
-      "vorticity_850",
-      "mslp_anomaly",
-      "q500",
-      "cape",
-      "olr",
-      "olr_anomaly",
-      "moisture_flux",
-      "trough_latitude",
-      "elevation",
-      "slope",
-      "dist_coast",
-      "latitude",
-      "longitude",
-      "raw_nwp",
-      "p_regime_active",
-      "p_regime_break",
-      "p_regime_depression",
-      "p_regime_orographic",
-      "p_regime_coastal",
-      "p_regime_western_disturbance",
-      "p_regime_weak_normal"
-    ],
-    "train_rmse": 2.7013,
-    "skipped": false
+    "skipped": true,
+    "reason": "\"['vort_max_box', 'u850_westcoast', 'z500_anomaly_nw'] not in index\""
   },
-  "elapsed_seconds": 35.16,
+  "elapsed_seconds": 26.5,
   "dataset": {
-    "path": "data/synthetic/district_daily.parquet",
-    "rows": 110664,
-    "sha256_16": "0bb61ddeab888cde"
+    "path": "data/real/district_daily.csv.gz",
+    "rows": 31005,
+    "mode": "real",
+    "sha256_16": "087d96da64ea4992"
   },
+  "gbm_backend": "sklearn-hist-gradient-boosting",
   "artifacts": {
     "regime_classifier": {
-      "sha256_16": "d8f1b592ee4f9137",
-      "bytes": 1273819
+      "sha256_16": "3a11b2cc4f5cd90f",
+      "bytes": 3088235
     },
     "mixture_of_experts": {
-      "sha256_16": "0574d99c221ee8af",
-      "bytes": 1874404
+      "sha256_16": "22b5d04bc9e74921",
+      "bytes": 1267109
     },
     "quantile_regressor": {
-      "sha256_16": "c4af41271fa0c608",
-      "bytes": 737769
+      "sha256_16": "a6a89e079b79ee06",
+      "bytes": 815845
     },
     "heavy_rain_module": {
-      "sha256_16": "b2e6356628090adc",
-      "bytes": 472149
+      "sha256_16": "1ed4a18b47db4a1d",
+      "bytes": 919870
     },
     "lead_time_bundle": {
-      "sha256_16": "1e11008f32f45641",
-      "bytes": 15321113
+      "sha256_16": "cbc9112d858e560b",
+      "bytes": 15087544
     },
     "grid_correction": {
-      "sha256_16": "45230d5fddab8e87",
-      "bytes": 1333577
+      "sha256_16": "90e40223c5d1cd05",
+      "bytes": 1772094
     }
   }
 }

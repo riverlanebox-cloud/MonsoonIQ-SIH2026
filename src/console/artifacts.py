@@ -25,7 +25,10 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-DATA = "data/synthetic/district_daily.parquet"
+from src import config
+from src.compat import read_table
+
+DATA = config.ARCHIVE
 OUT_DIR = "artifacts/console"
 LEADS = (1, 2, 3, 4, 5)
 IMD_CATEGORIES = {"green": 0, "yellow": 1, "orange": 2, "red": 3}
@@ -62,7 +65,7 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
     from src.heavy_rain.heavy_rain_classifier import HeavyRainProbabilityModule
 
     t0 = time.time()
-    df = pd.read_parquet(data_path).reset_index(drop=True)
+    df = read_table(data_path).reset_index(drop=True)
     clf = MLRegimeClassifier(); clf.load()
     moe = MonsoonIQMixtureOfExperts.load()
     qr = QuantileRegressor.load()
@@ -171,6 +174,11 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
     # warning count, and opening a monsoon product on a November day would
     # misrepresent what it is for.
     jjas = [e for e in scored if e["date"][5:7] in ("06", "07", "08", "09")]
+    # On the real archive, open on a held-out day: the demo then shows a forecast
+    # the models never saw during fitting or tuning.
+    held_out = [e for e in jjas if int(e["date"][:4]) in config.TEST_YEARS]
+    if config.MODE == "real" and held_out:
+        jjas = held_out
     featured = [e for e in jjas if e["severity_score"] >= np.percentile(
         [e["severity_score"] for e in jjas], 95)] if jjas else []
     default_date = (featured[0]["date"] if featured
@@ -179,7 +187,7 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
     meta = {
         "built_utc": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "build_seconds": round(time.time() - t0, 1),
-        "provenance": "SYNTHETIC_PHYSICALLY_PLAUSIBLE",
+        "provenance": ("REAL_IMD_GFS" if config.MODE == "real" else "SYNTHETIC_PHYSICALLY_PLAUSIBLE"),
         "dates": len(timeline),
         "date_range": [unique_dates[0], unique_dates[-1]],
         "default_date": default_date,
@@ -190,8 +198,10 @@ def build_console_artifacts(data_path: str = DATA, out_dir: str = OUT_DIR,
                              "orange": "115.6-204.4 mm", "red": ">=204.5 mm"},
         "year_summary": _year_summary(per_day, unique_dates),
         "spells": spells[:12],
-        "note": ("Timeline is model output over a synthetic archive; observed columns are "
-                 "shown only as reference for demos and are never used as forecast input."),
+        "note": (("Timeline is model output over the real IMD + GFS archive (JJAS 2021-2025); "
+                  if config.MODE == "real" else
+                  "Timeline is model output over a synthetic archive; ")
+                 + "observed columns are shown only as reference and are never used as forecast input."),
     }
 
     with open(timeline_path, "w", encoding="utf-8") as f:

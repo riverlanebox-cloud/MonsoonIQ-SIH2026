@@ -1,7 +1,15 @@
 """
 MonsoonIQ Mixture-of-Experts (MoE) Bias-Correction Engine.
 Implements:
-1. Seven regime experts (Quantile Mapping baseline + LightGBM residual learning).
+1. Seven regime experts, each = base forecast + regime residual model. The base is
+   either regime quantile mapping ("qm", the original design, used on the synthetic
+   archive) or the global gradient-boosting model's out-of-fold prediction ("gbm",
+   used on the real archive). On real IMD/GFS data, 2021-2023, quantile mapping at
+   district-day scale is worse than the raw model (it inflates variance where the
+   forecast-observation correlation is weak), so regime experts built on it cannot
+   recover; on the GBM base each regime learns only the part of the error that is
+   regime-specific, shrunk towards zero when the regime has few training days.
+   The choice was made on the 2023 validation season, not the test seasons.
 2. Soft blending: Forecast = sum_{k=1}^7 P(R_k) * Expert_k.
 3. Baseline 1: Raw NWP
 4. Baseline 2: Global Quantile Mapping (regime-agnostic)
@@ -14,7 +22,7 @@ import joblib
 import logging
 import numpy as np
 import pandas as pd
-import lightgbm as lgb
+from src.compat import lgb
 from typing import Dict, Any, List, Optional, Tuple
 
 from src.correction.quantile_mapping import EmpiricalQuantileMapper, RegimeQuantileMapper
@@ -44,8 +52,16 @@ class MonsoonIQMixtureOfExperts:
     ]
     FEATURE_COLS = ["raw_nwp"] + PREDICTOR_COLS
 
-    def __init__(self, model_save_path: str = "artifacts/models/mixture_of_experts.joblib"):
+    SHRINK_ROWS = 2000  # rows of a regime at which its residual gets half weight
+
+    def __init__(self, model_save_path: str = "artifacts/models/mixture_of_experts.joblib",
+                 expert_base: Optional[str] = None):
         self.model_save_path = model_save_path
+        if expert_base is None:
+            from src import config
+            expert_base = "gbm" if config.MODE == "real" else "qm"
+        self.expert_base = expert_base
+        self.expert_weight = {r: 1.0 for r in self.EXPERT_REGIMES}
 
         # MoE components
         self.regime_qm = RegimeQuantileMapper()
@@ -104,6 +120,10 @@ class MonsoonIQMixtureOfExperts:
 
         # 3. Fit Regime Quantile Mappers
         self.regime_qm.fit(nwp_train, obs_train, regimes_train)
+
+        if self.expert_base == "gbm":
+            return self._fit_gbm_experts(train_df, val_df, nwp_train, obs_train, regimes_train,
+                                         nwp_val, obs_val, regimes_val, X_train_global, X_val_global)
 
         # 4. Compute regime QM outputs and residuals for each expert
         expert_train_scores = {}
@@ -170,7 +190,14 @@ class MonsoonIQMixtureOfExperts:
             regime_probs = np.ones((N, 7)) / 7.0
 
         expert_preds = np.zeros((N, 7), dtype=float)
+        base_mode = getattr(self, "expert_base", "qm")
         for idx, (r_id, expert) in enumerate(self.experts.items()):
+            if base_mode == "gbm":
+                X_expert = X_global.copy()
+                X_expert["qm_base"] = global_lgb_pred
+                res = expert.predict_residual(X_expert) * self.expert_weight.get(r_id, 1.0)
+                expert_preds[:, idx] = np.maximum(0.0, global_lgb_pred + res)
+                continue
             qm_r = self.regime_qm.transform_single_regime(nwp_vals, r_id)
             X_expert = df[self.PREDICTOR_COLS].copy()
             X_expert["raw_nwp"] = nwp_vals
@@ -189,6 +216,46 @@ class MonsoonIQMixtureOfExperts:
             "monsooniq": monsooniq_pred,
             "expert_breakdown": expert_preds
         }
+
+    def _fit_gbm_experts(self, train_df, val_df, nwp_train, obs_train, regimes_train,
+                         nwp_val, obs_val, regimes_val, X_train_global, X_val_global):
+        """Regime residual experts on the global GBM's out-of-fold prediction."""
+        days = train_df["date"].astype(str).to_numpy()
+        uniq = np.unique(days)
+        fold_of_day = {d: i % 4 for i, d in enumerate(uniq)}  # contiguous-ish day blocks
+        fold = np.array([fold_of_day[d] for d in days])
+        oof = np.zeros(len(train_df))
+        params = self.global_lgb.get_params()
+        for k in range(4):
+            tr, te = fold != k, fold == k
+            m = lgb.LGBMRegressor(**params)
+            m.fit(X_train_global[tr], obs_train[tr])
+            oof[te] = np.maximum(0.0, m.predict(X_train_global[te]))
+        base_val = np.maximum(0.0, self.global_lgb.predict(X_val_global))
+
+        expert_train_scores = {}
+        for r_id, expert in self.experts.items():
+            mt, mv = regimes_train == r_id, regimes_val == r_id
+            X_r = X_train_global[mt].copy()
+            X_r["qm_base"] = oof[mt]
+            X_rv, res_v = None, None
+            if mv.sum() > 10:
+                X_rv = X_val_global[mv].copy()
+                X_rv["qm_base"] = base_val[mv]
+                res_v = obs_val[mv] - base_val[mv]
+            expert.fit(X_r, obs_train[mt] - oof[mt], X_rv, res_v)
+            n = int(mt.sum())
+            self.expert_weight[r_id] = n / (n + self.SHRINK_ROWS)
+            expert_train_scores[expert.regime_name] = n
+            logger.info(f"Expert {r_id} ({expert.regime_name}) on GBM base: {n} rows, "
+                        f"shrinkage weight {self.expert_weight[r_id]:.2f}")
+
+        self.is_fitted = True
+        os.makedirs(os.path.dirname(self.model_save_path), exist_ok=True)
+        joblib.dump(self, self.model_save_path)
+        logger.info(f"Saved complete MoE system to {self.model_save_path}")
+        return {"expert_samples": expert_train_scores, "expert_base": "gbm",
+                "expert_weights": {self.EXPERT_REGIMES[k]: round(v, 3) for k, v in self.expert_weight.items()}}
 
     @classmethod
     def load(cls, path: str = "artifacts/models/mixture_of_experts.joblib") -> "MonsoonIQMixtureOfExperts":

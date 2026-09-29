@@ -51,6 +51,26 @@ class LeadTimeCorrectionBundle:
     def _nwp_col(lead: int) -> str:
         return f"raw_nwp_d{lead}"
 
+    @staticmethod
+    def lead_view(df: pd.DataFrame, lead: int) -> pd.DataFrame:
+        """Swap in the lead-specific forecast predictors when the archive has them.
+
+        The real archive stores, for every district-day, the dynamical predictors
+        forecast for that valid day at each lead (`u850_d3`, `olr_anomaly_d5`, ...).
+        A Day-3 correction must only see what a Day-3 forecast knows, so each lead's
+        models are fitted and applied on its own predictors. The synthetic archive
+        has no such columns and passes through unchanged.
+        """
+        suffix = f"_d{lead}"
+        swap = {c[:-len(suffix)]: c for c in df.columns
+                if c.endswith(suffix) and not c.startswith("raw_nwp") and c[:-len(suffix)] in df.columns}
+        if not swap:
+            return df
+        out = df.copy()
+        for base, col in swap.items():
+            out[base] = df[col].values
+        return out
+
     def fit(self, train_df: pd.DataFrame, val_df: pd.DataFrame,
             obs_col: str = "obs_rain_mean", obs_max_col: str = "obs_rain_max",
             regime_col: str = "regime") -> "LeadTimeCorrectionBundle":
@@ -62,18 +82,19 @@ class LeadTimeCorrectionBundle:
                 continue
 
             logger.info("=== Fitting lead Day %d (%s) ===", lead, nwp_col)
+            train_l, val_l = self.lead_view(train_df, lead), self.lead_view(val_df, lead)
             moe = MonsoonIQMixtureOfExperts(
                 model_save_path=os.path.join(self.cache_dir, f"moe_d{lead}.joblib"))
-            info = moe.fit(train_df, val_df, nwp_col=nwp_col, obs_col=obs_col,
+            info = moe.fit(train_l, val_l, nwp_col=nwp_col, obs_col=obs_col,
                            regime_col=regime_col)
 
             qr = QuantileRegressor(
                 model_save_path=os.path.join(self.cache_dir, f"qr_d{lead}.joblib"))
-            qr.fit(train_df, obs_col=obs_col, nwp_col=nwp_col)
+            qr.fit(train_l, obs_col=obs_col, nwp_col=nwp_col)
 
             hrc = HeavyRainProbabilityModule(
                 model_save_path=os.path.join(self.cache_dir, f"hrc_d{lead}.joblib"))
-            hrc_metrics = hrc.fit(train_df, val_df, target_col=obs_max_col, nwp_col=nwp_col)
+            hrc_metrics = hrc.fit(train_l, val_l, target_col=obs_max_col, nwp_col=nwp_col)
 
             self.systems[lead] = {"moe": moe, "quantile": qr, "probability": hrc,
                                   "nwp_col": nwp_col}
@@ -109,16 +130,16 @@ class LeadTimeCorrectionBundle:
         if lead not in self.systems:
             raise KeyError(f"Lead {lead} not fitted; available={self.available_leads()}")
         sysd = self.systems[lead]
-        return sysd["moe"].predict_all_systems(df, nwp_col=sysd["nwp_col"],
+        return sysd["moe"].predict_all_systems(self.lead_view(df, lead), nwp_col=sysd["nwp_col"],
                                                regime_probs=regime_probs)
 
     def predict_probabilities(self, df: pd.DataFrame, lead: int) -> Dict[str, np.ndarray]:
         sysd = self.systems[lead]
-        return sysd["probability"].predict_probabilities(df, nwp_col=sysd["nwp_col"])
+        return sysd["probability"].predict_probabilities(self.lead_view(df, lead), nwp_col=sysd["nwp_col"])
 
     def predict_quantiles(self, df: pd.DataFrame, lead: int) -> Dict[str, np.ndarray]:
         sysd = self.systems[lead]
-        return sysd["quantile"].predict_quantiles(df, nwp_col=sysd["nwp_col"])
+        return sysd["quantile"].predict_quantiles(self.lead_view(df, lead), nwp_col=sysd["nwp_col"])
 
     def verification_matrix(self, df: pd.DataFrame, regime_probs: Optional[np.ndarray] = None,
                             thresholds=(64.5, 115.6)) -> Dict[str, Any]:

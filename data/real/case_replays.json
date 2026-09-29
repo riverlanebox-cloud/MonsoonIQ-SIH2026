@@ -1,0 +1,77 @@
+{
+ "cases": [
+  {
+   "id": "ml_shl_2024-06-15",
+   "name": "East Khasi Hills, Meghalaya (15 Jun 2024)",
+   "regime": "Weak/Normal",
+   "dates": [
+    "2024-06-14",
+    "2024-06-15",
+    "2024-06-16"
+   ],
+   "key_districts": [
+    "ML_SHL",
+    "AR_ITA",
+    "MH_RTG",
+    "AP_VSK"
+   ],
+   "description": "IMD observed 426 mm (heaviest 0.25 deg cell) and 105 mm district mean; GFS Day-1 forecast 11 mm district mean.",
+   "observed_max_mm": 426.5
+  },
+  {
+   "id": "gj_kch_2025-09-08",
+   "name": "Kutch, Gujarat (08 Sep 2025)",
+   "regime": "Weak/Normal",
+   "dates": [
+    "2025-09-07",
+    "2025-09-08",
+    "2025-09-09"
+   ],
+   "key_districts": [
+    "GJ_KCH",
+    "MH_RTG",
+    "GJ_SRT",
+    "MH_THN"
+   ],
+   "description": "IMD observed 377 mm (heaviest 0.25 deg cell) and 139 mm district mean; GFS Day-1 forecast 94 mm district mean.",
+   "observed_max_mm": 376.8
+  },
+  {
+   "id": "ml_shl_2024-07-01",
+   "name": "East Khasi Hills, Meghalaya (01 Jul 2024)",
+   "regime": "Weak/Normal",
+   "dates": [
+    "2024-06-30",
+    "2024-07-01",
+    "2024-07-02"
+   ],
+   "key_districts": [
+    "ML_SHL",
+    "GJ_SRT",
+    "AR_ITA",
+    "CG_BST"
+   ],
+   "description": "IMD observed 332 mm (heaviest 0.25 deg cell) and 195 mm district mean; GFS Day-1 forecast 52 mm district mean.",
+   "observed_max_mm": 331.9
+  },
+  {
+   "id": "ga_nga_2024-07-08",
+   "name": "North Goa, Goa (08 Jul 2024)",
+   "regime": "Orographic",
+   "dates": [
+    "2024-07-07",
+    "2024-07-08",
+    "2024-07-09"
+   ],
+   "key_districts": [
+    "GA_NGA",
+    "MH_RTG",
+    "MH_SUB",
+    "KA_UDU"
+   ],
+   "description": "IMD observed 318 mm (heaviest 0.25 deg cell) and 222 mm district mean; GFS Day-1 forecast 11 mm district mean.",
+   "observed_max_mm": 317.6
+  }
+ ],
+ "selection": "top 4 held-out district-days by observed rainfall, >5 days apart"
+}
