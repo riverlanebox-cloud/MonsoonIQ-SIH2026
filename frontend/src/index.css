@@ -829,6 +829,59 @@ table.data tbody tr:hover { background: rgba(0, 212, 255, .06); }
 .landing-hint { margin-top: 22px; }
 .landing-hint kbd { background: var(--glass-2); border-color: var(--glass-line-2); border-radius: 5px; }
 
+/* ------------------------------------------------------------ console v2 */
+.summary-strip.four { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0; background: transparent; border: 0; overflow: visible; }
+@media (max-width: 980px) { .summary-strip.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.seg.leads button { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 5px 12px; line-height: 1.2; }
+.seg.leads .lead-day { font-weight: 600; font-size: 12.5px; }
+.seg.leads .lead-sub { font-size: 10.5px; color: var(--gray-400); display: inline-flex; align-items: center; gap: 4px; }
+.seg.leads button[aria-pressed="true"] .lead-sub { color: var(--cyan); }
+.seg.leads .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+.commandbar .btn.primary .icon { color: var(--bg-1); }
+
+.panel.warned { display: flex; flex-direction: column; min-height: 0; }
+.panel.warned .panel-head input[type="search"] { width: 150px; }
+.warned-scroll { flex: 1; max-height: 470px; overflow: auto; }
+.panel-foot { padding: 10px 14px; border-top: 1px solid var(--glass-line); display: flex; justify-content: flex-end; }
+
+.cases-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.chip.case { cursor: pointer; font-size: 12px; transition: all .2s ease; }
+.chip.case:hover, .chip.case.on { border-color: rgba(0, 212, 255, .5); color: var(--cyan); box-shadow: 0 0 14px rgba(0, 212, 255, .15); }
+
+.help-pop {
+  position: fixed; top: 128px; right: 24px; z-index: 1500; width: 300px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, .5); animation: pop .2s ease-out both;
+}
+.help-pop kbd { display: inline-block; padding: 1px 7px; border-radius: 5px; background: var(--glass-2); border: 1px solid var(--glass-line-2); font-size: 11.5px; }
+
+.drawer-backdrop { position: fixed; inset: 0; z-index: 1400; background: rgba(0, 0, 0, .45); backdrop-filter: blur(2px); animation: fade .2s ease both; }
+.drawer {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1450; width: min(460px, 100%);
+  overflow: auto; padding: 18px; background: rgba(10, 25, 41, .96); backdrop-filter: blur(12px);
+  border-left: 1px solid rgba(0, 212, 255, .25); box-shadow: -20px 0 50px rgba(0, 0, 0, .5);
+  animation: slidein .28s ease-out both;
+}
+.drawer .rail { gap: 14px; }
+.drawer .panel { animation: none; }
+@keyframes slidein { from { transform: translateX(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .drawer, .help-pop, .drawer-backdrop { animation: none; } }
+
+/* ----------------------------------------------------------------- API page */
+.api-page { display: flex; flex-direction: column; gap: 18px; }
+.api-base { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 18px 20px; }
+.api-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; }
+.api-card .panel-title { display: inline-flex; align-items: center; gap: 8px; }
+.api-card .panel-title::before { display: none; }
+.api-card .panel-title .icon { color: var(--cyan); }
+.api-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.api-list li { padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .06); margin: 0; }
+.api-list li:first-child { border-top: 0; padding-top: 0; }
+.api-line { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.api-path { font-family: var(--mono); font-size: 13px; color: #fff; overflow-wrap: anywhere; }
+.api-actions { margin-left: auto; display: inline-flex; gap: 6px; flex: none; }
+.api-actions .btn.icon { padding: 5px 7px; }
+.api-what { color: var(--gray-300); font-size: 12.5px; margin-top: 4px; line-height: 1.5; }
+
 /* ----------------------------------------------------------- small screens */
 @media (max-width: 1100px) {
   .masthead-right .chip:not(.live) { display: none; }

@@ -7,7 +7,7 @@ import { REGIME_COLOR, REGIME_SHORT, CATEGORY_COLOR, shortDate } from '../lib/fo
  * the fastest way to see how skill and regime move together, and it removes the
  * need for a date picker in most sessions.
  */
-export default function RegimeTimeline({ days, currentDate, lead = 1, onSelect }) {
+export default function RegimeTimeline({ days, currentDate, lead = 1, onSelect, events = [], cases = [] }) {
   const ref = useRef(null);
   const [hover, setHover] = useState(null);
 
@@ -56,12 +56,27 @@ export default function RegimeTimeline({ days, currentDate, lead = 1, onSelect }
   return (
     <div className="panel">
       <div className="panel-head">
-        <span className="panel-title">Regime and warning timeline · {days.length} days</span>
-        <span className="tiny muted">
-          {hoverEntry
-            ? `${hoverEntry.date} · ${hoverEntry.regime_name} · ${hoverEntry.observed_heavy_districts} heavy-rain districts observed`
-            : 'click or drag to change the valid date · bands = dominant regime · bars = districts in warning'}
+        <span className="panel-title">
+          Season timeline
+          <span className="muted small" style={{ marginLeft: 8, fontWeight: 400 }}>
+            {hoverEntry
+              ? `${hoverEntry.date} · ${hoverEntry.regime_name} · ${hoverEntry.observed_heavy_districts} districts had heavy rain`
+              : `${days.length} days · click a day to open it`}
+          </span>
         </span>
+        <div className="cb-group">
+          {events.length > 0 && (
+            <select value="" onChange={(e) => e.target.value && onSelect(e.target.value)}
+                    aria-label="jump to a significant day" title="Days with the most warnings (n / p)">
+              <option value="">Busiest days…</option>
+              {events.map((e) => (
+                <option key={e.date} value={e.date}>
+                  {e.date} · {e.regime_name} · {e.red} red, {e.orange} orange
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       </div>
       <div className="timeline">
         <div
@@ -109,8 +124,22 @@ export default function RegimeTimeline({ days, currentDate, lead = 1, onSelect }
               {REGIME_SHORT[name] || name}
             </span>
           ))}
-          <span>· cursor: {shortDate(currentDate)}</span>
+          <span>· showing {shortDate(currentDate)}</span>
         </div>
+        {cases.length > 0 && (
+          <div className="cases-row">
+            <span className="tiny muted">Documented cases</span>
+            {cases.map((c) => {
+              const active = c.dates.includes(currentDate);
+              return (
+                <button key={c.id} className={`chip case${active ? ' on' : ''}`}
+                        onClick={() => onSelect(c.dates[0], 1)} title={`${c.regime} — ${c.description}`}>
+                  {c.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

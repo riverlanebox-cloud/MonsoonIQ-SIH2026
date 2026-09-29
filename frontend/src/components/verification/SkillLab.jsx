@@ -108,18 +108,13 @@ export default function SkillLab() {
   return (
     <div className="workspace">
       <div className="note">
-        <b>Read this first.</b> {isReal(summary.data_provenance)
-          ? <>Every number below scores forecasts against IMD 0.25° gridded observations
-            (provenance <span className="mono">{summary.data_provenance}</span>). The raw model is NOAA GFS,
-            a public stand-in for NCMRWF NCUM; models were fitted on earlier seasons only. Held-out years</>
-          : <>Every number below is an internal comparison computed on the archive in
-            this repository (provenance <span className="mono">{summary.data_provenance}</span>), not IMD
-            verification. Held-out years</>} <span className="mono">{(period.test_years || []).join(', ')}</span>
-        {' '}· <span className="mono">{period.calendar_days}</span> calendar days ·
-        {' '}<span className="mono">{period.district_days?.toLocaleString()}</span> district-days ·
-        {' '}<span className="mono">{period.districts}</span> districts. What makes the comparison worth
-        reading is that the reference systems are fitted and scored on exactly the same fixtures:
-        one command reproduces every figure.
+        {isReal(summary.data_provenance)
+          ? <>Scored against IMD 0.25° observations on <b>{(period.test_years || []).join(' and ')}</b>, two
+            seasons the models never saw: {period.district_days?.toLocaleString()} district-days across
+            {' '}{period.districts} districts. The raw model is NOAA GFS, standing in for NCMRWF NCUM.</>
+          : <>Internal comparison on the synthetic archive in this repository, not IMD verification.
+            Held-out years {(period.test_years || []).join(', ')} · {period.district_days?.toLocaleString()} district-days.</>}
+        {' '}Every reference system is fitted and scored on the same data.
       </div>
 
       {/* ---------------------------------------------- scorecard */}
@@ -145,7 +140,7 @@ export default function SkillLab() {
       {/* ---------------------------------------------- claims */}
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">Claims and their verdicts</span>
+          <span className="panel-title">What we claim, and whether it holds</span>
           <span className="tiny muted">
             paired day-block bootstrap · {summary.confidence_intervals?.rmse?.method}
           </span>
@@ -173,7 +168,7 @@ export default function SkillLab() {
       {/* ---------------------------------------------- categorical */}
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">Categorical verification by rainfall threshold</span>
+          <span className="panel-title">Hit rate by warning threshold</span>
           <div className="seg">
             {THRESHOLDS.map((t) => (
               <button key={t} aria-pressed={threshold === t} onClick={() => setThreshold(t)}>≥ {t} mm</button>
@@ -225,7 +220,7 @@ export default function SkillLab() {
       <div className="split" style={{ gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)' }}>
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Skill by lead time (≥ 64.5 mm)</span>
+            <span className="panel-title">Skill by lead day (≥ 64.5 mm)</span>
             <span className="tiny muted">{summary.lead_time_breakdown?.note}</span>
           </div>
           <div className="table-scroll">
@@ -258,7 +253,7 @@ export default function SkillLab() {
 
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Does the gain hold inside each regime?</span>
+            <span className="panel-title">Skill by regime</span>
             <span className="tiny muted">thin strata are suppressed, not shown as zeros</span>
           </div>
           <div className="table-scroll">
@@ -289,7 +284,7 @@ export default function SkillLab() {
       {/* ---------------------------------------------- probabilistic */}
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">Probability forecasts: are the numbers calibrated?</span>
+          <span className="panel-title">Are the probabilities honest?</span>
           <span className="tiny muted">reliability diagram, exceedance modules</span>
         </div>
         <div className="panel-body">
@@ -324,7 +319,7 @@ export default function SkillLab() {
       {grid?.available && (
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Fractional skill score on the grid</span>
+            <span className="panel-title">Skill on the grid (FSS)</span>
             <span className="tiny muted">
               {grid.grid?.dates_scored} held-out dates · {grid.grid?.grid_cells_in_districts} cells in
               district boxes · windows {grid.neighbourhood_windows_cells?.join(', ')} grid lengths
@@ -380,7 +375,7 @@ export default function SkillLab() {
       {rv.available && (
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Is the regime layer earning its complexity?</span>
+            <span className="panel-title">Is the regime layer worth it?</span>
             <span className="tiny muted">regime value audit</span>
           </div>
           <div className="panel-body">
@@ -416,7 +411,7 @@ export default function SkillLab() {
       {events && (
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Heavy-rainfall event inventory (≥ {events.threshold_mm} mm)</span>
+            <span className="panel-title">Heavy-rain days (≥ {events.threshold_mm} mm)</span>
             <span className="tiny muted">which days and regimes carry these statistics</span>
           </div>
           <div className="panel-body tight">
@@ -458,7 +453,7 @@ export default function SkillLab() {
       {/* ---------------------------------------------- zones + reproduce */}
       <div className="split" style={{ gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)' }}>
         <div className="panel">
-          <div className="panel-head"><span className="panel-title">Skill by agro-climatic zone</span></div>
+          <div className="panel-head"><span className="panel-title">Skill by zone</span></div>
           <div className="table-scroll">
             <table className="data">
               <thead><tr><th>Zone</th><th className="num">Days</th><th className="num">Heavy events</th>
@@ -481,7 +476,7 @@ export default function SkillLab() {
 
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Reproduce every number on this page</span>
+            <span className="panel-title">Reproduce this page</span>
             <a className="btn" href={api.reportPdfUrl()} target="_blank" rel="noreferrer">Open PDF report</a>
           </div>
           <div className="panel-body">
@@ -494,9 +489,9 @@ export default function SkillLab() {
               python -m pytest tests/ -q
             </div>
             <div className="small" style={{ marginTop: 8 }}>
-              <b>Honest baseline used everywhere:</b>{' '}
+              <b>Baseline:</b>{' '}
               {summary.scorecard?.honest_baseline?.[1] || 'quantile mapping and a regime-agnostic learner'}.
-              Beating the raw model is table stakes; the comparison that matters is against that.
+              Beating the raw model is the easy part; the comparison that matters is against that.
             </div>
             <div className="small" style={{ marginTop: 6 }}>
               Continuous metrics (held-out): {Object.entries(summary.continuous_metrics || {}).map(([k, v]) => (

@@ -58,7 +58,7 @@ export default function MapPanel({
     <div className="panel">
       <div className="panel-head">
         <span className="panel-title">
-          Spatial view
+          Map
           <span className="muted small" style={{ marginLeft: 8, fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>
             {hovered ? (
               <>
@@ -74,7 +74,7 @@ export default function MapPanel({
                   </>
                 )}
               </>
-            ) : 'click a district to inspect it'}
+            ) : 'click a district for its detail'}
           </span>
         </span>
         <div className="cb-group">

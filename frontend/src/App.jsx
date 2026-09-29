@@ -18,10 +18,10 @@ const TABS = [
 
 // Page headings, SAGAR-style: one large statement of what the screen is for.
 const PAGE = {
-  today: { title: 'District rainfall warnings', sub: 'Corrected forecast, IMD warning category and exceedance probability for every district.' },
-  skill: { title: 'Verification skill lab', sub: 'How much the regime-aware correction actually helps — with confidence intervals, including where it does not.' },
-  method: { title: 'Method and architecture', sub: 'How the pipeline is built, how modules talk to each other, and what the models can and cannot do.' },
-  api: { title: 'API reference', sub: 'Every number on screen comes from these endpoints. Probe them live.' },
+  today: { title: 'District warnings', sub: 'Corrected rainfall, IMD warning level and heavy-rain probability for 53 districts, one day at a time.' },
+  skill: { title: 'Skill lab', sub: 'How much the correction helps, measured on two seasons the models never saw.' },
+  method: { title: 'How it works', sub: 'The pipeline, the models, and what they can and cannot do.' },
+  api: { title: 'API', sub: 'The same endpoints the console reads. Open, no key.' },
 };
 
 const HOME = { tab: 'landing', date: null, lead: 1 };
@@ -132,15 +132,14 @@ export default function App() {
           <div className="masthead-right">
             <span className="chip live" title={health ? JSON.stringify(health.artifacts) : ''}>
               <span className="dot" />
-              {health?.status === 'healthy' ? 'Live · engine ready' : 'Engine degraded'}
+              {health?.status === 'healthy' ? 'Ready' : 'Degraded'}
             </span>
             <span className="chip" title={`data provenance: ${health?.provenance || 'unknown'}`}>
               {provenanceChip(health?.provenance)}
             </span>
-            {freshness && freshness !== '<volatile>' && <span className="chip">Models loaded {freshness}</span>}
-            <button className="btn back" onClick={() => setTab('landing')} title="Overview screen (h)">
+            <button className="btn back" onClick={() => setTab('landing')} title="Back to the start (h)">
               <Icon name="back" />
-              <span>Overview</span>
+              <span>Home</span>
             </button>
           </div>
         </div>

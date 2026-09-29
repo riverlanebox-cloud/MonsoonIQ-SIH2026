@@ -62,18 +62,7 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
     return () => { alive = false; };
   }, [districtId, date, lead]);
 
-  if (!districtId) {
-    return (
-      <div className="panel">
-        <div className="panel-head"><span className="panel-title">District detail</span></div>
-        <div className="panel-body small muted">
-          Select a district on the map or in the table. The rail then shows the corrected
-          distribution, the model's regime evidence, the plain-language advisory and the
-          Day 1–5 trend — one click, no page change.
-        </div>
-      </div>
-    );
-  }
+  if (!districtId) return null;
 
   if (error) {
     return (
@@ -111,7 +100,7 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
           </span>
           <div className="cb-group">
             <span className={`cat-chip cat-${data.category}`} title={`${cat.label} — ${cat.action}`}>{cat.short}</span>
-            <button className="btn" onClick={onClose} title="close panel (Esc)">✕</button>
+            <button className="btn icon" onClick={onClose} title="close (Esc)" aria-label="close">✕</button>
           </div>
         </div>
         <div className="panel-body">
@@ -139,7 +128,7 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
           </div>
 
           <div className="small muted" style={{ marginTop: 12, marginBottom: 5 }}>
-            Predictive distribution for this district
+            Likely range
           </div>
           <Band p10={data.p10_mm} p50={data.p50_mm} p90={data.p90_mm}
                 raw={data.raw_mm} corrected={data.corrected_mm} />
@@ -157,7 +146,7 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
 
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">Why this correction — regime evidence</span>
+          <span className="panel-title">Regime the model saw</span>
         </div>
         <div className="panel-body">
           {posterior.map(([name, p]) => (
@@ -170,15 +159,14 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
             </div>
           ))}
           <div className="tiny muted" style={{ marginTop: 6 }}>
-            The correction model receives these posteriors together with the dynamical fields, so the
-            same raw rainfall can be corrected differently on a depression day than on a break day.
-            No black-box text explanation: this is the actual model input.
+            These probabilities are an input to the correction, so the same raw value is corrected
+            differently in different regimes.
           </div>
         </div>
       </div>
 
       <div className="panel">
-        <div className="panel-head"><span className="panel-title">Advisory issued for this district</span></div>
+        <div className="panel-head"><span className="panel-title">Advisory</span></div>
         <div className="panel-body">
           <div className={`advisory${data.category === 'yellow' ? ' hi' : ''}`}>
             <div><b>{data.advisory.alert_label_en}</b> · {cat.action}</div>
@@ -193,17 +181,15 @@ export default function DistrictRail({ districtId, date, lead, onClose }) {
             </div>
           )}
           <div className="tiny muted" style={{ marginTop: 6 }}>
-            CAP alert identifier: <span className="mono">{data.cap_alert?.identifier || '—'}</span> ·
-            severity <span className="mono">{data.cap_alert?.severity || '—'}</span> ·
-            urgency <span className="mono">{data.cap_alert?.urgency || '—'}</span>
+            CAP <span className="mono">{data.cap_alert?.identifier || '—'}</span> · {data.cap_alert?.severity || '—'} · {data.cap_alert?.urgency || '—'}
           </div>
         </div>
       </div>
 
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">Day 1–5 consistency</span>
-          <span className="tiny muted">does the signal survive the forecast horizon?</span>
+          <span className="panel-title">Day 1–5</span>
+          <span className="tiny muted">corrected vs raw, by lead</span>
         </div>
         <div className="panel-body">
           {trend.map((t) => (

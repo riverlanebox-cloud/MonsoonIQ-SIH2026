@@ -75,13 +75,12 @@ export default function AboutModal({ onClose, provenance }) {
 
         <div className="modal-body">
           <section>
-            <h3><Icon name="globe" size={18} /> Platform overview</h3>
+            <h3><Icon name="globe" size={18} /> What it is</h3>
             <p>
-              MonsoonIQ takes a dynamical rainfall forecast and turns it into what a district
-              administration needs: a bias-corrected rainfall field, IMD-scaled district warnings,
-              exceedance probabilities and a ready-to-file bulletin. The correction is conditioned
-              on the prevailing monsoon regime — the same raw value is corrected differently on a
-              depression day than on a break day, because the model's errors differ.
+              MonsoonIQ turns a raw rainfall forecast into what a district administration needs:
+              a corrected rainfall field, IMD warning levels, the chance of heavy rain, and a
+              bulletin ready to send. The correction depends on the monsoon regime of the day,
+              because the model's errors differ between, say, a depression day and a break day.
             </p>
             <p className="tiny muted" style={{ marginTop: 8 }}>
               SIH26080 · Ministry of Earth Sciences (NCMRWF) · Disaster Management
@@ -89,7 +88,7 @@ export default function AboutModal({ onClose, provenance }) {
           </section>
 
           <section>
-            <h3><Icon name="database" size={18} /> Data sources &amp; acknowledgements</h3>
+            <h3><Icon name="database" size={18} /> Data</h3>
             <div className="source-grid">
               {SOURCES.map((s) => (
                 <div key={s.name} className="source-card">

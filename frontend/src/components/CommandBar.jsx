@@ -1,11 +1,17 @@
 import React from 'react';
-import { CATEGORY_META } from '../lib/format';
+import Icon from './Icon';
+import { CATEGORY_META, fmt } from '../lib/format';
 
-const LEADS = [1, 2, 3, 4, 5];
-
+/**
+ * One row of controls: the date, the lead day, and the two things a duty
+ * officer does with a screen (issue the bulletin, export the table).
+ *
+ * The lead buttons double as the 5-day outlook — each one shows how many
+ * districts are warned on that day — so there is one control for lead time,
+ * not a selector and a strip that disagree.
+ */
 export default function CommandBar({
-  date, onDate, lead, onLead, counts, events, onJumpEvent, query, onQuery,
-  onExport, onBulletin, onRefresh, dates, busy, modelScope,
+  date, onDate, lead, onLead, horizon, onBulletin, onExport, onHelp, dates,
 }) {
   const days = dates || [];
   const idx = days.indexOf(date);
@@ -14,71 +20,46 @@ export default function CommandBar({
     const next = days[Math.min(Math.max(base + delta, 0), days.length - 1)];
     if (next) onDate(next);
   };
+  const byLead = Object.fromEntries((horizon || []).map((h) => [h.lead, h]));
+
   return (
     <div className="commandbar">
       <div className="cb-group">
-        <span className="cb-label">Valid for</span>
-        <button className="btn icon" onClick={() => step(-1)} title="Previous day (←)"
-                aria-label="previous day">◀</button>
+        <button className="btn icon" onClick={() => step(-1)} title="Previous day (←)" aria-label="previous day">◀</button>
         <input type="date" value={date || ''} min={days[0]} max={days[days.length - 1]}
-               onChange={(e) => e.target.value && onDate(e.target.value)} />
-        <button className="btn icon" onClick={() => step(1)} title="Next day (→)"
-                aria-label="next day">▶</button>
+               onChange={(e) => e.target.value && onDate(e.target.value)} aria-label="valid date" />
+        <button className="btn icon" onClick={() => step(1)} title="Next day (→)" aria-label="next day">▶</button>
       </div>
 
-      <div className="cb-group">
-        <span className="cb-label">Lead</span>
-        <div className="seg" role="group" aria-label="forecast lead time">
-          {LEADS.map((d) => (
+      <div className="seg leads" role="group" aria-label="forecast lead day">
+        {[1, 2, 3, 4, 5].map((d) => {
+          const h = byLead[d];
+          return (
             <button key={d} aria-pressed={lead === d} onClick={() => onLead(d)}
-                    title={`Day ${d} (press ${d})`}>D{d}</button>
-          ))}
-        </div>
-      </div>
-
-      <div className="cb-group">
-        <span className="cb-label">Significant days</span>
-        <select value="" onChange={(e) => e.target.value && onJumpEvent(e.target.value)}
-                title="Jump to a ranked significant day ([ and ])">
-          <option value="">jump to…</option>
-          {events.map((e) => (
-            <option key={e.date} value={e.date}>
-              {e.date} · {e.regime_name} · {e.red} red / {e.orange} orange
-            </option>
-          ))}
-        </select>
+                    title={h ? `Day ${d}: ${h.districts_warned} districts warned, peak ${fmt(h.max_corrected_mm)} mm (press ${d})` : `Day ${d} (press ${d})`}>
+              <span className="lead-day">Day {d}</span>
+              {h && (
+                <span className="lead-sub">
+                  {h.red > 0 && <i className="dot" style={{ background: 'var(--red)' }} />}
+                  {h.districts_warned} warned
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <div className="cb-group" style={{ marginLeft: 'auto' }}>
-        <input type="search" value={query} placeholder="find district  ( / )"
-               onChange={(e) => onQuery(e.target.value)} />
-      </div>
-
-      <div className="cb-group">
-        {counts && (
-          <span className="chip" title="districts in each IMD warning category">
-            <span className="dot" style={{ background: 'var(--red)' }} />{counts.red}
-            <span className="dot" style={{ background: 'var(--orange)', marginLeft: 6 }} />{counts.orange}
-            <span className="dot" style={{ background: 'var(--yellow)', marginLeft: 6 }} />{counts.yellow}
-            <span className="muted" style={{ marginLeft: 4 }}>warned districts</span>
-          </span>
-        )}
-        <button className="btn" onClick={onBulletin} title="Issue a district warning bulletin (b)">
-          Bulletin
+        <button className="btn primary" onClick={onBulletin} title="Open the bulletin for this day (b)">
+          <Icon name="file" size={15} /> Bulletin
         </button>
-        <button className="btn" onClick={onExport} title="Download this view as CSV">CSV</button>
-        <button className="btn" onClick={onRefresh} disabled={busy} title="Reload from the API">
-          {busy ? '…' : 'Refresh'}
+        <button className="btn" onClick={onExport} title="Download the warning table as CSV">
+          <Icon name="download" size={15} /> CSV
+        </button>
+        <button className="btn icon" onClick={onHelp} title="Keyboard shortcuts (?)" aria-label="keyboard shortcuts">
+          <Icon name="help" size={15} />
         </button>
       </div>
-
-      {modelScope && (
-        <span className="tiny muted" style={{ width: '100%' }}>
-          {modelScope === 'per_lead'
-            ? 'Lead-specific models: each lead has its own fitted correction'
-            : 'Day-1 models applied to this lead'}
-        </span>
-      )}
     </div>
   );
 }

@@ -110,30 +110,30 @@ const clickText = (text, selector = 'button') => {
   return !!b;
 };
 const enterConsole = async () => {
-  clickText('Enter operations console');
+  clickText('Open the console');
   await wait(900);
 };
 const check = (label, condition) => checks.push({ label, ok: !!condition });
 
 // ---------------------------------------------------------------- landing screen
 check('landing title + kicker', html().includes('MonsoonIQ') && html().includes('SIH26080'));
-check('landing CTAs', html().includes('Enter operations console') && html().includes('Verification'));
-check('landing live stat strip', html().includes('Districts warned') && html().includes('Peak corrected'));
+check('landing CTAs', html().includes('Open the console') && html().includes('See the results'));
+check('landing live stat strip', html().includes('Districts warned') && html().includes('Heaviest forecast'));
 check('landing provenance disclaimer', html().toLowerCase().includes('synthetic')
   && html().includes('not an official'.replace(' an ', ' ')) === false || html().includes('official IMD'));
-check('landing shortcut hints', html().includes('keyboard-first'));
+check('landing badges', html().includes('53 districts'));
 
 // ---------------------------------------------------------------- enter the console
-check('enter console button present', !!buttonByText('Enter operations console', 'button.cta'));
+check('enter console button present', !!buttonByText('Open the console', 'button.cta'));
 await enterConsole();
 
 check('masthead + provenance chip', html().includes('MonsoonIQ')
   && (html().includes('Provenance') || html().includes('IMD observations')));
-check('command bar with lead selector', html().includes('Lead') && html().includes('D5'));
+check('command bar with lead selector', html().includes('Day 1') && html().includes('Day 5'));
 check('warning summary strip', html().includes('Districts warned'));
-check('regime timeline rendered', html().includes('Regime and warning timeline'));
+check('regime timeline rendered', html().includes('Season timeline'));
 check('map legend present', html().includes('map-legend') || html().includes('Warning category'));
-check('district table rows', html().includes('Warning table'));
+check('warned district list', html().includes('Warned districts'));
 
 // The console repeats one backend rule client-side (which criterion set a warning
 // category). If that mirror drifts, every category label in the UI becomes a lie,
@@ -146,7 +146,7 @@ check('category basis mirrors the API for every district',
 if (basisMismatches.length) console.log('  disagreements:', basisMismatches.slice(0, 4).map((d) => d.district_id));
 check('every warning names a criterion', fixtureRows.filter((d) => d.category !== 'green')
   .every((d) => window.__format?.categoryBasis(d)?.source !== 'none'));
-check('rail placeholder or detail', html().includes('District detail'));
+check('no drawer before a click', !html().includes('class="drawer"'));
 
 // Open a district: the rail must explain the category it is showing, which for the
 // fixture date is the worked example of a probability-driven warning.
@@ -162,15 +162,15 @@ check('console fetched once per screen', calls.filter((c) => c.startsWith('/cons
 // --- tab navigation
 const clickTab = (label) => clickText(label, 'button.tab');
 
-check('overview button returns to landing', clickText('Overview'));
+check('home button returns to landing', clickText('Home'));
 await wait(400);
-check('returned to landing', html().includes('Enter operations console'));
+check('returned to landing', html().includes('Open the console'));
 await enterConsole();
 
 check('switched to Skill lab', clickTab('Skill lab'));
 await wait(500);
-check('skill lab honesty note', html().includes('Read this first'));
-check('skill lab claim table', html().includes('Claims and their verdicts'));
+check('skill lab honesty note', html().includes('never saw') || html().includes('not IMD verification'));
+check('skill lab claim table', html().includes('What we claim'));
 check('skill lab categorical table', html().includes('Raw NWP'));
 
 // Documented cases: one click from the map to a named event.
@@ -192,9 +192,9 @@ check('case date applied to the console',
 
 check('switched to Method', clickTab('Method'));
 await wait(400);
-check('method architecture section', html().includes('System architecture and module communication'));
-check('method user flow section', html().includes('Operational user flow'));
-check('method model card', html().includes('Model card') || html().includes('Stated limits'));
+check('method architecture section', html().includes('Architecture'));
+check('method user flow section', html().includes('How a duty officer uses it'));
+check('method model card', html().includes('Model card') || html().includes('Limits'));
 
 // --- keyboard navigation back on the console
 clickTab('Today');

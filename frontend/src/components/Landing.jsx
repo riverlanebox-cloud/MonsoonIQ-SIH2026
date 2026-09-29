@@ -55,26 +55,25 @@ export default function Landing({ onEnter, onMethod }) {
         </div>
         <h1 className="landing-title anim-up d1">MonsoonIQ</h1>
         <p className="landing-sub anim-up d2">
-          Regime-aware post-processing of numerical rainfall forecasts for India.
-          The dynamical field is corrected <b>per monsoon regime</b>, converted into
-          IMD-scaled district warnings with exceedance probabilities, and verified —
-          including the result that does not work.
+          Turns a raw rainfall forecast into district warnings a duty officer can act on.
+          The correction depends on the <b>monsoon regime</b> of the day, and every claim is
+          checked against what actually fell.
         </p>
 
         <div className="landing-ctas anim-up d3">
           <button className="cta primary" onClick={() => onEnter(defaultDate)}>
-            Enter operations console
+            Open the console
           </button>
           <button className="cta teal" onClick={onMethod}>
-            Verification &amp; method
+            See the results
           </button>
         </div>
 
         <div className="landing-stats anim-up d3">
           <div className="landing-stat">
-            <div className="k">Valid for</div>
+            <div className="k">Showing</div>
             <div className="v" style={{ fontSize: 15 }}>{console_?.date || '—'}</div>
-            <div className="tiny muted">{isReal(console_?.provenance) ? 'most warning-heavy held-out day' : 'most warning-heavy monsoon day'}</div>
+            <div className="tiny muted">{isReal(console_?.provenance) ? 'the busiest day the models never saw' : 'the busiest day in the archive'}</div>
           </div>
           <div className="landing-stat">
             <div className="k">Districts warned</div>
@@ -87,7 +86,7 @@ export default function Landing({ onEnter, onMethod }) {
             </div>
           </div>
           <div className="landing-stat">
-            <div className="k">Regime detected</div>
+            <div className="k">Regime</div>
             <div className="v" style={{ fontSize: 15 }}>
               {console_?.regime?.name || '—'}
             </div>
@@ -97,7 +96,7 @@ export default function Landing({ onEnter, onMethod }) {
             </div>
           </div>
           <div className="landing-stat">
-            <div className="k">Peak corrected</div>
+            <div className="k">Heaviest forecast</div>
             <div className="v">
               {fmt(console_?.summary?.max_corrected_mm)}
               <span className="muted" style={{ fontSize: 13 }}> mm</span>
@@ -110,14 +109,9 @@ export default function Landing({ onEnter, onMethod }) {
         </div>
 
         <div className="landing-hint anim-up d3">
-          <span className="badge cyan" style={{ marginRight: 8 }}>3 screens</span>
-          <span className="badge green" style={{ marginRight: 8 }}>keyboard-first</span>
-          <span className="badge">{isReal(console_?.provenance) ? 'real IMD + GFS data' : 'runs offline'}</span>
-          <div style={{ marginTop: 10 }}>
-            Console shortcuts: <kbd>←</kbd> <kbd>→</kbd> days · <kbd>1</kbd>–<kbd>5</kbd> lead ·
-            <kbd>n</kbd>/<kbd>p</kbd> significant days · <kbd>l</kbd> map layer · <kbd>b</kbd> bulletin ·
-            <kbd>s</kbd> guided demo · <kbd>?</kbd> help
-          </div>
+          <span className="badge cyan" style={{ marginRight: 8 }}>{isReal(console_?.provenance) ? 'IMD + GFS, 2021–2025' : 'synthetic archive'}</span>
+          <span className="badge green" style={{ marginRight: 8 }}>53 districts</span>
+          <span className="badge">Day 1–5</span>
         </div>
       </div>
 

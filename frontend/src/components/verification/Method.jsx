@@ -46,25 +46,23 @@ export default function Method() {
     <div className="workspace method">
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">What this system does, in one paragraph</span>
+          <span className="panel-title">In short</span>
         </div>
         <div className="panel-body">
           <p style={{ margin: 0 }}>
-            Numerical weather prediction systematically under-forecasts heavy monsoon rainfall because
-            it smooths extremes. MonsoonIQ takes a dynamical rainfall forecast and the fields around it,
-            decides which monsoon regime the day belongs to, and applies a correction learned separately
-            for that regime — then converts the result into district-level warnings, exceedance
-            probabilities, and a filed bulletin. The same codebase carries the verification harness that
-            checks whether any of that actually helps, including the result that does not:
-            the regime conditioning does not significantly beat a strong regime-agnostic learner on the
-            heavy-rainfall categorical score.
+            Weather models under-forecast heavy monsoon rain because they smooth extremes. MonsoonIQ
+            takes the model's rainfall and the fields around it, works out which monsoon regime the day
+            is in, and applies a correction learned for that regime. The result becomes district
+            warnings, exceedance probabilities and a bulletin. The same code checks whether any of
+            this helps. One result does not: regime conditioning does not beat a strong
+            regime-agnostic model on the heavy-rain score, and the Skill lab says so.
           </p>
         </div>
       </div>
 
       <div className="panel">
         <div className="panel-head">
-          <span className="panel-title">System architecture and module communication</span>
+          <span className="panel-title">Architecture</span>
           <span className="tiny muted">offline pipeline (top) → serving path (bottom)</span>
         </div>
         <div className="panel-body">
@@ -86,7 +84,7 @@ export default function Method() {
 
       <div className="split" style={{ gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)' }}>
         <div className="panel">
-          <div className="panel-head"><span className="panel-title">Operational user flow</span></div>
+          <div className="panel-head"><span className="panel-title">How a duty officer uses it</span></div>
           <div className="panel-body">
             <div className="flow">
               <div className="flow-col">
@@ -119,14 +117,14 @@ export default function Method() {
 
         <div className="panel">
           <div className="panel-head">
-            <span className="panel-title">Design rules we held ourselves to</span>
+            <span className="panel-title">Design rules</span>
           </div>
           <div className="panel-body small">
             <ul style={{ margin: 0, paddingLeft: 16, lineHeight: 1.7 }}>
               <li><b>Forecast, not chat.</b> Nothing on the console asks the user to phrase a question. The screen answers "what is going to happen and where" the moment it loads.</li>
               <li><b>Colour is data.</b> The only saturated colours are the IMD warning scale and the rainfall scale. No decoration competes with them.</li>
               <li><b>Numbers stay visible.</b> Every corrected value can be compared with the raw model value in the same view — trust is built by showing the adjustment, not hiding it.</li>
-              <li><b>Explain with model inputs.</b> The district rail shows the regime posteriors that actually enter the correction, not a generated paragraph.</li>
+              <li><b>Explain with model inputs.</b> The district panel shows the regime probabilities that enter the correction, not a generated paragraph.</li>
               <li><b>Uncertainty is a first-class element.</b> P10–P90 bands and exceedance probabilities sit next to the point forecast.</li>
               <li><b>Negative results are shipped.</b> The district-transfer FSS and the non-significant categorical gain stay in the product.</li>
             </ul>
@@ -158,7 +156,7 @@ export default function Method() {
       {card && (
         <div className="split" style={{ gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)' }}>
           <div className="panel">
-            <div className="panel-head"><span className="panel-title">Model card and data provenance</span></div>
+            <div className="panel-head"><span className="panel-title">Model card</span></div>
             <div className="panel-body">
               <dl className="kv" style={{ gridTemplateColumns: 'auto 1fr' }}>
                 <dt>Archive</dt><dd className="mono">{card.data?.archive?.name || card.data?.provenance}</dd>
@@ -199,7 +197,7 @@ export default function Method() {
           </div>
 
           <div className="panel">
-            <div className="panel-head"><span className="panel-title">Stated limits</span></div>
+            <div className="panel-head"><span className="panel-title">Limits</span></div>
             <div className="panel-body small">
               <ul style={{ margin: 0, paddingLeft: 16, lineHeight: 1.7 }}>
                 {(card.known_limits || []).map((l) => <li key={l}>{l}</li>)}
@@ -216,7 +214,7 @@ export default function Method() {
       )}
 
       <div className="panel">
-        <div className="panel-head"><span className="panel-title">Regime definitions used by the classifier</span></div>
+        <div className="panel-head"><span className="panel-title">The seven regimes</span></div>
         <div className="table-scroll">
           <table className="data">
             <thead><tr><th>ID</th><th>Regime</th><th>Rule criterion (configs/regime_rules.yaml)</th></tr></thead>

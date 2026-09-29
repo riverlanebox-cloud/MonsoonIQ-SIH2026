@@ -1,185 +1,165 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
+import Icon from './Icon';
 import { apiBase, STATIC } from '../api';
 
-/** Read-only endpoints, with a plain-language line each. Used when the spec is
- *  unreachable (offline build, static file server) so the reference never renders
- *  empty; when the service is up, the real OpenAPI document wins. */
-const FALLBACK = [
-  ['GET', '/health', 'Service status, loaded models and artifact list'],
-  ['GET', '/console', 'Everything one console screen needs for a date and lead day'],
-  ['GET', '/timeline', 'Forecast archive: one record per day, regime + confidence'],
-  ['GET', '/events', 'Regime spells and the days that carried the most warnings'],
-  ['GET', '/district/{district_id}', 'Correction breakdown, confidence and drivers'],
-  ['GET', '/bulletin', 'The duty-officer bulletin text (en / hi)'],
-  ['GET', '/grid', '0.25° corrected field with raw and bias-corrected baselines'],
-  ['GET', '/verification/summary', 'Skill scorecard, significance claims, ensembles'],
-  ['GET', '/verification/heavy-events', 'Threshold exceedance reliability and ROC'],
-  ['GET', '/verification/regime-value', 'Per-regime CSI improvement and coverage'],
-  ['GET', '/verification/report.pdf', 'Generated verification report'],
-  ['GET', '/model-card', 'Provenance, archive fingerprint, honesty statement'],
-  ['GET', '/case-replays', 'Documented events with known raw-model failures'],
-  ['GET', '/explain/{district_id}/{date}', 'Feature contributions behind one correction'],
-  ['GET', '/export/districts.csv', 'Current screen as a spreadsheet'],
-];
+/**
+ * API reference, laid out the way SAGAR documents its services: one card per
+ * group, a base URL you can copy, and one plain line per endpoint.
+ *
+ * Nothing here is fetched. The list is written by hand so it reads the same on
+ * the live service and on the static site, and so every line says what a
+ * response is for rather than what the handler is called.
+ */
 
-const GROUPS = [
-  ['forecast', /^\/(console|timeline|events|grid|bulletin|forecast)/],
-  ['district detail', /^\/(district|districts|regime|explain)/],
-  ['verification', /^\/verification/],
-  ['service', /^\/(health|model-card|case-replays|export)/],
-];
-
-const groupOf = (path) => GROUPS.find(([, re]) => re.test(path))?.[0] || 'service';
-
-/** Query strings used by the probe buttons — a real archived date. */
-const PROBE_DATE = '2024-07-19';
-const PROBE_DISTRICT = 'GA_NGA';
-const PROBE_QUERY = {
-  '/console': `date=${PROBE_DATE}&lead=1`,
-  [`/district/${PROBE_DISTRICT}`]: `date=${PROBE_DATE}&lead=1`,
-  '/bulletin': `date=${PROBE_DATE}&lead=1`,
-  '/grid': `date=${PROBE_DATE}`,
-  '/events': 'limit=5',
-  '/export/districts.csv': `date=${PROBE_DATE}&lead=1`,
+// Shared payloads are real files on the static site, so they can be opened.
+const STATIC_FILE = {
+  '/health': '/health.json',
+  '/model-card': '/model-card.json',
+  '/timeline': '/timeline.json',
+  '/events': '/events.json',
+  '/grid': '/grid.json',
+  '/districts': '/districts.json',
+  '/districts/geojson': '/districts/geojson.json',
+  '/verification/summary': '/verification/summary.json',
+  '/verification/heavy-events': '/verification/heavy-events.json',
+  '/verification/regime-value': '/verification/regime-value.json',
+  '/verification/report.pdf': '/verification/report.pdf',
+  '/case-replays': '/case-replays.json',
 };
 
-/** Issue one GET and report what came back, timed. Kept outside the component so
- *  the request and its clock are plainly an effect of a click, not of a render. */
-async function probeRequest(url) {
-  const t0 = performance.now();
-  try {
-    const res = await fetch(url);
-    const text = await res.text();
-    return { status: res.status, ms: performance.now() - t0, bytes: text.length };
-  } catch {
-    return { status: 'network error', ms: performance.now() - t0, bytes: 0 };
-  }
+const GROUPS = [
+  {
+    id: 'forecast', title: 'Forecast', icon: 'today',
+    blurb: 'What the console shows for one date and lead day.',
+    endpoints: [
+      ['/console', 'Everything on the console screen: warnings, regime, summary and the 5-day outlook', 'date, lead'],
+      ['/district/{id}', 'One district in full: correction, percentiles, probabilities, advisory text', 'date, lead'],
+      ['/bulletin', 'The bulletin as plain text, English or Hindi', 'date, lead, lang'],
+      ['/grid', 'The corrected 0.5° rainfall field with the raw and bias-corrected fields', 'date'],
+      ['/export/districts.csv', 'The warning table as a spreadsheet', 'date, lead'],
+    ],
+  },
+  {
+    id: 'archive', title: 'Archive', icon: 'method',
+    blurb: 'Precomputed once for the whole season, so the console loads them a single time.',
+    endpoints: [
+      ['/timeline', 'One row per archived day: regime, confidence and warning counts'],
+      ['/events', 'The days that carried the most warnings, and the regime spells'],
+      ['/case-replays', 'Documented heavy-rain cases with the raw model’s miss'],
+      ['/districts', 'The 53 districts with state, zone and coordinates'],
+      ['/districts/geojson', 'District boundaries (Census 2011) for the map'],
+    ],
+  },
+  {
+    id: 'verification', title: 'Verification', icon: 'skill',
+    blurb: 'The numbers behind the Skill lab page.',
+    endpoints: [
+      ['/verification/summary', 'Scores for every system, with confidence intervals'],
+      ['/verification/heavy-events', 'How reliable the heavy-rain probabilities are'],
+      ['/verification/regime-value', 'Where regime conditioning helps and where it does not'],
+      ['/verification/report.pdf', 'The verification report as a PDF'],
+    ],
+  },
+  {
+    id: 'service', title: 'Service', icon: 'api',
+    blurb: 'Status and provenance.',
+    endpoints: [
+      ['/health', 'Whether the models and archive are loaded'],
+      ['/model-card', 'Which data, splits and models produced this build'],
+      ['/explain/{id}/{date}', 'Which inputs moved one district’s correction (live service only)', 'lead'],
+    ],
+  },
+];
+
+const EXAMPLE = { date: '2024-07-19', lead: 1, id: 'GA_NGA' };
+
+function exampleUrl(path, params) {
+  const base = STATIC ? '' : apiBase();
+  let p = path.replace('{id}', EXAMPLE.id).replace('{date}', EXAMPLE.date);
+  if (STATIC) return STATIC_FILE[path] ? `${apiBase()}${STATIC_FILE[path]}` : null;
+  const q = (params || '').split(',').map((s) => s.trim()).filter(Boolean)
+    .filter((k) => k !== 'lang')
+    .map((k) => `${k}=${EXAMPLE[k] ?? ''}`)
+    .join('&');
+  return `${base}${p}${q ? `?${q}` : ''}`;
 }
 
 export default function ApiView() {
-  const [spec, setSpec] = useState(null);
-  const [offline, setOffline] = useState(false);
-  const [result, setResult] = useState({});
-  const [busy, setBusy] = useState(null);
+  const [copied, setCopied] = useState(null);
+  const origin = typeof window !== 'undefined' ? window.location.origin : '';
+  const baseUrl = STATIC ? `${origin}${apiBase()}` : `${origin}${apiBase() || ''}`;
 
-  useEffect(() => {
-    fetch(`${apiBase()}/openapi.json`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then(setSpec)
-      .catch(() => setOffline(true));
-  }, []);
-
-  const routes = useMemo(() => {
-    if (!spec?.paths) return FALLBACK.map(([method, path, summary]) => ({ method, path, summary, params: [] }));
-    return Object.entries(spec.paths).flatMap(([path, ops]) =>
-      Object.entries(ops)
-        .filter(([method]) => method === 'get')
-        .map(([method, op]) => ({
-          method: method.toUpperCase(),
-          path,
-          summary: op.summary || op.description?.split('.')[0] || '',
-          params: (op.parameters || []).map((p) => p.name),
-        })),
-    );
-  }, [spec]);
-
-  const send = async (path) => {
-    // Probe each route with a date that exists in the archive, so a probe that
-    // returns 200 means the endpoint genuinely works end to end.
-    const probe = path.replace('{district_id}', PROBE_DISTRICT).replace('{date}', PROBE_DATE);
-    const query = PROBE_QUERY[probe];
-    const url = `${apiBase()}${probe}${query ? `?${query}` : ''}`;
-    setBusy(path);
-    const outcome = await probeRequest(url);
-    setResult((r) => ({ ...r, [path]: outcome }));
-    setBusy(null);
+  const copy = (text, key) => {
+    navigator.clipboard?.writeText(text).then(() => {
+      setCopied(key);
+      setTimeout(() => setCopied(null), 1800);
+    }).catch(() => {});
   };
 
   return (
-    <>
-      <div className="panel">
-        <div className="panel-head">
-          <span className="panel-title">Service reference</span>
-          <span className="tiny muted" style={{ marginLeft: 8 }}>
-            {offline
-              ? 'spec unavailable · static list of the published routes'
-              : `rendered from the live OpenAPI document · ${routes.length} read endpoints`}
-          </span>
+    <div className="api-page">
+      <div className="api-base panel">
+        <div>
+          <div className="tiny muted" style={{ letterSpacing: '.06em' }}>BASE URL</div>
+          <div className="mono" style={{ fontSize: 14, marginTop: 4 }}>{baseUrl}</div>
+          <p className="small muted" style={{ marginTop: 8, maxWidth: 640 }}>
+            {STATIC
+              ? 'This site is a static build: every response was computed from the trained models when the site was built and is served as a file. The endpoints below are the live service’s; the ones marked Open exist here as files.'
+              : 'All endpoints are GET and return JSON, except the PDF report and the CSV export. No key is needed.'}
+          </p>
         </div>
-        <div className="panel-body small muted">
-          The console reads forecast state over HTTP; the same endpoints are open, so a state
-          emergency operations centre can pull corrected warnings into its own dashboard instead of
-          retyping them. Every number on screen is traceable to one of these responses.
-          {STATIC
-            ? ' This deployment is a static snapshot: every response was computed at build time from the trained models, so the endpoints below describe the live service (run it with make serve) and cannot be probed from here.'
-            : ' Send a probe to see the status and response time from this browser.'}
-        </div>
+        <button className="btn" onClick={() => copy(baseUrl, 'base')}>
+          <Icon name={copied === 'base' ? 'check' : 'copy'} size={15} />
+          {copied === 'base' ? 'Copied' : 'Copy'}
+        </button>
       </div>
 
-      <div className="panel">
-        <div className="panel-head">
-          <span className="panel-title">Endpoints</span>
-          <span className="tiny muted">GET only · all responses JSON except the report PDF and CSV export</span>
-        </div>
-        <div className="panel-body" style={{ overflowX: 'auto' }}>
-          <table className="data">
-            <thead>
-              <tr>
-                <th style={{ width: 54 }}>Method</th>
-                <th style={{ width: 300 }}>Path</th>
-                <th>What it returns</th>
-                <th style={{ width: 190, textAlign: 'right' }}>Probe</th>
-              </tr>
-            </thead>
-            <tbody>
-              {GROUP_ORDER(routes).map(([group, items]) => (
-                <React.Fragment key={group}>
-                  <tr>
-                    <td colSpan={4} className="tiny muted"
-                        style={{ textTransform: 'uppercase', letterSpacing: '.9px', paddingTop: 12 }}>
-                      {group}
-                    </td>
-                  </tr>
-                  {items.map((r) => {
-                    const res = result[r.path];
-                    return (
-                      <tr key={r.path}>
-                        <td><span className="badge mono">{r.method}</span></td>
-                        <td className="mono" style={{ color: 'var(--ink)' }}>{r.path}</td>
-                        <td className="muted">
-                          {r.summary}
-                          {r.params?.length > 0 && (
-                            <div className="tiny mono" style={{ marginTop: 3 }}>
-                              {r.params.map((p) => (p.startsWith('{') || r.path.includes(`{${p}}`) ? p : `${p}=`)).join(' · ')}
-                            </div>
-                          )}
-                        </td>
-                        <td style={{ textAlign: 'right' }}>
-                          {STATIC ? <span className="tiny muted">live API only</span> : (
-                          <button className="btn" disabled={busy === r.path} onClick={() => send(r.path)}>
-                            {busy === r.path ? 'sending…' : 'Send'}
-                          </button>)}
-                          {res && (
-                            <span className="tiny mono" style={{ marginLeft: 8, color: res.status === 200 ? 'var(--green)' : 'var(--red)' }}>
-                              {res.status} · {res.ms.toFixed(0)} ms · {(res.bytes / 1024).toFixed(1)} kB
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="api-grid">
+        {GROUPS.map((g) => (
+          <section key={g.id} className="panel api-card">
+            <div className="panel-head">
+              <span className="panel-title"><Icon name={g.icon} size={16} /> {g.title}</span>
+              <span className="tiny muted">{g.endpoints.length} endpoints</span>
+            </div>
+            <div className="panel-body">
+              <p className="small muted" style={{ marginBottom: 12 }}>{g.blurb}</p>
+              <ul className="api-list">
+                {g.endpoints.map(([path, what, params]) => {
+                  const url = exampleUrl(path, params);
+                  const key = `${g.id}${path}`;
+                  return (
+                    <li key={path}>
+                      <div className="api-line">
+                        <span className="badge mono">GET</span>
+                        <code className="api-path">{path}</code>
+                        {url && (
+                          <span className="api-actions">
+                            <button className="btn icon" title="Copy example URL" onClick={() => copy(url, key)}>
+                              <Icon name={copied === key ? 'check' : 'copy'} size={14} />
+                            </button>
+                            <a className="btn icon" href={url} target="_blank" rel="noreferrer" title="Open">
+                              <Icon name="external" size={14} />
+                            </a>
+                          </span>
+                        )}
+                      </div>
+                      <div className="api-what">
+                        {what}
+                        {params && <span className="tiny muted mono"> · {params}</span>}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </section>
+        ))}
       </div>
-    </>
+
+      <p className="tiny muted" style={{ padding: '4px 2px' }}>
+        Example URLs use {EXAMPLE.date}, Day {EXAMPLE.lead}, North Goa. On the live service the dates
+        and leads are free; run it with <code>make serve</code>.
+      </p>
+    </div>
   );
-}
-
-function GROUP_ORDER(routes) {
-  const buckets = new Map(GROUPS.map(([name]) => [name, []]));
-  routes.forEach((r) => buckets.get(groupOf(r.path)).push(r));
-  return [...buckets.entries()].filter(([, items]) => items.length);
 }

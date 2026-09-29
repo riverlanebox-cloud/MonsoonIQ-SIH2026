@@ -8,16 +8,15 @@
 export const isReal = (p) => typeof p === 'string' && p.toUpperCase().startsWith('REAL');
 
 export function provenanceChip(p) {
-  if (isReal(p)) return 'Data: IMD observations + NOAA GFS forecasts';
+  if (isReal(p)) return 'IMD observations · GFS forecasts';
   if (p === 'SYNTHETIC_PHYSICALLY_PLAUSIBLE') return 'Provenance: synthetic research archive';
   return `Provenance: ${p || 'unknown'}`;
 }
 
 export function provenanceFooter(p) {
   if (isReal(p)) {
-    return 'Research prototype. Observed rainfall is IMD 0.25° gridded data (Pai et al. 2014); raw '
-      + 'forecasts are NOAA GFS, a public stand-in for NCMRWF NCUM. Not an official IMD/NCMRWF '
-      + 'product — do not use for public warnings.';
+    return 'Research prototype, not an official IMD or NCMRWF product. Observed rainfall: IMD 0.25° '
+      + 'gridded data (Pai et al. 2014). Raw forecasts: NOAA GFS, standing in for NCMRWF NCUM.';
   }
   return 'Research prototype. Forecast fields are produced by a synthetic physically-plausible archive '
     + 'generated inside this repository and are not official IMD/NCMRWF products; do not use for '
